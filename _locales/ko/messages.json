@@ -280,5 +280,20 @@
   },
   "copiedFailed": {
     "message": "실패"
+  },
+  "ipInternal": {
+    "message": "내부 IP 주소"
+  },
+  "ipExternal": {
+    "message": "외부 IP 주소"
+  },
+  "tooltipRouteOrigin": {
+    "message": "출발 지점 (발신자)"
+  },
+  "tooltipRouteNext": {
+    "message": "메일 전달 (다음 서버)"
+  },
+  "tooltipEnvelopeTo": {
+    "message": "수신 (대상)"
   }
 }

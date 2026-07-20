@@ -280,5 +280,20 @@
   },
   "copiedFailed": {
     "message": "Ошибка"
+  },
+  "ipInternal": {
+    "message": "Внутренний IP-адрес"
+  },
+  "ipExternal": {
+    "message": "Внешний IP-адрес"
+  },
+  "tooltipRouteOrigin": {
+    "message": "Точка отправления (Отправитель)"
+  },
+  "tooltipRouteNext": {
+    "message": "Пересылка почты (Следующий сервер)"
+  },
+  "tooltipEnvelopeTo": {
+    "message": "Получение (Назначение)"
   }
 }

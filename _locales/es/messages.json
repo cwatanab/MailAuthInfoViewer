@@ -280,5 +280,20 @@
   },
   "copiedFailed": {
     "message": "Falló"
+  },
+  "ipInternal": {
+    "message": "Dirección IP interna"
+  },
+  "ipExternal": {
+    "message": "Dirección IP externa"
+  },
+  "tooltipRouteOrigin": {
+    "message": "Punto de partida (Remitente)"
+  },
+  "tooltipRouteNext": {
+    "message": "Reenvío de correo (Siguiente servidor)"
+  },
+  "tooltipEnvelopeTo": {
+    "message": "Recibo (Destino)"
   }
 }

@@ -2847,7 +2847,7 @@
           let delayStr = "";
           let delayClass = "maiv-delay-none";
           if (isFirst) {
-            delayStr = `<span class="maiv-icon">${BI.rocketTakeoffFill}</span>`;
+            delayStr = `<span class="maiv-icon" title="${escapeHTML(msg("tooltipRouteOrigin"))}">${BI.rocketTakeoffFill}</span>`;
             delayClass = "maiv-delay-origin";
           } else if (hop.date && routeHops[i - 1].date) {
             const diffMs = hop.date - routeHops[i - 1].date;
@@ -2865,7 +2865,8 @@
           let ipTag = "";
           if (hop.ip) {
             const ipIcon = hop.isInternal ? BI.houseFill : BI.globe;
-            ipTag = `<span class="maiv-ip-tag" title="${escapeHTML(hop.ip)}"><span class="maiv-icon">${ipIcon}</span></span>`;
+            const ipLabel = hop.isInternal ? msg("ipInternal") : msg("ipExternal");
+            ipTag = `<span class="maiv-ip-tag" title="${escapeHTML(hop.ip)} (${escapeHTML(ipLabel)})"><span class="maiv-icon">${ipIcon}</span></span>`;
           }
 
           // TLS / 暗号化状態セル（このホップの Received ヘッダ記載に基づく）
@@ -2893,7 +2894,7 @@
 
           const rowClass = isFirst ? "maiv-route-origin" : "maiv-route-hop";
           const timeDisplay = hop.date ? hop.date.toLocaleTimeString() : "";
-          const escapedLabel = isFirst ? `${escapeHTML(msg("labelOrigin"))} <span class="maiv-icon">${BI.arrowUpRightCircleFill}</span>` : escapeHTML(`#${i + 1}`);
+          const escapedLabel = isFirst ? `${escapeHTML(msg("labelOrigin"))} <span class="maiv-icon" title="${escapeHTML(msg("tooltipRouteOrigin"))}">${BI.arrowUpRightCircleFill}</span>` : escapeHTML(`#${i + 1}`);
 
           routeRows += `
             <tr class="${rowClass}">
@@ -2910,7 +2911,7 @@
           const envelopeToLabel = `${escapeHTML(msg("labelEnvelopeTo"))}: ${escapeHTML(envelope.envelopeTo)}`;
           routeRows += `
             <tr class="maiv-route-hop">
-              <td class="maiv-route-delay"><span class="maiv-delay-none"><span class="maiv-icon">${BI.arrowDownLeftCircleFill}</span></span></td>
+              <td class="maiv-route-delay"><span class="maiv-delay-none"><span class="maiv-icon" title="${escapeHTML(msg("tooltipEnvelopeTo"))}">${BI.arrowDownLeftCircleFill}</span></span></td>
               <td>${envelopeToLabel}</td>
               <td class="maiv-route-tls"></td>
               <td class="maiv-route-time"></td>

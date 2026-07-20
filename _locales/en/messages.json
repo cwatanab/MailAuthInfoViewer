@@ -282,5 +282,20 @@
   },
   "copiedFailed": {
     "message": "Failed"
+  },
+  "ipInternal": {
+    "message": "Internal IP Address"
+  },
+  "ipExternal": {
+    "message": "External IP Address"
+  },
+  "tooltipRouteOrigin": {
+    "message": "Starting Point (Sender)"
+  },
+  "tooltipRouteNext": {
+    "message": "Mail Forwarding (Next Server)"
+  },
+  "tooltipEnvelopeTo": {
+    "message": "Receipt (Destination)"
   }
 }

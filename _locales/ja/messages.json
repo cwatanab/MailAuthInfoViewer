@@ -282,5 +282,20 @@
   },
   "copiedFailed": {
     "message": "失敗"
+  },
+  "ipInternal": {
+    "message": "内部IPアドレス"
+  },
+  "ipExternal": {
+    "message": "外部IPアドレス"
+  },
+  "tooltipRouteOrigin": {
+    "message": "送信起点（送信者）"
+  },
+  "tooltipRouteNext": {
+    "message": "メール転送（次のサーバー）"
+  },
+  "tooltipEnvelopeTo": {
+    "message": "受信（最終宛先）"
   }
 }

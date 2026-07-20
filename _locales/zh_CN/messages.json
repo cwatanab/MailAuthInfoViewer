@@ -280,5 +280,20 @@
   },
   "copiedFailed": {
     "message": "失败"
+  },
+  "ipInternal": {
+    "message": "内部 IP 地址"
+  },
+  "ipExternal": {
+    "message": "外部 IP 地址"
+  },
+  "tooltipRouteOrigin": {
+    "message": "起点（发送者）"
+  },
+  "tooltipRouteNext": {
+    "message": "邮件转发（下一台服务器）"
+  },
+  "tooltipEnvelopeTo": {
+    "message": "接收（目的地）"
   }
 }

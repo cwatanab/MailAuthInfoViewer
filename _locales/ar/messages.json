@@ -280,5 +280,20 @@
   },
   "copiedFailed": {
     "message": "فشل"
+  },
+  "ipInternal": {
+    "message": "عنوان IP داخلي"
+  },
+  "ipExternal": {
+    "message": "عنوان IP خارجي"
+  },
+  "tooltipRouteOrigin": {
+    "message": "نقطة الانطلاق (المرسل)"
+  },
+  "tooltipRouteNext": {
+    "message": "نقل البريد (الخادم التالي)"
+  },
+  "tooltipEnvelopeTo": {
+    "message": "الاستلام (الوجهة)"
   }
 }
