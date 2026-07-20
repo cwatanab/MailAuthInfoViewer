@@ -1279,11 +1279,22 @@
     // =========================================================
     // 8. buildUI - UI構築 (HTML/CSS) — Shadow DOM・i18n・ダークモード完全対応
     // =========================================================
-    const buildUI = (envelope, authResults, routeHops, security, arcChain, linkSafety, trustedDomains, compactMode) => {
+    const buildUI = async (envelope, authResults, routeHops, security, arcChain, linkSafety, trustedDomains, compactMode) => {
 
       // --- スタイル定義 (CSS変数によるダークモード完全対応) ---
+      let bootstrapIconsCSS = "";
+      try {
+        const cssUrl = browser.runtime.getURL("css/bootstrap-icons.css");
+        const resp = await fetch(cssUrl);
+        bootstrapIconsCSS = await resp.text();
+      } catch (err) {
+        console.error("MailAuthInfoViewer: Failed to load bootstrap-icons.css", err);
+      }
+
       const style = document.createElement('style');
       style.textContent = `
+        ${bootstrapIconsCSS}
+
         /* === Shadow DOM host reset (upstream email CSS isolation) === */
         /* テキストメールで body に padding があってもバー周囲に隙間が出ないよう
            マージン・パディングは常に 0。幅はホスト側インラインで body padding を相殺する。 */
@@ -3054,10 +3065,6 @@
       document.body.insertAdjacentElement("afterbegin", host);
 
       const shadow = host.attachShadow({ mode: "closed" });
-      const iconLink = document.createElement("link");
-      iconLink.rel = "stylesheet";
-      iconLink.href = browser.runtime.getURL("css/bootstrap-icons.css");
-      shadow.appendChild(iconLink);
       shadow.appendChild(style);
       shadow.appendChild(container);
 
@@ -3232,7 +3239,7 @@
     const linkSafety = analyzeLinkSafety(bodyContent, envelope.headerOrgDomain, trustedDomains);
     const security = determineSecurityStatus(authResults, envelope.isDomainAligned, envelope.envelopeFrom, envelope.isDisplayNameSpoofed, linkSafety);
 
-    buildUI(envelope, authResults, routeHops, security, arcChain, linkSafety, trustedDomains, compactMode);
+    await buildUI(envelope, authResults, routeHops, security, arcChain, linkSafety, trustedDomains, compactMode);
 
   } catch (e) {
     console.error("MailAuthInfoViewer Error:", e);
