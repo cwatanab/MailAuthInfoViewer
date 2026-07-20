@@ -1564,16 +1564,10 @@
         }
         .maiv-badge.secure { background: var(--maiv-accent-secure); }
         .maiv-badge.warning { background: var(--maiv-accent-warning); color: #fff; }
-        .maiv-badge.danger { background: var(--maiv-accent-danger); }
+        .maiv-badge.danger,
         .maiv-badge.phishing {
-          background: #fff;
-          color: var(--maiv-accent-phishing);
-          border: 1.5px solid var(--maiv-accent-phishing);
-          animation: maiv-phishing-pulse 0.8s ease-in-out 5;
-        }
-        @keyframes maiv-phishing-pulse {
-          0%, 100% { background-color: #fff; color: #d70015; }
-          50% { background-color: #d70015; color: #fff; }
+          background: var(--maiv-accent-danger);
+          color: #fff;
         }
 
         /* ドメイン名は SF Pro Display で Apple Tight を再現 */
