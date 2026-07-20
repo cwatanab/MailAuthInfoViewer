@@ -1872,9 +1872,10 @@
           letter-spacing: var(--maiv-ls-fine);
           line-height: var(--maiv-lh-fine);
         }
-        .status-pass { color: var(--maiv-pass); font-weight: 600; }
-        .status-fail { color: var(--maiv-fail); font-weight: 600; }
-        .status-none { color: var(--maiv-none); font-weight: 600; }
+        .status-pass, .status-fail, .status-none { font-weight: 600; color: var(--maiv-text); }
+        .maiv-status-icon.status-pass, .maiv-icon.status-pass { color: var(--maiv-pass) !important; }
+        .maiv-status-icon.status-fail, .maiv-icon.status-fail { color: var(--maiv-fail) !important; }
+        .maiv-status-icon.status-none, .maiv-icon.status-none { color: var(--maiv-none) !important; }
 
         /* 共通 kv 行（アドレス・詳細・プロパティ） */
         .maiv-kv-row,
@@ -1950,8 +1951,9 @@
           font-size: var(--maiv-fs-fine);
           font-family: var(--maiv-font-sans);
         }
-        .maiv-align-pass { color: var(--maiv-pass); font-weight: 600; }
-        .maiv-align-fail { color: var(--maiv-fail); font-weight: 600; }
+        .maiv-align-pass, .maiv-align-fail { font-weight: 600; color: var(--maiv-text); }
+        .maiv-icon.maiv-align-pass { color: var(--maiv-pass) !important; }
+        .maiv-icon.maiv-align-fail { color: var(--maiv-fail) !important; }
         .maiv-sig-heading {
           font-weight: 600;
           font-size: var(--maiv-fs-fine);
@@ -2183,10 +2185,19 @@
           line-height: 1.4;
         }
         .maiv-link-domain-count { color: var(--maiv-text-faint); font-size: var(--maiv-fs-fine); }
-        .maiv-link-domain-match { color: var(--maiv-pass); }
-        .maiv-link-domain-mismatch { color: var(--maiv-align-warn-text); }
-        .maiv-link-domain-trusted { color: var(--maiv-primary); }
-        .maiv-link-domain-danger { color: var(--maiv-fail); font-weight: 600; }
+        .maiv-link-domain-match,
+        .maiv-link-domain-mismatch,
+        .maiv-link-domain-trusted {
+          color: var(--maiv-text);
+        }
+        .maiv-link-domain-danger {
+          color: var(--maiv-text);
+          font-weight: 600;
+        }
+        .maiv-icon.maiv-link-domain-match { color: var(--maiv-pass) !important; }
+        .maiv-icon.maiv-link-domain-mismatch { color: var(--maiv-align-warn-text) !important; }
+        .maiv-icon.maiv-link-domain-trusted { color: var(--maiv-primary) !important; }
+        .maiv-icon.maiv-link-domain-danger { color: var(--maiv-fail) !important; }
 
         .maiv-trust-btn {
           font-size: var(--maiv-fs-fine);
