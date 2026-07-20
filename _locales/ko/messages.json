@@ -263,6 +263,9 @@
   "verdictReasonUntrusted": {
     "message": "신뢰할 수 없는 링크 도메인"
   },
+  "verdictReasonMore": {
+    "message": "+{n}개 더"
+  },
   "linkAllExternalUntrusted": {
     "message": "모든 링크가 신뢰할 수 없는 외부 도메인을 가리킵니다"
   },

@@ -263,6 +263,9 @@
   "verdictReasonUntrusted": {
     "message": "未信任的链接域名"
   },
+  "verdictReasonMore": {
+    "message": "另+{n}项"
+  },
   "linkAllExternalUntrusted": {
     "message": "所有链接都指向未信任的外部域名"
   },

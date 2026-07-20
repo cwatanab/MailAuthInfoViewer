@@ -263,6 +263,9 @@
   "verdictReasonUntrusted": {
     "message": "نطاق رابط غير موثوق"
   },
+  "verdictReasonMore": {
+    "message": "+{n} أخرى"
+  },
   "linkAllExternalUntrusted": {
     "message": "جميع الروابط تشير إلى نطاق خارجي غير موثوق"
   },

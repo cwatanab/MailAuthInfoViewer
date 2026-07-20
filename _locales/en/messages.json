@@ -265,6 +265,9 @@
   "verdictReasonUntrusted": {
     "message": "Untrusted link domain"
   },
+  "verdictReasonMore": {
+    "message": "+{n} more"
+  },
   "linkAllExternalUntrusted": {
     "message": "All links point to an untrusted external domain"
   },

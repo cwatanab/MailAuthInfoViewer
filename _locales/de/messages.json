@@ -263,6 +263,9 @@
   "verdictReasonUntrusted": {
     "message": "Nicht vertrauenswürdige Link-Domain"
   },
+  "verdictReasonMore": {
+    "message": "+{n} weitere"
+  },
   "linkAllExternalUntrusted": {
     "message": "Alle Links verweisen auf eine nicht vertrauenswürdige externe Domain"
   },

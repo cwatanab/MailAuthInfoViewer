@@ -265,6 +265,9 @@
   "verdictReasonUntrusted": {
     "message": "未信頼のリンクドメイン"
   },
+  "verdictReasonMore": {
+    "message": "+{n}件"
+  },
   "linkAllExternalUntrusted": {
     "message": "すべてのリンクが未信頼の外部ドメインを指しています"
   },

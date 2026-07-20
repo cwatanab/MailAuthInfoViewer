@@ -263,6 +263,9 @@
   "verdictReasonUntrusted": {
     "message": "Недоверенный домен ссылки"
   },
+  "verdictReasonMore": {
+    "message": "ещё +{n}"
+  },
   "linkAllExternalUntrusted": {
     "message": "Все ссылки указывают на недоверенный внешний домен"
   },

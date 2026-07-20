@@ -263,6 +263,9 @@
   "verdictReasonUntrusted": {
     "message": "Domaine de lien non approuvé"
   },
+  "verdictReasonMore": {
+    "message": "+{n} de plus"
+  },
   "linkAllExternalUntrusted": {
     "message": "Tous les liens pointent vers un domaine externe non approuvé"
   },

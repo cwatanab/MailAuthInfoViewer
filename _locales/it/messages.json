@@ -263,6 +263,9 @@
   "verdictReasonUntrusted": {
     "message": "Dominio del link non attendibile"
   },
+  "verdictReasonMore": {
+    "message": "+{n} altri"
+  },
   "linkAllExternalUntrusted": {
     "message": "Tutti i link puntano a un dominio esterno non attendibile"
   },

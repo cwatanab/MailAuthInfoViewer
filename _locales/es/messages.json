@@ -263,6 +263,9 @@
   "verdictReasonUntrusted": {
     "message": "Dominio de enlace no confiable"
   },
+  "verdictReasonMore": {
+    "message": "+{n} más"
+  },
   "linkAllExternalUntrusted": {
     "message": "Todos los enlaces apuntan a un dominio externo no confiable"
   },
