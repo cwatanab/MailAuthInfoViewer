@@ -2842,21 +2842,21 @@
             const verNum = tls.version.replace(/^TLS\s*/i, "");
             const isLegacy = /^1\.[01]$/.test(verNum);
             const tlsCls = isLegacy ? "maiv-tls-warn" : "maiv-tls-secure";
-            const tlsIcon = isLegacy ? '<i class="bi bi-exclamation-triangle-fill"></i>' : '<i class="bi bi-lock-fill"></i>';
+            const tlsIcon = isLegacy ? BI.exclamationTriangleFill : BI.lockFill;
             const tipParts = [tls.version];
             if (tls.cipher) tipParts.push(tls.cipher);
             tlsCell = `<span class="maiv-tls-tag ${tlsCls}" title="${escapeHTML(tipParts.join(" / "))}">${tlsIcon} ${escapeHTML(verNum)}</span>`;
           } else if (tls && tls.encrypted === true) {
-            tlsCell = `<span class="maiv-tls-tag maiv-tls-secure" title="TLS"><i class="bi bi-lock-fill"></i></span>`;
+            tlsCell = `<span class="maiv-tls-tag maiv-tls-secure" title="TLS">${BI.lockFill}</span>`;
           } else if (tls && tls.encrypted === false) {
-            tlsCell = `<span class="maiv-tls-tag maiv-tls-danger" title="${escapeHTML(msg("tlsUnencrypted"))}"><i class="bi bi-unlock-fill"></i></span>`;
+            tlsCell = `<span class="maiv-tls-tag maiv-tls-danger" title="${escapeHTML(msg("tlsUnencrypted"))}">${BI.unlockFill}</span>`;
           } else {
-            tlsCell = `<span class="maiv-tls-tag maiv-tls-unknown" title="${escapeHTML(msg("tlsUnknown"))}"><i class="bi bi-dash"></i></span>`;
+            tlsCell = `<span class="maiv-tls-tag maiv-tls-unknown" title="${escapeHTML(msg("tlsUnknown"))}">${BI.dash}</span>`;
           }
 
           const rowClass = isFirst ? "maiv-route-origin" : "maiv-route-hop";
           const timeDisplay = hop.date ? hop.date.toLocaleTimeString() : "";
-          const escapedLabel = isFirst ? `${escapeHTML(msg("labelOrigin"))} ${BI.arrowUpRightCircleFill}` : escapeHTML(`#${i + 1}`);
+          const escapedLabel = isFirst ? `${escapeHTML(msg("labelOrigin"))} <span class="maiv-icon">${BI.arrowUpRightCircleFill}</span>` : escapeHTML(`#${i + 1}`);
 
           routeRows += `
             <tr class="${rowClass}">
@@ -2873,7 +2873,7 @@
           const envelopeToLabel = `${escapeHTML(msg("labelEnvelopeTo"))}: ${escapeHTML(envelope.envelopeTo)}`;
           routeRows += `
             <tr class="maiv-route-hop">
-              <td class="maiv-route-delay"><span class="maiv-delay-none">${BI.arrowDownLeftCircleFill}</span></td>
+              <td class="maiv-route-delay"><span class="maiv-delay-none"><span class="maiv-icon">${BI.arrowDownLeftCircleFill}</span></span></td>
               <td>${envelopeToLabel}</td>
               <td class="maiv-route-tls"></td>
               <td class="maiv-route-time"></td>
