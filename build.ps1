@@ -36,7 +36,9 @@ Copy-Item -Force "images/icon.svg"  (Join-Path $stageDir "images")
 Copy-Item -Recurse -Force "_locales" (Join-Path $stageDir "_locales")
 
 # --- 圧縮 ---
-Compress-Archive -Path (Join-Path $stageDir "*") -DestinationPath $outFile -Force
+$zipFile = Join-Path $outDir "MailAuthInfoViewer-$version.zip"
+Compress-Archive -Path (Join-Path $stageDir "*") -DestinationPath $zipFile -Force
+Rename-Item -Path $zipFile -NewName $fileName -Force
 
 # --- ステージ削除 ---
 Remove-Item -Recurse -Force $stageDir
