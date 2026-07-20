@@ -2561,7 +2561,7 @@
                  title="${escapeHTML(tooltip)}">${escapeHTML(title)}</div>
             <div class="maiv-detail-stack">
               <div class="maiv-status-row">
-                <span class="maiv-status-icon">${icon}</span>
+                <span class="maiv-status-icon ${sClass}">${icon}</span>
                 <span class="${sClass}">${escapeHTML(displayStatus)}</span>
                 ${authServLabel}
               </div>
@@ -2591,7 +2591,7 @@
           const icon = al.spfAligned ? BI.checkCircleFill : BI.xCircleFill;
           const cls = al.spfAligned ? "maiv-align-pass" : "maiv-align-fail";
           const label = al.spfAligned ? msg("alignedLabel") : msg("notAlignedLabel");
-          parts.push(`<div class="maiv-align-item"><span class="maiv-icon">${icon}</span><span class="${cls}">${escapeHTML(msg("labelSpfAlign"))} ${escapeHTML(label)}</span></div>`);
+          parts.push(`<div class="maiv-align-item"><span class="maiv-icon ${cls}">${icon}</span><span class="${cls}">${escapeHTML(msg("labelSpfAlign"))} ${escapeHTML(label)}</span></div>`);
         }
         return parts.join("");
       })();
@@ -2644,7 +2644,7 @@
           const sClass = sig.status === "pass" ? "status-pass" : (sig.status === "fail" ? "status-fail" : "status-none");
 
           // ステータス行（SPFと同じ maiv-status-row）
-          html += `<div class="maiv-status-row"><span class="maiv-status-icon">${icon}</span><span class="${sClass}">${escapeHTML(sig.status.toUpperCase())}</span>${authServLabel}</div>`;
+          html += `<div class="maiv-status-row"><span class="maiv-status-icon ${sClass}">${icon}</span><span class="${sClass}">${escapeHTML(sig.status.toUpperCase())}</span>${authServLabel}</div>`;
           const parts = [];
           parts.push(kvRow(msg("labelDomain"), sig.domain));
           if (sig.selector) parts.push(kvRow(msg("labelSelector"), sig.selector));
@@ -2654,7 +2654,7 @@
             const alIcon = aligned ? BI.checkCircleFill : BI.xCircleFill;
             const alCls = aligned ? "maiv-align-pass" : "maiv-align-fail";
             const alLabel = aligned ? msg("alignedLabel") : msg("notAlignedLabel");
-            parts.push(`<div class="maiv-align-item"><span class="maiv-icon">${alIcon}</span><span class="${alCls}">${escapeHTML(msg("labelDkimAlign"))} ${escapeHTML(alLabel)}</span></div>`);
+            parts.push(`<div class="maiv-align-item"><span class="maiv-icon ${alCls}">${alIcon}</span><span class="${alCls}">${escapeHTML(msg("labelDkimAlign"))} ${escapeHTML(alLabel)}</span></div>`);
           }
           html += `<div class="maiv-detail-text">${parts.join("")}</div>`;
         }
@@ -2938,7 +2938,7 @@
           arcRows += `
             <tr>
               <td class="maiv-arc-chain-num">#${chain.i}</td>
-              <td><span class="maiv-icon">${cvIcon}</span><span class="${cvClass}">${escapeHTML(chain.cv.toUpperCase())}</span></td>
+              <td><span class="maiv-icon ${cvClass}">${cvIcon}</span><span class="${cvClass}">${escapeHTML(chain.cv.toUpperCase())}</span></td>
               <td class="maiv-arc-domain">${escapeHTML(chain.domain)}</td>
               <td class="maiv-arc-summary">${escapeHTML(chain.authSummary)}</td>
             </tr>
