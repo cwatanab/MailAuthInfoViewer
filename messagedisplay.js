@@ -3019,7 +3019,7 @@
             } else {
               icon = BI.exclamationTriangleFill; cls = "maiv-link-domain-mismatch";
             }
-            const trackerMark = trackers && trackers.has(domain) ? ` ${BI.eyeSlashFill}` : "";
+            const trackerMark = trackers && trackers.has(domain) ? ` <span class="maiv-icon">${BI.eyeSlashFill}</span>` : "";
             // 「信頼」ボタン: 任意のリンク警告(critical/suspicious/untrusted)検出時、未信頼かつ不一致ドメインに表示
             const trustBtn = (showTrust && hasFindings && !info.matchesFrom && !isTrusted)
               ? ` <button class="maiv-trust-btn" data-domain="${escapeHTML(domain)}">${escapeHTML(msg("trustDomainButton"))}</button>`
