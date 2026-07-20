@@ -1284,11 +1284,10 @@
       // --- スタイル定義 (CSS変数によるダークモード完全対応) ---
       let bootstrapIconsCSS = "";
       try {
-        const cssUrl = browser.runtime.getURL("css/bootstrap-icons.css");
-        const resp = await fetch(cssUrl);
-        bootstrapIconsCSS = await resp.text();
+        const resp = await browser.runtime.sendMessage({ command: "getBootstrapIconsCSS" });
+        bootstrapIconsCSS = resp?.cssText || "";
       } catch (err) {
-        console.error("MailAuthInfoViewer: Failed to load bootstrap-icons.css", err);
+        console.error("MailAuthInfoViewer: Failed to load bootstrap-icons.css via background", err);
       }
 
       const style = document.createElement('style');

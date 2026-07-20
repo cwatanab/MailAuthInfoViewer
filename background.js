@@ -12,7 +12,7 @@ browser.messageDisplayScripts.register({
   console.warn("MailAuthInfoViewer: Failed to register messageDisplayScripts:", e);
 });
 
-// 注入されたコンテンツスクリプトからの「メッセージ詳細取得」リクエストを待ち受け
+// 注入されたコンテンツスクリプトからのリクエストを待ち受け
 browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.command === "getMessageDetails") {
     let currentMsg; // デコード済みの基本情報を保持する変数
@@ -35,6 +35,18 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
       .catch(e => sendResponse({ error: e.toString() }));
       
     // 非同期処理 (Promise) の完了後に sendResponse を呼び出すため、true を返す
+    return true;
+  }
+
+  if (request.command === "getBootstrapIconsCSS") {
+    const url = browser.runtime.getURL("css/bootstrap-icons.css");
+    fetch(url)
+      .then(resp => resp.text())
+      .then(text => sendResponse({ cssText: text }))
+      .catch(err => {
+        console.error("MailAuthInfoViewer: Failed to read bootstrap-icons.css in background", err);
+        sendResponse({ cssText: "" });
+      });
     return true;
   }
 });
