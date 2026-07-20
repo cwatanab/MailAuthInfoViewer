@@ -1562,6 +1562,14 @@
           flex-shrink: 0;
           cursor: help;
         }
+        .maiv-badge svg {
+          display: inline-block;
+          vertical-align: middle;
+          width: 18px;
+          height: 18px;
+          fill: currentColor;
+          flex-shrink: 0;
+        }
         .maiv-badge.secure { background: var(--maiv-accent-secure); }
         .maiv-badge.warning { background: var(--maiv-accent-warning); color: #fff; }
         .maiv-badge.danger,
