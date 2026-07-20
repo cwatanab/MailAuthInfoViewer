@@ -37,16 +37,4 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
     // 非同期処理 (Promise) の完了後に sendResponse を呼び出すため、true を返す
     return true;
   }
-
-  if (request.command === "getBootstrapIconsCSS") {
-    const url = browser.runtime.getURL("css/bootstrap-icons.css");
-    fetch(url)
-      .then(resp => resp.text())
-      .then(text => sendResponse({ cssText: text }))
-      .catch(err => {
-        console.error("MailAuthInfoViewer: Failed to read bootstrap-icons.css in background", err);
-        sendResponse({ cssText: "" });
-      });
-    return true;
-  }
 });

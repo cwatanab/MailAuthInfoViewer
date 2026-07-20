@@ -31,8 +31,5 @@
   "options_ui": {
     "page": "options.html",
     "browser_style": false
-  },
-  "web_accessible_resources": [
-    "css/bootstrap-icons.css"
-  ]
+  }
 }

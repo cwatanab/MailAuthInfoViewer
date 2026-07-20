@@ -36,7 +36,6 @@ cp images/icon.svg   "${STAGE_DIR}/images/"
 
 # --- _locales ディレクトリをコピー ---
 cp -r _locales       "${STAGE_DIR}/_locales"
-cp -r css            "${STAGE_DIR}/css"
 
 # --- 圧縮 (zip → xpi) ---
 (cd "$STAGE_DIR" && zip -r -q "../../${OUT_FILE}" .)
