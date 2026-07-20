@@ -3025,7 +3025,7 @@
             const trustBtn = (showTrust && hasFindings && !info.matchesFrom && !isTrusted)
               ? ` <button class="maiv-trust-btn" data-domain="${escapeHTML(domain)}">${escapeHTML(msg("trustDomainButton"))}</button>`
               : "";
-            items += `<div class="maiv-link-domain-item"><span class="maiv-icon">${icon}</span><span class="${cls}">${escapeHTML(domain)}</span>${trackerMark} <span class="maiv-link-domain-count">(×${info.count})</span>${trustBtn}</div>`;
+            items += `<div class="maiv-link-domain-item"><span class="maiv-icon ${cls}">${icon}</span><span class="${cls}">${escapeHTML(domain)}</span>${trackerMark} <span class="maiv-link-domain-count">(×${info.count})</span>${trustBtn}</div>`;
           }
           return `
             <div class="maiv-link-domain-list">
