@@ -6,13 +6,13 @@
     "message": "Visualise les résultats d'authentification des e-mails (SPF, DKIM, DMARC), l'identité de l'expéditeur et les routes de livraison avec les délais."
   },
   "badgeAuthPass": {
-    "message": "✅ AUTH RÉUSSIE"
+    "message": "AUTH RÉUSSIE"
   },
   "badgeAuthFailed": {
-    "message": "❌ AUTH ÉCHOUÉE"
+    "message": "AUTH ÉCHOUÉE"
   },
   "badgeAuthPassWarning": {
-    "message": "⚠️ AUTH RÉUSSIE"
+    "message": "AUTH RÉUSSIE"
   },
   "badgeUnverified": {
     "message": "NON VÉRIFIÉ"
@@ -114,13 +114,13 @@
     "message": "Non aligné"
   },
   "alignOk": {
-    "message": "✅ Domaine aligné (Authentifié)"
+    "message": "Domaine aligné (Authentifié)"
   },
   "alignMismatch": {
-    "message": "⚠️ Non-concordance de domaine entre Header From et Envelope"
+    "message": "Non-concordance de domaine entre Header From et Envelope"
   },
   "alignNotAuth": {
-    "message": "⚠️ Domaine aligné, mais l'expéditeur n'est pas authentifié"
+    "message": "Domaine aligné, mais l'expéditeur n'est pas authentifié"
   },
   "mailingListVia": {
     "message": "via liste de diffusion"
@@ -141,7 +141,7 @@
     "message": "Authenticated Received Chain : Affiche la chaîne de vérification ajoutée par chaque serveur de messagerie lors du transfert, préservant les résultats d'authentification originaux."
   },
   "displayNameSpoofWarning": {
-    "message": "⚠️ Le nom d'affichage contient une adresse e-mail d'un domaine différent (usurpation possible)"
+    "message": "Le nom d'affichage contient une adresse e-mail d'un domaine différent (usurpation possible)"
   },
   "cardTitleLinkSafety": {
     "message": "ANALYSE DE SÉCURITÉ DES LIENS"
@@ -150,7 +150,7 @@
     "message": "Analyse les liens dans le corps de l'e-mail pour détecter les indicateurs de phishing tels que les URL trompeuses, les schémas dangereux et les domaines suspects."
   },
   "replyToMismatch": {
-    "message": "⚠️ L'adresse Reply-To est sur un domaine différent de l'expéditeur"
+    "message": "L'adresse Reply-To est sur un domaine différent de l'expéditeur"
   },
   "linkDeceptiveText": {
     "message": "Lien trompeur"
@@ -192,7 +192,7 @@
     "message": "Alignement DKIM échoué"
   },
   "badgeAuthPartial": {
-    "message": "⚠️ PARTIEL"
+    "message": "PARTIEL"
   },
   "linkCtaExternal": {
     "message": "La zone cliquable principale pointe vers un domaine externe"
@@ -204,7 +204,7 @@
     "message": "Domaines des ressources (images, etc.) :"
   },
   "badgePhishing": {
-    "message": "💀 LIEN DISCORDANT"
+    "message": "LIEN DISCORDANT"
   },
   "verdictReasonTrackingPixel": {
     "message": "Pixel de suivi"

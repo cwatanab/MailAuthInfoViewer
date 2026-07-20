@@ -8,13 +8,13 @@
     "description": "拡張機能の説明"
   },
   "badgeAuthPass": {
-    "message": "✅ 認証成功"
+    "message": "認証成功"
   },
   "badgeAuthFailed": {
-    "message": "❌ 認証失敗"
+    "message": "認証失敗"
   },
   "badgeAuthPassWarning": {
-    "message": "⚠️ 認証成功"
+    "message": "認証成功"
   },
   "badgeUnverified": {
     "message": "未検証"
@@ -122,13 +122,13 @@
     "message": "非整合"
   },
   "alignOk": {
-    "message": "✅ ドメイン一致（認証済み）"
+    "message": "ドメイン一致（認証済み）"
   },
   "alignMismatch": {
-    "message": "⚠️ ヘッダFromとエンベロープのドメインが不一致です"
+    "message": "ヘッダFromとエンベロープのドメインが不一致です"
   },
   "alignNotAuth": {
-    "message": "⚠️ ドメインは一致していますが、送信者が認証されていません"
+    "message": "ドメインは一致していますが、送信者が認証されていません"
   },
   "mailingListVia": {
     "message": "メーリングリスト経由"
@@ -149,10 +149,10 @@
     "message": "Authenticated Received Chain: メール転送時に各中継サーバーが付与する検証チェーンを表示し、元の認証結果を保全します。"
   },
   "displayNameSpoofWarning": {
-    "message": "⚠️ 表示名に別ドメインのメールアドレスが含まれています（なりすましの疑い）"
+    "message": "表示名に別ドメインのメールアドレスが含まれています（なりすましの疑い）"
   },
   "replyToMismatch": {
-    "message": "⚠️ Reply-Toアドレスが送信者と異なるドメインです"
+    "message": "Reply-Toアドレスが送信者と異なるドメインです"
   },
   "linkDeceptiveText": {
     "message": "リンク偽装"
@@ -194,7 +194,7 @@
     "message": "DKIMアライメント非整合"
   },
   "badgeAuthPartial": {
-    "message": "⚠️ 部分認証"
+    "message": "部分認証"
   },
   "linkCtaExternal": {
     "message": "メインのクリック領域が外部ドメイン"
@@ -206,7 +206,7 @@
     "message": "リソースドメイン一覧（画像等）:"
   },
   "badgePhishing": {
-    "message": "💀 リンク先相違"
+    "message": "リンク先相違"
   },
   "verdictReasonTrackingPixel": {
     "message": "トラッキングピクセル"

@@ -6,13 +6,13 @@
     "message": "視覺化呈現電子郵件驗證結果（SPF、DKIM、DMARC）、寄件者身分比對，以及包含延遲時間的投遞路徑。"
   },
   "badgeAuthPass": {
-    "message": "✅ 驗證通過"
+    "message": "驗證通過"
   },
   "badgeAuthFailed": {
-    "message": "❌ 驗證失敗"
+    "message": "驗證失敗"
   },
   "badgeAuthPassWarning": {
-    "message": "⚠️ 驗證通過"
+    "message": "驗證通過"
   },
   "badgeUnverified": {
     "message": "未驗證"
@@ -114,13 +114,13 @@
     "message": "不一致"
   },
   "alignOk": {
-    "message": "✅ 網域一致（已驗證）"
+    "message": "網域一致（已驗證）"
   },
   "alignMismatch": {
-    "message": "⚠️ Header From 與信封之間的網域不符"
+    "message": "Header From 與信封之間的網域不符"
   },
   "alignNotAuth": {
-    "message": "⚠️ 網域一致，但寄件者未經驗證"
+    "message": "網域一致，但寄件者未經驗證"
   },
   "mailingListVia": {
     "message": "透過郵件群組"
@@ -141,7 +141,7 @@
     "message": "已驗證接收鏈：顯示郵件轉發過程中每個伺服器新增的驗證鏈，保留原始驗證結果。"
   },
   "displayNameSpoofWarning": {
-    "message": "⚠️ 顯示名稱包含不同網域的電子郵件地址（可能為偽造）"
+    "message": "顯示名稱包含不同網域的電子郵件地址（可能為偽造）"
   },
   "cardTitleLinkSafety": {
     "message": "連結安全分析"
@@ -150,7 +150,7 @@
     "message": "分析郵件內文中的連結，偵測偽裝 URL、危險協定、可疑網域等釣魚指標。"
   },
   "replyToMismatch": {
-    "message": "⚠️ Reply-To 地址與寄件者的網域不同"
+    "message": "Reply-To 地址與寄件者的網域不同"
   },
   "linkDeceptiveText": {
     "message": "連結偽裝"
@@ -192,7 +192,7 @@
     "message": "DKIM 不一致"
   },
   "badgeAuthPartial": {
-    "message": "⚠️ 部分驗證"
+    "message": "部分驗證"
   },
   "linkCtaExternal": {
     "message": "主要點擊區域指向外部網域"
@@ -204,7 +204,7 @@
     "message": "資源網域一覽（圖片等）："
   },
   "badgePhishing": {
-    "message": "💀 連結不符"
+    "message": "連結不符"
   },
   "verdictReasonTrackingPixel": {
     "message": "追蹤像素"

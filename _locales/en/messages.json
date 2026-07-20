@@ -8,13 +8,13 @@
     "description": "Description of the extension."
   },
   "badgeAuthPass": {
-    "message": "✅ AUTH PASS"
+    "message": "AUTH PASS"
   },
   "badgeAuthFailed": {
-    "message": "❌ AUTH FAILED"
+    "message": "AUTH FAILED"
   },
   "badgeAuthPassWarning": {
-    "message": "⚠️ AUTH PASS"
+    "message": "AUTH PASS"
   },
   "badgeUnverified": {
     "message": "UNVERIFIED"
@@ -122,13 +122,13 @@
     "message": "Not Aligned"
   },
   "alignOk": {
-    "message": "✅ Domain aligned (Authenticated)"
+    "message": "Domain aligned (Authenticated)"
   },
   "alignMismatch": {
-    "message": "⚠️ Domain mismatch between Header From and Envelope"
+    "message": "Domain mismatch between Header From and Envelope"
   },
   "alignNotAuth": {
-    "message": "⚠️ Domain aligned, but sender is not authenticated"
+    "message": "Domain aligned, but sender is not authenticated"
   },
   "mailingListVia": {
     "message": "via Mailing List"
@@ -149,10 +149,10 @@
     "message": "Authenticated Received Chain: Shows the verification chain added by each mail server during forwarding, preserving original authentication results."
   },
   "displayNameSpoofWarning": {
-    "message": "⚠️ Display name contains an email address from a different domain (possible spoofing)"
+    "message": "Display name contains an email address from a different domain (possible spoofing)"
   },
   "replyToMismatch": {
-    "message": "⚠️ Reply-To address is on a different domain than the sender"
+    "message": "Reply-To address is on a different domain than the sender"
   },
   "linkDeceptiveText": {
     "message": "Link URL spoofing"
@@ -194,7 +194,7 @@
     "message": "DKIM alignment failed"
   },
   "badgeAuthPartial": {
-    "message": "⚠️ PARTIAL"
+    "message": "PARTIAL"
   },
   "linkCtaExternal": {
     "message": "Main click area points to external domain"
@@ -206,7 +206,7 @@
     "message": "Resource Domains (images, etc.):"
   },
   "badgePhishing": {
-    "message": "💀 LINK MISMATCH"
+    "message": "LINK MISMATCH"
   },
   "verdictReasonTrackingPixel": {
     "message": "Tracking pixel"

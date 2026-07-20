@@ -6,13 +6,13 @@
     "message": "يعرض نتائج مصادقة البريد الإلكتروني (SPF، DKIM، DMARC)، وهوية المرسل، ومسارات التسليم مع أوقات التأخير."
   },
   "badgeAuthPass": {
-    "message": "✅ المصادقة ناجحة"
+    "message": "المصادقة ناجحة"
   },
   "badgeAuthFailed": {
-    "message": "❌ فشل المصادقة"
+    "message": "فشل المصادقة"
   },
   "badgeAuthPassWarning": {
-    "message": "⚠️ المصادقة ناجحة"
+    "message": "المصادقة ناجحة"
   },
   "badgeUnverified": {
     "message": "غير موثق"
@@ -114,13 +114,13 @@
     "message": "غير متوافق"
   },
   "alignOk": {
-    "message": "✅ النطاق متطابق (موثق)"
+    "message": "النطاق متطابق (موثق)"
   },
   "alignMismatch": {
-    "message": "⚠️ عدم تطابق النطاق بين Header From والمغلف"
+    "message": "عدم تطابق النطاق بين Header From والمغلف"
   },
   "alignNotAuth": {
-    "message": "⚠️ النطاق متطابق، لكن المرسل غير موثق"
+    "message": "النطاق متطابق، لكن المرسل غير موثق"
   },
   "mailingListVia": {
     "message": "عبر قائمة بريدية"
@@ -141,7 +141,7 @@
     "message": "سلسلة الاستلام الموثقة: تعرض سلسلة التحقق المضافة من كل خادم بريد أثناء إعادة التوجيه، مع الحفاظ على نتائج المصادقة الأصلية."
   },
   "displayNameSpoofWarning": {
-    "message": "⚠️ يحتوي الاسم المعروض على عنوان بريد إلكتروني من نطاق مختلف (تزوير محتمل)"
+    "message": "يحتوي الاسم المعروض على عنوان بريد إلكتروني من نطاق مختلف (تزوير محتمل)"
   },
   "cardTitleLinkSafety": {
     "message": "تحليل أمان الروابط"
@@ -150,7 +150,7 @@
     "message": "يحلل الروابط في نص البريد للكشف عن مؤشرات التصيد مثل عناوين URL المخادعة والمخططات الخطيرة والنطاقات المشبوهة."
   },
   "replyToMismatch": {
-    "message": "⚠️ عنوان Reply-To ينتمي لنطاق مختلف عن المرسل"
+    "message": "عنوان Reply-To ينتمي لنطاق مختلف عن المرسل"
   },
   "linkDeceptiveText": {
     "message": "رابط مخادع"
@@ -192,7 +192,7 @@
     "message": "DKIM غير متوافق"
   },
   "badgeAuthPartial": {
-    "message": "⚠️ جزئي"
+    "message": "جزئي"
   },
   "linkCtaExternal": {
     "message": "منطقة النقر الرئيسية تشير إلى نطاق خارجي"
@@ -204,7 +204,7 @@
     "message": "نطاقات الموارد (الصور وغيرها):"
   },
   "badgePhishing": {
-    "message": "💀 عدم تطابق الرابط"
+    "message": "عدم تطابق الرابط"
   },
   "verdictReasonTrackingPixel": {
     "message": "بكسل تتبع"

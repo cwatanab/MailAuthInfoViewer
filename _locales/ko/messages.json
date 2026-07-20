@@ -6,13 +6,13 @@
     "message": "이메일 인증 결과(SPF, DKIM, DMARC), 발신자 신원 확인, 지연 시간을 포함한 전달 경로를 시각화합니다."
   },
   "badgeAuthPass": {
-    "message": "✅ 인증 성공"
+    "message": "인증 성공"
   },
   "badgeAuthFailed": {
-    "message": "❌ 인증 실패"
+    "message": "인증 실패"
   },
   "badgeAuthPassWarning": {
-    "message": "⚠️ 인증 성공"
+    "message": "인증 성공"
   },
   "badgeUnverified": {
     "message": "미검증"
@@ -114,13 +114,13 @@
     "message": "비정렬"
   },
   "alignOk": {
-    "message": "✅ 도메인 일치 (인증됨)"
+    "message": "도메인 일치 (인증됨)"
   },
   "alignMismatch": {
-    "message": "⚠️ Header From과 Envelope 간 도메인 불일치"
+    "message": "Header From과 Envelope 간 도메인 불일치"
   },
   "alignNotAuth": {
-    "message": "⚠️ 도메인은 일치하지만 발신자가 인증되지 않았습니다"
+    "message": "도메인은 일치하지만 발신자가 인증되지 않았습니다"
   },
   "mailingListVia": {
     "message": "메일링 리스트 경유"
@@ -141,7 +141,7 @@
     "message": "Authenticated Received Chain: 전달 과정에서 각 메일 서버가 추가한 검증 체인을 표시하여 원본 인증 결과를 보존합니다."
   },
   "displayNameSpoofWarning": {
-    "message": "⚠️ 표시 이름에 다른 도메인의 이메일 주소가 포함되어 있습니다 (스푸핑 의심)"
+    "message": "표시 이름에 다른 도메인의 이메일 주소가 포함되어 있습니다 (스푸핑 의심)"
   },
   "cardTitleLinkSafety": {
     "message": "링크 안전성 분석"
@@ -150,7 +150,7 @@
     "message": "이메일 본문의 링크를 분석하여 위조 URL, 위험한 스키마, 의심스러운 도메인 등의 피싱 지표를 감지합니다."
   },
   "replyToMismatch": {
-    "message": "⚠️ Reply-To 주소가 발신자와 다른 도메인입니다"
+    "message": "Reply-To 주소가 발신자와 다른 도메인입니다"
   },
   "linkDeceptiveText": {
     "message": "링크 위조"
@@ -192,7 +192,7 @@
     "message": "DKIM 정렬 실패"
   },
   "badgeAuthPartial": {
-    "message": "⚠️ 부분 인증"
+    "message": "부분 인증"
   },
   "linkCtaExternal": {
     "message": "메인 클릭 영역이 외부 도메인을 가리킴"
@@ -204,7 +204,7 @@
     "message": "리소스 도메인 (이미지 등):"
   },
   "badgePhishing": {
-    "message": "💀 링크 불일치"
+    "message": "링크 불일치"
   },
   "verdictReasonTrackingPixel": {
     "message": "추적 픽셀"

@@ -6,13 +6,13 @@
     "message": "可视化展示邮件认证结果（SPF、DKIM、DMARC）、发件人身份比对，以及包含延迟时间的投递路径。"
   },
   "badgeAuthPass": {
-    "message": "✅ 认证通过"
+    "message": "认证通过"
   },
   "badgeAuthFailed": {
-    "message": "❌ 认证失败"
+    "message": "认证失败"
   },
   "badgeAuthPassWarning": {
-    "message": "⚠️ 认证通过"
+    "message": "认证通过"
   },
   "badgeUnverified": {
     "message": "未验证"
@@ -114,13 +114,13 @@
     "message": "不一致"
   },
   "alignOk": {
-    "message": "✅ 域名一致（已认证）"
+    "message": "域名一致（已认证）"
   },
   "alignMismatch": {
-    "message": "⚠️ Header From 与信封之间的域名不匹配"
+    "message": "Header From 与信封之间的域名不匹配"
   },
   "alignNotAuth": {
-    "message": "⚠️ 域名一致，但发件人未经认证"
+    "message": "域名一致，但发件人未经认证"
   },
   "mailingListVia": {
     "message": "通过邮件列表"
@@ -141,7 +141,7 @@
     "message": "已认证接收链：显示邮件转发过程中每个服务器添加的验证链，保留原始认证结果。"
   },
   "displayNameSpoofWarning": {
-    "message": "⚠️ 显示名称包含不同域名的电子邮件地址（可能为伪造）"
+    "message": "显示名称包含不同域名的电子邮件地址（可能为伪造）"
   },
   "cardTitleLinkSafety": {
     "message": "链接安全分析"
@@ -150,7 +150,7 @@
     "message": "分析邮件正文中的链接，检测伪装 URL、危险协议、可疑域名等钓鱼指标。"
   },
   "replyToMismatch": {
-    "message": "⚠️ Reply-To 地址与发件人的域名不同"
+    "message": "Reply-To 地址与发件人的域名不同"
   },
   "linkDeceptiveText": {
     "message": "链接伪装"
@@ -192,7 +192,7 @@
     "message": "DKIM 不一致"
   },
   "badgeAuthPartial": {
-    "message": "⚠️ 部分验证"
+    "message": "部分验证"
   },
   "linkCtaExternal": {
     "message": "主要点击区域指向外部域名"
@@ -204,7 +204,7 @@
     "message": "资源域名一览（图片等）："
   },
   "badgePhishing": {
-    "message": "💀 链接不符"
+    "message": "链接不符"
   },
   "verdictReasonTrackingPixel": {
     "message": "跟踪像素"

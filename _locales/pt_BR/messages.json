@@ -6,13 +6,13 @@
     "message": "Visualiza os resultados de autenticação de e-mail (SPF, DKIM, DMARC), identidade do remetente e rotas de entrega com tempos de atraso."
   },
   "badgeAuthPass": {
-    "message": "✅ AUTH APROVADA"
+    "message": "AUTH APROVADA"
   },
   "badgeAuthFailed": {
-    "message": "❌ AUTH REPROVADA"
+    "message": "AUTH REPROVADA"
   },
   "badgeAuthPassWarning": {
-    "message": "⚠️ AUTH APROVADA"
+    "message": "AUTH APROVADA"
   },
   "badgeUnverified": {
     "message": "NÃO VERIFICADO"
@@ -114,13 +114,13 @@
     "message": "Não alinhado"
   },
   "alignOk": {
-    "message": "✅ Domínio alinhado (Autenticado)"
+    "message": "Domínio alinhado (Autenticado)"
   },
   "alignMismatch": {
-    "message": "⚠️ Discrepância de domínio entre Header From e Envelope"
+    "message": "Discrepância de domínio entre Header From e Envelope"
   },
   "alignNotAuth": {
-    "message": "⚠️ Domínio alinhado, mas o remetente não está autenticado"
+    "message": "Domínio alinhado, mas o remetente não está autenticado"
   },
   "mailingListVia": {
     "message": "via lista de e-mails"
@@ -141,7 +141,7 @@
     "message": "Authenticated Received Chain: Mostra a cadeia de verificação adicionada por cada servidor de e-mail durante o encaminhamento, preservando os resultados de autenticação originais."
   },
   "displayNameSpoofWarning": {
-    "message": "⚠️ O nome de exibição contém um endereço de e-mail de um domínio diferente (possível falsificação)"
+    "message": "O nome de exibição contém um endereço de e-mail de um domínio diferente (possível falsificação)"
   },
   "cardTitleLinkSafety": {
     "message": "ANÁLISE DE SEGURANÇA DE LINKS"
@@ -150,7 +150,7 @@
     "message": "Analisa os links no corpo do e-mail para detectar indicadores de phishing como URLs enganosas, esquemas perigosos e domínios suspeitos."
   },
   "replyToMismatch": {
-    "message": "⚠️ O endereço Reply-To pertence a um domínio diferente do remetente"
+    "message": "O endereço Reply-To pertence a um domínio diferente do remetente"
   },
   "linkDeceptiveText": {
     "message": "Link enganoso"
@@ -192,7 +192,7 @@
     "message": "Alinhamento DKIM falhou"
   },
   "badgeAuthPartial": {
-    "message": "⚠️ PARCIAL"
+    "message": "PARCIAL"
   },
   "linkCtaExternal": {
     "message": "Área de clique principal aponta para domínio externo"
@@ -204,7 +204,7 @@
     "message": "Domínios de recursos (imagens, etc.):"
   },
   "badgePhishing": {
-    "message": "💀 LINK DIVERGENTE"
+    "message": "LINK DIVERGENTE"
   },
   "verdictReasonTrackingPixel": {
     "message": "Pixel de rastreamento"
