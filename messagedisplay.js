@@ -2369,17 +2369,17 @@
 
       // 判定バッジ: アイコンのみ。フルラベルは tooltip / aria-label
       const badgeIconMap = {
-        secure: "✔",
-        warning: "⚠︎",
-        danger: "✘",
-        phishing: "✘"
+        secure: '<i class="bi bi-check-circle-fill"></i>',
+        warning: '<i class="bi bi-exclamation-triangle-fill"></i>',
+        danger: '<i class="bi bi-x-circle-fill"></i>',
+        phishing: '<i class="bi bi-exclamation-octagon-fill"></i>'
       };
-      const badgeIcon = badgeIconMap[security.badgeClass] || "⚠︎";
+      const badgeIcon = badgeIconMap[security.badgeClass] || '<i class="bi bi-exclamation-triangle-fill"></i>';
       const badgeTitle = security.badgeText;
 
       // メーリングリスト: アイコンのみ
       const mailingListTag = envelope.isMailingList
-        ? `<span class="maiv-chip maiv-chip-ml" title="${escapeHTML(msg("mailingListVia"))}"><span class="maiv-icon">▤</span></span>`
+        ? `<span class="maiv-chip maiv-chip-ml" title="${escapeHTML(msg("mailingListVia"))}"><span class="maiv-icon"><i class="bi bi-envelope-fill"></i></span></span>`
         : "";
 
       // --- SPF / DKIM / DMARC ミニ指標（折りたたみ時も常時表示） ---
@@ -2393,10 +2393,10 @@
       // ラベルは省略せず SPF / DKIM / DMARC と表示し、ステータスに応じたアイコンを付与
       const miniStatusIcon = (status) => {
         const s = (status || "none").toLowerCase();
-        if (s === "pass") return "✔";
-        if (s === "fail" || s === "temperror" || s === "permerror") return "✘";
-        if (s === "softfail" || s === "neutral" || s === "policy") return "⚠︎";
-        return "−"; // none / 未判定
+        if (s === "pass") return '<i class="bi bi-check-circle-fill"></i>';
+        if (s === "fail" || s === "temperror" || s === "permerror") return '<i class="bi bi-x-circle-fill"></i>';
+        if (s === "softfail" || s === "neutral" || s === "policy") return '<i class="bi bi-exclamation-triangle-fill"></i>';
+        return '<i class="bi bi-dash"></i>'; // none / 未判定
       };
       const renderAuthMini = (status, methodLabel) => {
         const st = (status || "none").toLowerCase();
@@ -2434,7 +2434,7 @@
         const issueCls = (security.badgeClass === "danger" || security.badgeClass === "phishing")
           ? "maiv-chip maiv-chip-issue danger"
           : "maiv-chip maiv-chip-issue";
-        const issueIcon = security.badgeClass === "phishing" ? "✘" : "⚠︎";
+        const issueIcon = security.badgeClass === "phishing" ? '<i class="bi bi-exclamation-octagon-fill"></i>' : '<i class="bi bi-exclamation-triangle-fill"></i>';
         issueChipHTML = `<span class="${issueCls}" title="${escapeHTML(tip)}"><span class="maiv-icon">${issueIcon}</span><span class="maiv-chip-count">${count}</span></span>`;
       }
 
@@ -2448,7 +2448,7 @@
         if (ru.dmarc) parts.push(`DMARC:${ru.dmarc}`);
         const tip = `${msg("reportedUnverifiedNotice")}\n${parts.join(" ")}`;
         reportedUnverifiedTag =
-          `<span class="maiv-chip maiv-chip-info" title="${escapeHTML(tip)}"><span class="maiv-icon">ℹ︎</span></span>`;
+          `<span class="maiv-chip maiv-chip-info" title="${escapeHTML(tip)}"><span class="maiv-icon"><i class="bi bi-info-circle-fill"></i></span></span>`;
       }
 
       const headerHTML = `
@@ -2463,7 +2463,7 @@
           ${reportedUnverifiedTag}
           <span class="maiv-spacer"></span>
           <button class="maiv-copy-btn" id="maiv-copy-btn" title="${escapeHTML(msg("copyButton"))}"
-                  type="button" aria-label="${escapeHTML(msg("copyButton"))}">❏</button>
+                  type="button" aria-label="${escapeHTML(msg("copyButton"))}"><i class="bi bi-clipboard"></i></button>
           <button class="maiv-toggle-icon" id="maiv-toggle-icon" type="button"
                   title="${escapeHTML(msg("toggleDetails"))}"
                   aria-label="${escapeHTML(msg("toggleDetails"))}"
@@ -2473,14 +2473,14 @@
 
       // --- 認証カード生成ヘルパー ---
       const createAuthCard = (title, tooltip, data, detailHTML, expandedHTML, cardId) => {
-        let icon = "−";
+        let icon = '<i class="bi bi-dash-circle-fill"></i>';
         let sClass = "status-none";
         const displayStatus = data.status.toUpperCase();
 
-        if (data.status === "pass") { icon = "✔"; sClass = "status-pass"; }
-        else if (data.status === "fail") { icon = "✘"; sClass = "status-fail"; }
-        else if (data.status === "softfail" || data.status === "neutral" || data.status === "none") { icon = "⚠︎"; sClass = "status-none"; }
-        else if (data.status === "temperror" || data.status === "permerror") { icon = "✘"; sClass = "status-fail"; }
+        if (data.status === "pass") { icon = '<i class="bi bi-check-circle-fill"></i>'; sClass = "status-pass"; }
+        else if (data.status === "fail") { icon = '<i class="bi bi-x-circle-fill"></i>'; sClass = "status-fail"; }
+        else if (data.status === "softfail" || data.status === "neutral" || data.status === "none") { icon = '<i class="bi bi-exclamation-triangle-fill"></i>'; sClass = "status-none"; }
+        else if (data.status === "temperror" || data.status === "permerror") { icon = '<i class="bi bi-x-circle-fill"></i>'; sClass = "status-fail"; }
 
         // authserv-id: ジャッジしたサーバのドメイン
         const authServLabel = authResults.authServId
@@ -2521,7 +2521,7 @@
         if (d.ip) parts.push(kvRow(msg("labelIpAddress"), d.ip));
         // SPF アライメント: SPF が pass の場合のみ表示
         if (al && authResults.spf.status === "pass") {
-          const icon = al.spfAligned ? "✔" : "✘";
+          const icon = al.spfAligned ? '<i class="bi bi-check-circle-fill"></i>' : '<i class="bi bi-x-circle-fill"></i>';
           const cls = al.spfAligned ? "maiv-align-pass" : "maiv-align-fail";
           const label = al.spfAligned ? msg("alignedLabel") : msg("notAlignedLabel");
           parts.push(`<div class="maiv-align-item"><span class="maiv-icon">${icon}</span><span class="${cls}">${escapeHTML(msg("labelSpfAlign"))} ${escapeHTML(label)}</span></div>`);
@@ -2550,12 +2550,12 @@
         for (const w of (authResults.strength ? authResults.strength.dkim : [])) {
           const label = strengthTypeMsg[w.type] || w.type;
           const domainInfo = w.domain ? ` — ${w.domain}` : "";
-          strengthHTML += `<div class="maiv-strength-warn"><span class="maiv-icon">⚠︎</span><span>${escapeHTML(label)} (${escapeHTML(w.value)}${escapeHTML(domainInfo)})</span></div>`;
+          strengthHTML += `<div class="maiv-strength-warn"><span class="maiv-icon"><i class="bi bi-exclamation-triangle-fill"></i></span><span>${escapeHTML(label)} (${escapeHTML(w.value)}${escapeHTML(domainInfo)})</span></div>`;
         }
 
         if (sigs.length === 0 || !sigs.some(s => s.domain)) {
           const st = authResults.dkim.status;
-          const emptyIcon = (st === "fail" || st === "permerror" || st === "temperror") ? "✘" : "⚠︎";
+          const emptyIcon = (st === "fail" || st === "permerror" || st === "temperror") ? '<i class="bi bi-x-circle-fill"></i>' : '<i class="bi bi-exclamation-triangle-fill"></i>';
           const emptyCls = (st === "fail" || st === "permerror" || st === "temperror") ? "status-fail" : "status-none";
           return `
             <div class="maiv-status-row">
@@ -2573,7 +2573,7 @@
           if (!sig.domain) continue;
           if (i > 0) html += `<div class="maiv-sig-sep"></div>`;
 
-          const icon = sig.status === "pass" ? "✔" : (sig.status === "fail" ? "✘" : "⚠︎");
+          const icon = sig.status === "pass" ? '<i class="bi bi-check-circle-fill"></i>' : (sig.status === "fail" ? '<i class="bi bi-x-circle-fill"></i>' : '<i class="bi bi-exclamation-triangle-fill"></i>');
           const sClass = sig.status === "pass" ? "status-pass" : (sig.status === "fail" ? "status-fail" : "status-none");
 
           // ステータス行（SPFと同じ maiv-status-row）
@@ -2584,7 +2584,7 @@
           if (sig.status === "pass") {
             const sigOrgDomain = getOrgDomain(sig.domain.toLowerCase());
             const aligned = (sigOrgDomain === headerOrgDomain);
-            const alIcon = aligned ? "✔" : "✘";
+            const alIcon = aligned ? '<i class="bi bi-check-circle-fill"></i>' : '<i class="bi bi-x-circle-fill"></i>';
             const alCls = aligned ? "maiv-align-pass" : "maiv-align-fail";
             const alLabel = aligned ? msg("alignedLabel") : msg("notAlignedLabel");
             parts.push(`<div class="maiv-align-item"><span class="maiv-icon">${alIcon}</span><span class="${alCls}">${escapeHTML(msg("labelDkimAlign"))} ${escapeHTML(alLabel)}</span></div>`);
@@ -2610,7 +2610,7 @@
         };
         for (const w of (authResults.strength ? authResults.strength.dmarc : [])) {
           const label = dmarcStrengthMsg[w.type] || w.type;
-          parts.push(`<div class="maiv-strength-warn"><span class="maiv-icon">⚠︎</span><span>${escapeHTML(label)} (${escapeHTML(w.value)})</span></div>`);
+          parts.push(`<div class="maiv-strength-warn"><span class="maiv-icon"><i class="bi bi-exclamation-triangle-fill"></i></span><span>${escapeHTML(label)} (${escapeHTML(w.value)})</span></div>`);
         }
         return parts.join("");
       })();
@@ -2719,31 +2719,31 @@
 
       // 表示名なりすまし警告: 表示名に別ドメインのアドレスが埋め込まれている場合
       if (envelope.isDisplayNameSpoofed) {
-        alignmentWarningHTML += `<div class="align-ng"><span class="maiv-icon">✘</span><span>${escapeHTML(msg("displayNameSpoofWarning"))}</span></div>`;
+        alignmentWarningHTML += `<div class="align-ng"><span class="maiv-icon"><i class="bi bi-x-circle-fill"></i></span><span>${escapeHTML(msg("displayNameSpoofWarning"))}</span></div>`;
       }
 
       if (!envelope.isDomainAligned && envelope.envelopeFrom !== "Unknown") {
         if (envelope.isMailingList) {
           // メーリングリスト経由: 不一致の原因が転送である可能性を明示
-          alignmentWarningHTML += `<div class="align-warn"><span class="maiv-icon">▤</span><span>${escapeHTML(msg("mailingListNote"))}</span></div>`;
+          alignmentWarningHTML += `<div class="align-warn"><span class="maiv-icon"><i class="bi bi-envelope-fill"></i></span><span>${escapeHTML(msg("mailingListNote"))}</span></div>`;
         } else if (security.isSpfOk || security.isDkimOk) {
           // 認証は通っている: DMARCアライメント成立時は情報提供レベル、非成立時は警告
-          alignmentWarningHTML += `<div class="align-warn"><span class="maiv-icon">⚠︎</span><span>${escapeHTML(msg("alignMismatch"))}</span></div>`;
+          alignmentWarningHTML += `<div class="align-warn"><span class="maiv-icon"><i class="bi bi-exclamation-triangle-fill"></i></span><span>${escapeHTML(msg("alignMismatch"))}</span></div>`;
         } else {
-          alignmentWarningHTML += `<div class="align-ng"><span class="maiv-icon">✘</span><span>${escapeHTML(msg("alignMismatch"))}</span></div>`;
+          alignmentWarningHTML += `<div class="align-ng"><span class="maiv-icon"><i class="bi bi-x-circle-fill"></i></span><span>${escapeHTML(msg("alignMismatch"))}</span></div>`;
         }
       } else if (envelope.isDomainAligned && (security.isSpfOk || security.isDkimOk)) {
         // ドメイン一致かつ認証も通っている場合はグリーン表示
         // （p=none等で総合判定がグリーンでなくても、認証自体は成功している）
-        alignmentWarningHTML += `<div class="align-ok"><span class="maiv-icon">✔</span><span>${escapeHTML(msg("alignOk"))}</span></div>`;
+        alignmentWarningHTML += `<div class="align-ok"><span class="maiv-icon"><i class="bi bi-check-circle-fill"></i></span><span>${escapeHTML(msg("alignOk"))}</span></div>`;
       } else if (envelope.isDomainAligned) {
         // ドメインは一致しているが認証が通っていない
-        alignmentWarningHTML += `<div class="align-warn"><span class="maiv-icon">⚠︎</span><span>${escapeHTML(msg("alignNotAuth"))}</span></div>`;
+        alignmentWarningHTML += `<div class="align-warn"><span class="maiv-icon"><i class="bi bi-exclamation-triangle-fill"></i></span><span>${escapeHTML(msg("alignNotAuth"))}</span></div>`;
       }
 
       // Reply-To 不一致警告: フィッシングで返信先を攻撃者に誘導する手口の可能性
       if (envelope.isReplyToMismatch) {
-        alignmentWarningHTML += `<div class="align-warn"><span class="maiv-icon">⚠︎</span><span>${escapeHTML(msg("replyToMismatch"))} (${escapeHTML(envelope.replyToAddress)})</span></div>`;
+        alignmentWarningHTML += `<div class="align-warn"><span class="maiv-icon"><i class="bi bi-exclamation-triangle-fill"></i></span><span>${escapeHTML(msg("replyToMismatch"))} (${escapeHTML(envelope.replyToAddress)})</span></div>`;
       }
 
       const addressRow = (label, value) =>
@@ -2812,26 +2812,26 @@
             const verNum = tls.version.replace(/^TLS\s*/i, "");
             const isLegacy = /^1\.[01]$/.test(verNum);
             const tlsCls = isLegacy ? "maiv-tls-warn" : "maiv-tls-secure";
-            const tlsIcon = isLegacy ? "⚠︎" : "🔒︎";
+            const tlsIcon = isLegacy ? '<i class="bi bi-exclamation-triangle-fill"></i>' : '<i class="bi bi-lock-fill"></i>';
             const tipParts = [tls.version];
             if (tls.cipher) tipParts.push(tls.cipher);
             tlsCell = `<span class="maiv-tls-tag ${tlsCls}" title="${escapeHTML(tipParts.join(" / "))}">${tlsIcon} ${escapeHTML(verNum)}</span>`;
           } else if (tls && tls.encrypted === true) {
-            tlsCell = `<span class="maiv-tls-tag maiv-tls-secure" title="TLS">🔒︎</span>`;
+            tlsCell = `<span class="maiv-tls-tag maiv-tls-secure" title="TLS"><i class="bi bi-lock-fill"></i></span>`;
           } else if (tls && tls.encrypted === false) {
-            tlsCell = `<span class="maiv-tls-tag maiv-tls-danger" title="${escapeHTML(msg("tlsUnencrypted"))}">🔓︎</span>`;
+            tlsCell = `<span class="maiv-tls-tag maiv-tls-danger" title="${escapeHTML(msg("tlsUnencrypted"))}"><i class="bi bi-unlock-fill"></i></span>`;
           } else {
-            tlsCell = `<span class="maiv-tls-tag maiv-tls-unknown" title="${escapeHTML(msg("tlsUnknown"))}">−</span>`;
+            tlsCell = `<span class="maiv-tls-tag maiv-tls-unknown" title="${escapeHTML(msg("tlsUnknown"))}"><i class="bi bi-dash"></i></span>`;
           }
 
           const rowClass = isFirst ? "maiv-route-origin" : "maiv-route-hop";
           const timeDisplay = hop.date ? hop.date.toLocaleTimeString() : "";
-          const label = isFirst ? `${msg("labelOrigin")} ↗︎` : `#${i + 1}`;
+          const escapedLabel = isFirst ? `${escapeHTML(msg("labelOrigin"))} <i class="bi bi-arrow-up-right-circle-fill"></i>` : escapeHTML(`#${i + 1}`);
 
           routeRows += `
             <tr class="${rowClass}">
               <td class="maiv-route-delay"><span class="${delayClass}">${delayStr}</span></td>
-              <td>${escapeHTML(label)} ${ipTag}${byDisplay}</td>
+              <td>${escapedLabel} ${ipTag}${byDisplay}</td>
               <td class="maiv-route-tls">${tlsCell}</td>
               <td class="maiv-route-time">${escapeHTML(timeDisplay)}</td>
             </tr>
@@ -2840,10 +2840,11 @@
 
         // Envelope-To を末尾行に追加（取得できない場合は省略）
         if (envelope.envelopeTo && envelope.envelopeTo !== "Unknown") {
+          const envelopeToLabel = `${escapeHTML(msg("labelEnvelopeTo"))}: ${escapeHTML(envelope.envelopeTo)}`;
           routeRows += `
             <tr class="maiv-route-hop">
-              <td class="maiv-route-delay"><span class="maiv-delay-none">↙︎</span></td>
-              <td>${escapeHTML(msg("labelEnvelopeTo"))}: ${escapeHTML(envelope.envelopeTo)}</td>
+              <td class="maiv-route-delay"><span class="maiv-delay-none"><i class="bi bi-arrow-down-left-circle-fill"></i></span></td>
+              <td>${envelopeToLabel}</td>
               <td class="maiv-route-tls"></td>
               <td class="maiv-route-time"></td>
             </tr>
@@ -2864,7 +2865,7 @@
       if (arcChain.length > 0) {
         let arcRows = "";
         for (const chain of arcChain) {
-          const cvIcon = (chain.cv === "pass" || chain.cv === "none") ? "✔" : (chain.cv === "fail" ? "✘" : "⚠︎");
+          const cvIcon = (chain.cv === "pass" || chain.cv === "none") ? '<i class="bi bi-check-circle-fill"></i>' : (chain.cv === "fail" ? '<i class="bi bi-x-circle-fill"></i>' : '<i class="bi bi-exclamation-triangle-fill"></i>');
           const cvClass = (chain.cv === "pass" || chain.cv === "none") ? "status-pass" : (chain.cv === "fail" ? "status-fail" : "status-none");
           arcRows += `
             <tr>
@@ -2904,10 +2905,10 @@
             "privacy": "maiv-finding-privacy"
           };
           const levelIcon = {
-            "critical": "✘",
-            "suspicious": "⚠︎",
-            "untrusted": "⚠︎",
-            "privacy": "⚲"
+            "critical": '<i class="bi bi-x-circle-fill"></i>',
+            "suspicious": '<i class="bi bi-exclamation-triangle-fill"></i>',
+            "untrusted": '<i class="bi bi-exclamation-triangle-fill"></i>',
+            "privacy": '<i class="bi bi-eye-slash-fill"></i>'
           };
           // 未信頼な外部リンクドメインが1つだけの場合、その findings 行から直接Trustできるようにする。
           // 複数ある場合はユーザーが意図せず一括信頼するリスクがあるため、下のドメイン一覧から個別操作を促す。
@@ -2943,15 +2944,15 @@
             let icon, cls;
             const isTrusted = trustedDomains && trustedDomains.has(domain);
             if (deceptive && deceptive.has(domain)) {
-              icon = "✘"; cls = "maiv-link-domain-danger";
+              icon = '<i class="bi bi-x-circle-fill"></i>'; cls = "maiv-link-domain-danger";
             } else if (info.matchesFrom) {
-              icon = "✔"; cls = "maiv-link-domain-match";
+              icon = '<i class="bi bi-check-circle-fill"></i>'; cls = "maiv-link-domain-match";
             } else if (isTrusted) {
-              icon = "✦"; cls = "maiv-link-domain-trusted";
+              icon = '<i class="bi bi-shield-fill-check"></i>'; cls = "maiv-link-domain-trusted";
             } else {
-              icon = "⚠︎"; cls = "maiv-link-domain-mismatch";
+              icon = '<i class="bi bi-exclamation-triangle-fill"></i>'; cls = "maiv-link-domain-mismatch";
             }
-            const trackerMark = trackers && trackers.has(domain) ? " ⚲" : "";
+            const trackerMark = trackers && trackers.has(domain) ? ' <i class="bi bi-eye-slash-fill"></i>' : "";
             // 「信頼」ボタン: 任意のリンク警告(critical/suspicious/untrusted)検出時、未信頼かつ不一致ドメインに表示
             const trustBtn = (showTrust && hasFindings && !info.matchesFrom && !isTrusted)
               ? ` <button class="maiv-trust-btn" data-domain="${escapeHTML(domain)}">${escapeHTML(msg("trustDomainButton"))}</button>`
@@ -3053,6 +3054,10 @@
       document.body.insertAdjacentElement("afterbegin", host);
 
       const shadow = host.attachShadow({ mode: "closed" });
+      const iconLink = document.createElement("link");
+      iconLink.rel = "stylesheet";
+      iconLink.href = browser.runtime.getURL("css/bootstrap-icons.css");
+      shadow.appendChild(iconLink);
       shadow.appendChild(style);
       shadow.appendChild(container);
 
@@ -3097,10 +3102,10 @@
           }
           // 成否をアイコンと title で2秒間フィードバックして元に戻す
           const prevTitle = copyBtn.getAttribute("title") || msg("copyButton");
-          copyBtn.textContent = ok ? "✔" : "✘";
+          copyBtn.innerHTML = ok ? '<i class="bi bi-check-circle-fill"></i>' : '<i class="bi bi-x-circle-fill"></i>';
           copyBtn.title = ok ? msg("copiedSuccess") : msg("copiedFailed");
           setTimeout(() => {
-            copyBtn.textContent = "❏";
+            copyBtn.innerHTML = '<i class="bi bi-clipboard"></i>';
             copyBtn.title = prevTitle;
           }, 2000);
         });

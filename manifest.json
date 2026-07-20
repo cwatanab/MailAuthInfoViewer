@@ -31,5 +31,10 @@
   "options_ui": {
     "page": "options.html",
     "browser_style": false
-  }
+  },
+  "web_accessible_resources": [
+    "css/bootstrap-icons.css",
+    "css/fonts/bootstrap-icons.woff2",
+    "css/fonts/bootstrap-icons.woff"
+  ]
 }

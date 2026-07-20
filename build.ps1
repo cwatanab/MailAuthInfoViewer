@@ -34,6 +34,7 @@ Copy-Item -Force "images/icon.svg"  (Join-Path $stageDir "images")
 
 # --- _locales ディレクトリをコピー ---
 Copy-Item -Recurse -Force "_locales" (Join-Path $stageDir "_locales")
+Copy-Item -Recurse -Force "css"      (Join-Path $stageDir "css")
 
 # --- 圧縮 ---
 $absoluteOutFile = [System.IO.Path]::GetFullPath($outFile)

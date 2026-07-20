@@ -2,6 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
+<link rel="stylesheet" href="css/bootstrap-icons.css">
 <style>
   /* DESIGN.md — Apple design tokens adapted for options page */
   :root {
@@ -191,11 +192,13 @@
     border-color: var(--danger);
     border-width: 1px;
     background: transparent;
-    font-size: 12px; /* fine-print */
+    font-size: 14px;
     line-height: 1.0;
-    letter-spacing: -0.12px;
-    padding: 6px 12px;
-    border-radius: var(--radius-pill);
+    padding: 6px 10px;
+    border-radius: var(--radius-md); /* 11px */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 
   button.danger:hover { background: var(--danger-bg); }

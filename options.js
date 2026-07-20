@@ -55,7 +55,11 @@ const renderList = async () => {
     const btn = document.createElement("button");
     btn.className = "danger";
     btn.setAttribute("data-remove", d);
-    btn.textContent = msg("optionsRemove");
+    btn.setAttribute("aria-label", msg("optionsRemove"));
+    
+    const icon = document.createElement("i");
+    icon.className = "bi bi-trash";
+    btn.appendChild(icon);
 
     item.appendChild(span);
     item.appendChild(btn);
