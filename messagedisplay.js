@@ -1297,7 +1297,11 @@
         shieldFillCheck: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 0c-.69 0-1.843.265-2.928.56-1.11.3-2.229.655-2.887.87a1.54 1.54 0 0 0-1.044 1.262c-.596 4.477.787 7.795 2.465 9.99 1.614 2.111 3.596 3.197 4.09 3.456a1.54 1.54 0 0 0 1.348 0c.494-.259 2.476-1.345 4.09-3.456 1.678-2.195 3.061-5.513 2.466-9.99a1.54 1.54 0 0 0-1.044-1.263 55 55 0 0 0-2.887-.87C9.843.266 8.69 0 8 0m2.146 5.146a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793z"/></svg>',
         eyeSlashFill: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474L3.086 5.21C1.89 6.268 1 7.55 1 8c0 1.61 3.52 7 7 7a7 7 0 0 0 2.79-.088M5.21 3.086A7 7 0 0 1 8 3c3.48 0 7 5.39 7 7a7 7 0 0 1-.088 2.79l-2.062-2.063C13.48 9.308 14 8.543 14 8c0-1.61-3.52-7-7-7a7 7 0 0 0-1.17.1zm2.11 2.11a2.5 2.5 0 0 1 3.475 3.475l-3.475-3.475z"/><path d="M13.477 14.89 1.113 2.525a.5.5 0 1 1 .707-.707l12.366 12.365a.5.5 0 1 1-.707.708"/></svg>',
         dash: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8"/></svg>',
-        dashCircleFill: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1z"/></svg>'
+        dashCircleFill: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1z"/></svg>',
+        rocketTakeoffFill: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M12.052.148a.76.76 0 0 0-.583-.146L7.155 1.111l-.813.813c-.114.114-.15.285-.093.436l.72 1.916-2.52 2.52-1.921-.718a.38.38 0 0 0-.438.093l-.813.813L3.12 9.155a.76.76 0 0 0 .146.583l2.83 2.83a.76.76 0 0 0 .583.146l2.171-1.832.813-.813a.38.38 0 0 0 .093-.438l-.718-1.921 2.52-2.52 1.916.72a.38.38 0 0 0 .436-.093l.813-.813L12.2 4.893a.76.76 0 0 0-.148-.583zm-1.87 7.746a.75.75 0 1 1-1.06-1.06.75.75 0 0 1 1.06 1.06z"/></svg>',
+        houseFill: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L8 2.207l6.646 6.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293z"/><path d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293z"/></svg>',
+        globe: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m7.5-6.923c-.67.204-1.335.82-1.887 1.855A8 8 0 0 0 5.145 4H7.5zM4.09 4a9.2 9.2 0 0 1 .64-1.539 6.7 6.7 0 0 1 .597-.933A7.03 7.03 0 0 0 2.255 4zm-.582 1H1.053a7 7 0 0 0 0 2h2.222zm-.222 3H1.053a7 7 0 0 0 0 2h2.222zm.222 3H1.053a7 7 0 0 0 0 2h2.222zm.582 1h2.835a8 8 0 0 0 .47-1H4.09zm3.41 0h1c.67-.204 1.335-.82 1.887-1.855A8 8 0 0 0 10.855 12H7.5zm3.41 0a9.2 9.2 0 0 1-.64 1.539 6.7 6.7 0 0 1-.597.933A7.03 7.03 0 0 0 13.745 12zM12 11h2.222a7 7 0 0 0 0-2H12zm2.222-3a7 7 0 0 0 0-2H12zM12 5h2.222a7 7 0 0 0 0-2H12zm-1.145-1A8 8 0 0 0 10.855 3c-.552-1.035-1.217-1.651-1.887-1.855V4zM8.5 4h2.355a9.2 9.2 0 0 0-.46-1c-.538-1.01-1.2-1.613-1.895-1.815V4zM7.5 5v2H4.02a10 10 0 0 0 .08 2H7.5v2h2.46c-.05.67-.19 1.32-.42 1.93L7.5 11V5z"/></svg>',
+        chevronDown: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/></svg>'
       };
 
       // --- スタイル定義 (CSS変数によるダークモード完全対応) ---
@@ -1978,10 +1982,41 @@
           flex-shrink: 0;
           vertical-align: middle;
         }
+        /* アイコン類に明示的な color を強制し、外部からの白/黒等の予期しない color 継承を防ぐ */
+        .maiv-copy-btn,
+        .maiv-toggle-icon {
+          color: var(--maiv-text-secondary) !important;
+        }
+        .maiv-copy-btn:hover,
+        .maiv-toggle-icon:hover {
+          color: var(--maiv-primary) !important;
+        }
+        .maiv-tls-secure {
+          color: var(--maiv-pass) !important;
+        }
+        .maiv-tls-warn {
+          color: var(--maiv-delay-warning) !important;
+        }
+        .maiv-tls-danger {
+          color: var(--maiv-fail) !important;
+        }
+        .maiv-ip-tag {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          color: var(--maiv-text-muted) !important;
+          vertical-align: middle;
+        }
+        .maiv-delay-origin {
+          color: var(--maiv-primary) !important;
+        }
+
         .maiv-icon svg,
         .maiv-status-icon svg,
         .maiv-auth-mini-icon svg,
-        .maiv-tls-tag svg {
+        .maiv-tls-tag svg,
+        .maiv-copy-btn svg,
+        .maiv-toggle-icon svg {
           display: inline-block;
           vertical-align: middle;
           width: 1em;
@@ -2497,7 +2532,7 @@
           <button class="maiv-toggle-icon" id="maiv-toggle-icon" type="button"
                   title="${escapeHTML(msg("toggleDetails"))}"
                   aria-label="${escapeHTML(msg("toggleDetails"))}"
-                  aria-controls="maiv-body-wrapper">▼</button>
+                  aria-controls="maiv-body-wrapper">${BI.chevronDown}</button>
         </div>
       `;
 
@@ -2810,7 +2845,7 @@
           let delayStr = "";
           let delayClass = "maiv-delay-none";
           if (isFirst) {
-            delayStr = "🚀";
+            delayStr = `<span class="maiv-icon">${BI.rocketTakeoffFill}</span>`;
             delayClass = "maiv-delay-origin";
           } else if (hop.date && routeHops[i - 1].date) {
             const diffMs = hop.date - routeHops[i - 1].date;
@@ -2827,8 +2862,8 @@
           // IPアドレスタイプ (内部/外部) をアイコンとツールチップで表示
           let ipTag = "";
           if (hop.ip) {
-            const ipIcon = hop.isInternal ? "🏠" : "🌐";
-            ipTag = `<span class="maiv-ip-tag" title="${escapeHTML(hop.ip)}">${ipIcon}</span>`;
+            const ipIcon = hop.isInternal ? BI.houseFill : BI.globe;
+            ipTag = `<span class="maiv-ip-tag" title="${escapeHTML(hop.ip)}"><span class="maiv-icon">${ipIcon}</span></span>`;
           }
 
           // TLS / 暗号化状態セル（このホップの Received ヘッダ記載に基づく）
