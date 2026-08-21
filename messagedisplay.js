@@ -1393,6 +1393,10 @@
           --maiv-font-mono: ui-monospace, "SF Mono", "SFMono-Regular", Menlo, Consolas, monospace;
 
           /* Typography Profiles from DESIGN.md */
+          --maiv-fs-domain: 16px;
+          --maiv-lh-domain: 1.25;
+          --maiv-ls-domain: -0.32px;
+
           --maiv-fs-body: 17px;
           --maiv-lh-body: 1.47;
           --maiv-ls-body: -0.374px;
@@ -1578,14 +1582,14 @@
           color: #fff;
         }
 
-        /* ドメイン名は SF Pro Display で Apple Tight を再現 */
+        /* ドメイン名は SF Pro Display で Apple Tight を再現 (16px) */
         .maiv-header-domain {
-          font-size: var(--maiv-fs-body-strong);
+          font-size: var(--maiv-fs-domain);
           font-weight: 600;                  /* body-strong: 600 not 700 */
           color: var(--maiv-text-strong);
           font-family: var(--maiv-font-display);
-          letter-spacing: var(--maiv-ls-body-strong);
-          line-height: var(--maiv-lh-body-strong);
+          letter-spacing: var(--maiv-ls-domain);
+          line-height: var(--maiv-lh-domain);
           min-width: 0;
           max-width: 36ch;
           overflow: hidden;
