@@ -38,7 +38,22 @@ cp images/icon.svg   "${STAGE_DIR}/images/"
 cp -r _locales       "${STAGE_DIR}/_locales"
 
 # --- 圧縮 (zip → xpi) ---
-(cd "$STAGE_DIR" && zip -r -q "../../${OUT_FILE}" .)
+if command -v zip &>/dev/null; then
+  (cd "$STAGE_DIR" && zip -r -q "../../${OUT_FILE}" .)
+else
+  python3 -c "
+import os, zipfile
+out_path = os.path.abspath('${OUT_FILE}')
+stage_dir = os.path.abspath('${STAGE_DIR}')
+with zipfile.ZipFile(out_path, 'w', zipfile.ZIP_DEFLATED) as z:
+    for root, dirs, files in os.walk(stage_dir):
+        dirs.sort()
+        for file in sorted(files):
+            full = os.path.join(root, file)
+            rel = os.path.relpath(full, stage_dir)
+            z.write(full, rel)
+"
+fi
 
 # --- ステージ削除 ---
 rm -rf "$STAGE_DIR"
