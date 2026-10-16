@@ -122,6 +122,15 @@
   "alignNotAuth": {
     "message": "Домен совпадает, но отправитель не аутентифицирован"
   },
+  "m365InternalNote": {
+    "message": "Внутренняя доставка Microsoft 365: SPF/DKIM/DMARC не применяются к письмам, не покидающим организацию"
+  },
+  "relayOriginalAuthLabel": {
+    "message": "Исходный отправитель (по данным сервиса пересылки)"
+  },
+  "relayOriginalAuthNotice": {
+    "message": "Результаты аутентификации исходного письма, записанные сервисом пересылки при его получении. Этот заголовок невозможно проверить криптографически. Пока DMARC исходного отправителя не равен pass, вердикт не отображается зелёным."
+  },
   "mailingListVia": {
     "message": "через рассылку"
   },
@@ -165,7 +174,43 @@
     "message": "Ссылка ведёт на IP-адрес"
   },
   "linkIdnHomograph": {
-    "message": "Обнаружен интернационализированный домен (гомографический риск)"
+    "message": "Ссылка на домен с похожими символами (омограф)"
+  },
+  "badgeHomograph": {
+    "message": "ПОДДЕЛЬНЫЙ ДОМЕН"
+  },
+  "verdictReasonSenderHomograph": {
+    "message": "Поддельный домен отправителя"
+  },
+  "verdictReasonReplyToHomograph": {
+    "message": "Поддельный домен Reply-To"
+  },
+  "senderHomographWarning": {
+    "message": "Домен отправителя использует похожие символы, чтобы выдать себя за другой домен"
+  },
+  "homographReasonMixed": {
+    "message": "смешивает разные письменности"
+  },
+  "homographReasonWholeScript": {
+    "message": "состоит только из символов другой письменности, похожих на латинские буквы"
+  },
+  "homographReasonLatin": {
+    "message": "содержит похожие латинские символы"
+  },
+  "homographReasonResembles": {
+    "message": "похож на"
+  },
+  "idnDomainInfo": {
+    "message": "Интернационализированный домен"
+  },
+  "replyToHomographWarning": {
+    "message": "Домен Reply-To использует похожие символы"
+  },
+  "linkLookalikeDomain": {
+    "message": "Ссылка на домен, имитирующий известный домен"
+  },
+  "linkIdnDomain": {
+    "message": "Ссылка на интернационализированный домен (похожих символов не обнаружено)"
   },
   "linkShortener": {
     "message": "Обнаружен сокращатель URL (назначение скрыто)"
@@ -181,6 +226,9 @@
   },
   "verdictReasonSpoofing": {
     "message": "Подмена имени"
+  },
+  "verdictReasonRelayOriginal": {
+    "message": "Исходный отправитель не проверен (сервис пересылки)"
   },
   "verdictReasonSuspicious": {
     "message": "Подозрительная ссылка"

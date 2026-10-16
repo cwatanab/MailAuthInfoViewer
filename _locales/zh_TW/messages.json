@@ -122,6 +122,15 @@
   "alignNotAuth": {
     "message": "網域一致，但寄件者未經驗證"
   },
+  "m365InternalNote": {
+    "message": "Microsoft 365 組織內部傳遞：未離開組織的郵件不適用 SPF/DKIM/DMARC"
+  },
+  "relayOriginalAuthLabel": {
+    "message": "原始寄件者（轉寄服務回報值）"
+  },
+  "relayOriginalAuthNotice": {
+    "message": "這是郵件轉寄服務在接收原始郵件時記錄的驗證結果。此標頭無法以密碼學方式驗證。只要原始寄件者的 DMARC 不是 pass，判定就不會顯示為綠色。"
+  },
   "mailingListVia": {
     "message": "透過郵件群組"
   },
@@ -165,7 +174,43 @@
     "message": "連結指向 IP 位址"
   },
   "linkIdnHomograph": {
-    "message": "偵測到國際化網域名稱（同形字風險）"
+    "message": "指向使用外觀相似字元的網域的連結（同形異義）"
+  },
+  "badgeHomograph": {
+    "message": "仿冒網域"
+  },
+  "verdictReasonSenderHomograph": {
+    "message": "寄件者網域仿冒"
+  },
+  "verdictReasonReplyToHomograph": {
+    "message": "Reply-To 網域仿冒"
+  },
+  "senderHomographWarning": {
+    "message": "寄件者網域使用了外觀相似的字元來冒充其他網域"
+  },
+  "homographReasonMixed": {
+    "message": "混用了多種文字"
+  },
+  "homographReasonWholeScript": {
+    "message": "僅由看起來像拉丁字母的其他文字字元組成"
+  },
+  "homographReasonLatin": {
+    "message": "包含外觀相似的拉丁字元"
+  },
+  "homographReasonResembles": {
+    "message": "酷似"
+  },
+  "idnDomainInfo": {
+    "message": "國際化網域"
+  },
+  "replyToHomographWarning": {
+    "message": "Reply-To 網域使用了外觀相似的字元"
+  },
+  "linkLookalikeDomain": {
+    "message": "指向仿冒已知網域的連結"
+  },
+  "linkIdnDomain": {
+    "message": "指向國際化網域的連結（未發現外觀相似的字元）"
   },
   "linkShortener": {
     "message": "偵測到短網址（目標被隱藏）"
@@ -181,6 +226,9 @@
   },
   "verdictReasonSpoofing": {
     "message": "顯示名稱偽造"
+  },
+  "verdictReasonRelayOriginal": {
+    "message": "原始寄件者未驗證（轉寄服務）"
   },
   "verdictReasonSuspicious": {
     "message": "可疑連結"

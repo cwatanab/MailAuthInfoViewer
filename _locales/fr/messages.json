@@ -122,6 +122,15 @@
   "alignNotAuth": {
     "message": "Domaine aligné, mais l'expéditeur n'est pas authentifié"
   },
+  "m365InternalNote": {
+    "message": "Distribution interne Microsoft 365 : SPF/DKIM/DMARC ne s'appliquent pas aux messages qui restent au sein de l'organisation"
+  },
+  "relayOriginalAuthLabel": {
+    "message": "Expéditeur d'origine (signalé par le service de transfert)"
+  },
+  "relayOriginalAuthNotice": {
+    "message": "Résultats d'authentification du message d'origine, enregistrés par le service de transfert d'e-mails à sa réception. Cet en-tête ne peut pas être vérifié cryptographiquement. Tant que le DMARC de l'expéditeur d'origine n'est pas « pass », le verdict n'est pas affiché en vert."
+  },
   "mailingListVia": {
     "message": "via liste de diffusion"
   },
@@ -165,7 +174,43 @@
     "message": "Le lien pointe vers une adresse IP"
   },
   "linkIdnHomograph": {
-    "message": "Nom de domaine internationalisé détecté (risque homographe)"
+    "message": "Lien vers un domaine utilisant des caractères trompeurs (homographe)"
+  },
+  "badgeHomograph": {
+    "message": "DOMAINE TROMPEUR"
+  },
+  "verdictReasonSenderHomograph": {
+    "message": "Domaine d'expéditeur trompeur"
+  },
+  "verdictReasonReplyToHomograph": {
+    "message": "Domaine Reply-To trompeur"
+  },
+  "senderHomographWarning": {
+    "message": "Le domaine de l'expéditeur utilise des caractères trompeurs pour imiter un autre domaine"
+  },
+  "homographReasonMixed": {
+    "message": "mélange plusieurs écritures"
+  },
+  "homographReasonWholeScript": {
+    "message": "composé uniquement de caractères d'une autre écriture ressemblant à des lettres latines"
+  },
+  "homographReasonLatin": {
+    "message": "contient des caractères latins trompeurs"
+  },
+  "homographReasonResembles": {
+    "message": "ressemble à"
+  },
+  "idnDomainInfo": {
+    "message": "Nom de domaine internationalisé"
+  },
+  "replyToHomographWarning": {
+    "message": "Le domaine de réponse (Reply-To) utilise des caractères trompeurs"
+  },
+  "linkLookalikeDomain": {
+    "message": "Lien vers un domaine imitant un domaine connu"
+  },
+  "linkIdnDomain": {
+    "message": "Lien vers un domaine internationalisé (aucun caractère trompeur détecté)"
   },
   "linkShortener": {
     "message": "Raccourcisseur d'URL détecté (destination masquée)"
@@ -181,6 +226,9 @@
   },
   "verdictReasonSpoofing": {
     "message": "Usurpation de nom"
+  },
+  "verdictReasonRelayOriginal": {
+    "message": "Expéditeur d'origine non vérifié (service de transfert)"
   },
   "verdictReasonSuspicious": {
     "message": "Lien suspect"

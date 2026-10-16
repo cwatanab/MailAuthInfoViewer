@@ -122,6 +122,15 @@
   "alignNotAuth": {
     "message": "도메인은 일치하지만 발신자가 인증되지 않았습니다"
   },
+  "m365InternalNote": {
+    "message": "Microsoft 365 조직 내부 전달: 조직 밖으로 나가지 않는 메일에는 SPF/DKIM/DMARC가 적용되지 않습니다"
+  },
+  "relayOriginalAuthLabel": {
+    "message": "원 발신자 (전달 서비스 보고값)"
+  },
+  "relayOriginalAuthNotice": {
+    "message": "메일 전달 서비스가 원본 메일을 수신할 때 기록한 인증 결과입니다. 이 헤더는 암호학적으로 검증할 수 없습니다. 원 발신자의 DMARC가 pass가 아니면 판정은 녹색으로 표시되지 않습니다."
+  },
   "mailingListVia": {
     "message": "메일링 리스트 경유"
   },
@@ -165,7 +174,43 @@
     "message": "링크가 IP 주소를 가리킴"
   },
   "linkIdnHomograph": {
-    "message": "국제화 도메인 이름 감지됨 (호모그래프 위험)"
+    "message": "헷갈리기 쉬운 문자를 사용한 도메인으로의 링크 (호모그래프)"
+  },
+  "badgeHomograph": {
+    "message": "사칭 도메인"
+  },
+  "verdictReasonSenderHomograph": {
+    "message": "발신자 도메인 사칭"
+  },
+  "verdictReasonReplyToHomograph": {
+    "message": "Reply-To 도메인 사칭"
+  },
+  "senderHomographWarning": {
+    "message": "발신자 도메인이 다른 도메인처럼 보이도록 비슷한 문자를 사용합니다"
+  },
+  "homographReasonMixed": {
+    "message": "여러 문자 체계가 섞여 있음"
+  },
+  "homographReasonWholeScript": {
+    "message": "라틴 문자처럼 보이는 다른 문자 체계의 글자로만 구성됨"
+  },
+  "homographReasonLatin": {
+    "message": "헷갈리기 쉬운 라틴 문자를 포함함"
+  },
+  "homographReasonResembles": {
+    "message": "다음과 매우 유사:"
+  },
+  "idnDomainInfo": {
+    "message": "국제화 도메인"
+  },
+  "replyToHomographWarning": {
+    "message": "Reply-To 도메인에 헷갈리기 쉬운 문자가 사용되었습니다"
+  },
+  "linkLookalikeDomain": {
+    "message": "알려진 도메인을 흉내 낸 도메인으로의 링크"
+  },
+  "linkIdnDomain": {
+    "message": "국제화 도메인으로의 링크 (헷갈리기 쉬운 문자는 없음)"
   },
   "linkShortener": {
     "message": "URL 단축기 감지됨 (링크 대상 숨겨짐)"
@@ -181,6 +226,9 @@
   },
   "verdictReasonSpoofing": {
     "message": "표시 이름 스푸핑"
+  },
+  "verdictReasonRelayOriginal": {
+    "message": "원 발신자 미검증 (전달 서비스)"
   },
   "verdictReasonSuspicious": {
     "message": "의심스러운 링크"

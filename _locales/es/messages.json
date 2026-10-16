@@ -122,6 +122,15 @@
   "alignNotAuth": {
     "message": "Dominio alineado, pero el remitente no está autenticado"
   },
+  "m365InternalNote": {
+    "message": "Entrega interna de Microsoft 365: SPF/DKIM/DMARC no se aplican al correo que permanece dentro de la organización"
+  },
+  "relayOriginalAuthLabel": {
+    "message": "Remitente original (informado por el servicio de reenvío)"
+  },
+  "relayOriginalAuthNotice": {
+    "message": "Resultados de autenticación del mensaje original, registrados por el servicio de reenvío de correo al recibirlo. Este encabezado no se puede verificar criptográficamente. Mientras el DMARC del remitente original no sea pass, el veredicto no se mostrará en verde."
+  },
   "mailingListVia": {
     "message": "vía lista de correo"
   },
@@ -165,7 +174,43 @@
     "message": "El enlace apunta a una dirección IP"
   },
   "linkIdnHomograph": {
-    "message": "Nombre de dominio internacionalizado detectado (riesgo homógrafo)"
+    "message": "Enlace a un dominio con caracteres engañosos (homógrafo)"
+  },
+  "badgeHomograph": {
+    "message": "DOMINIO ENGAÑOSO"
+  },
+  "verdictReasonSenderHomograph": {
+    "message": "Dominio del remitente engañoso"
+  },
+  "verdictReasonReplyToHomograph": {
+    "message": "Dominio de Reply-To engañoso"
+  },
+  "senderHomographWarning": {
+    "message": "El dominio del remitente usa caracteres engañosos para imitar otro dominio"
+  },
+  "homographReasonMixed": {
+    "message": "mezcla distintos sistemas de escritura"
+  },
+  "homographReasonWholeScript": {
+    "message": "solo contiene caracteres de otra escritura que parecen letras latinas"
+  },
+  "homographReasonLatin": {
+    "message": "contiene caracteres latinos engañosos"
+  },
+  "homographReasonResembles": {
+    "message": "se parece a"
+  },
+  "idnDomainInfo": {
+    "message": "Dominio internacionalizado"
+  },
+  "replyToHomographWarning": {
+    "message": "El dominio de Reply-To usa caracteres engañosos"
+  },
+  "linkLookalikeDomain": {
+    "message": "Enlace a un dominio que imita a uno conocido"
+  },
+  "linkIdnDomain": {
+    "message": "Enlace a un dominio internacionalizado (sin caracteres engañosos)"
   },
   "linkShortener": {
     "message": "Acortador de URL detectado (destino oculto)"
@@ -181,6 +226,9 @@
   },
   "verdictReasonSpoofing": {
     "message": "Suplantación de nombre"
+  },
+  "verdictReasonRelayOriginal": {
+    "message": "Remitente original no verificado (servicio de reenvío)"
   },
   "verdictReasonSuspicious": {
     "message": "Enlace sospechoso"
