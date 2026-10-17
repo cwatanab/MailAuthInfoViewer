@@ -2017,10 +2017,11 @@
           --maiv-radius-md: 11px;
           --maiv-radius-lg: 18px;
           --maiv-radius-pill: 9999px;
+          --maiv-radius: var(--maiv-radius-sm);
 
-          --maiv-bar-pad-y: var(--maiv-space-xxs);
-          --maiv-bar-pad-x: var(--maiv-space-xs);
-          --maiv-gap: var(--maiv-space-xxs);
+          --maiv-bar-pad-y: 6px;
+          --maiv-bar-pad-x: var(--maiv-space-sm);
+          --maiv-gap: var(--maiv-space-xs);
         }
 
         @media (prefers-color-scheme: dark) {
@@ -2137,7 +2138,6 @@
           border-radius: var(--maiv-radius-sm);
           color: #fff;
           font-family: var(--maiv-font-display);
-          font-size: var(--maiv-fs-body-strong);
           line-height: 1;
           flex-shrink: 0;
           cursor: help;
@@ -2145,8 +2145,8 @@
         .maiv-badge svg {
           display: inline-block;
           vertical-align: middle;
-          width: 18px;
-          height: 18px;
+          width: 16px;
+          height: 16px;
           fill: currentColor;
           flex-shrink: 0;
         }
@@ -2158,16 +2158,16 @@
           color: #fff;
         }
 
-        /* ドメイン名は SF Pro Text でバランス調整 (14px, caption-strong) */
+        /* ドメイン名は SF Pro Display で Apple Tight を再現 (15px) */
         .maiv-header-domain {
-          font-size: var(--maiv-fs-domain);
-          font-weight: 600;                  /* caption-strong: 600 */
+          font-size: 15px;
+          font-weight: 600;
           color: var(--maiv-text-strong);
-          font-family: var(--maiv-font-sans);
-          letter-spacing: var(--maiv-ls-domain);
-          line-height: var(--maiv-lh-domain);
+          font-family: var(--maiv-font-display);
+          letter-spacing: -0.28px;
+          line-height: 1.25;
           min-width: 0;
-          max-width: 36ch;
+          max-width: 38ch;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
@@ -2178,7 +2178,7 @@
         .maiv-auth-minis {
           display: inline-flex;
           align-items: center;
-          gap: 4px;
+          gap: 5px;
           flex-shrink: 0;
         }
         /* ラベル省略なし: SPF / DKIM / DMARC + ステータスアイコン */
@@ -2186,28 +2186,36 @@
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          gap: 3px;
-          height: 26px;
+          gap: 4px;
+          height: 24px;
           min-width: 0;
           padding: 0 8px;
           border-radius: var(--maiv-radius-pill);
           font-family: var(--maiv-font-sans);
-          font-size: var(--maiv-fs-caption);
+          font-size: 11px;
           font-weight: 600;
-          letter-spacing: var(--maiv-ls-caption);
-          line-height: var(--maiv-lh-caption);
+          letter-spacing: 0.02em;
+          line-height: 1;
           border: 1px solid transparent;
           cursor: help;
           white-space: nowrap;
+          transition: background-color 0.15s ease, border-color 0.15s ease;
         }
         .maiv-auth-mini-icon {
-          font-size: 14px;
+          font-size: 12px;
           line-height: 1;
           flex-shrink: 0;
+          display: inline-flex;
+          align-items: center;
+        }
+        .maiv-auth-mini-icon svg {
+          width: 12px;
+          height: 12px;
         }
         .maiv-auth-mini-label {
           font-family: var(--maiv-font-mono);
-          letter-spacing: 0;
+          font-size: 11px;
+          letter-spacing: 0.02em;
         }
         .maiv-auth-mini.pass {
           color: var(--maiv-pass);
@@ -2235,16 +2243,16 @@
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          gap: 2px;
-          height: 26px;
-          min-width: 26px;
+          gap: 3px;
+          height: 24px;
+          min-width: 24px;
           padding: 0 8px;
           border-radius: var(--maiv-radius-pill);
           font-family: var(--maiv-font-sans);
-          font-size: var(--maiv-fs-fine);
+          font-size: 11px;
           font-weight: 600;
-          line-height: var(--maiv-lh-fine);
-          letter-spacing: var(--maiv-ls-fine);
+          line-height: 1;
+          letter-spacing: 0.02em;
           flex-shrink: 0;
           cursor: help;
           white-space: nowrap;
@@ -2273,69 +2281,51 @@
         .maiv-spacer { flex-grow: 1; min-width: 4px; }
 
         /* utility icon buttons — rounded.sm, hairline, Action Blue focus */
-        .maiv-copy-btn {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          width: 32px;
-          height: 32px;
-          min-width: 32px;
-          padding: 0;
-          font-size: var(--maiv-fs-caption);
-          border-radius: var(--maiv-radius-sm);
-          background: var(--maiv-highlight-bg);
-          border: 1px solid var(--maiv-border);
-          color: var(--maiv-text);
-          cursor: pointer;
-          line-height: 1;
-          flex-shrink: 0;
-          transition: transform 0.1s ease, background 0.15s, border-color 0.15s, color 0.15s;
-        }
-        .maiv-copy-btn:hover {
-          background: var(--maiv-bg-elevated);
-          color: var(--maiv-primary);
-          border-color: var(--maiv-primary);
-        }
-        .maiv-copy-btn:active { transform: scale(0.95); }
-        .maiv-copy-btn:focus-visible {
-          outline: 2px solid var(--maiv-primary-focus);
-          outline-offset: 2px;
-        }
-
-        /* 開閉キャレット: 最小 32×32 ヒット領域 */
+        .maiv-copy-btn,
         .maiv-toggle-icon {
-          color: var(--maiv-text);
-          transition: transform 0.25s ease, background 0.15s, border-color 0.15s, color 0.15s;
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          width: 32px;
-          height: 32px;
-          min-width: 32px;
-          min-height: 32px;
+          width: 28px;
+          height: 28px;
+          min-width: 28px;
+          min-height: 28px;
           margin: 0;
           padding: 0;
-          font-size: var(--maiv-fs-caption);
+          font-size: 13px;
           line-height: 1;
           flex-shrink: 0;
-          border: 1px solid var(--maiv-border);
           border-radius: var(--maiv-radius-sm);
           background: var(--maiv-highlight-bg);
+          border: 1px solid var(--maiv-border);
+          color: var(--maiv-text);
           cursor: pointer;
           box-sizing: border-box;
+          transition: transform 0.1s ease, background 0.15s, border-color 0.15s, color 0.15s;
         }
+        .maiv-copy-btn svg,
+        .maiv-toggle-icon svg {
+          width: 14px;
+          height: 14px;
+        }
+        .maiv-copy-btn:hover,
         .maiv-toggle-icon:hover {
           background: var(--maiv-bg-elevated);
           color: var(--maiv-primary);
           border-color: var(--maiv-primary);
         }
-        .maiv-toggle-icon:active { transform: scale(0.95); }
+        .maiv-copy-btn:active,
+        .maiv-toggle-icon:active { transform: scale(0.92); }
+        .maiv-copy-btn:focus-visible,
         .maiv-toggle-icon:focus-visible {
           outline: 2px solid var(--maiv-primary-focus);
-          outline-offset: 2px;
+          outline-offset: 1px;
+        }
+        .maiv-toggle-icon {
+          transition: transform 0.25s ease, background 0.15s, border-color 0.15s, color 0.15s;
         }
         .maiv-toggle-icon.expanded { transform: rotate(180deg); }
-        .maiv-toggle-icon.expanded:active { transform: rotate(180deg) scale(0.95); }
+        .maiv-toggle-icon.expanded:active { transform: rotate(180deg) scale(0.92); }
 
         /* Compact: 余白のみ圧縮（フォント比率は維持） */
         .maiv-container.maiv-compact {
@@ -2381,11 +2371,11 @@
         .maiv-card {
           display: flex;
           flex-direction: column;
-          gap: 6px;
+          gap: 8px;
           background: var(--maiv-card-bg);
           border: 1px solid var(--maiv-card-border);
-          border-radius: var(--maiv-radius);
-          padding: 8px 12px;
+          border-radius: var(--maiv-radius-sm);
+          padding: 10px 14px;
           min-width: 0;
           height: 100%;
           font-size: var(--maiv-fs-caption);
@@ -2393,11 +2383,20 @@
           line-height: var(--maiv-lh-caption);
           letter-spacing: var(--maiv-ls-caption);
           box-shadow: none;
+          transition: border-color 0.15s ease;
+        }
+        .maiv-card:hover {
+          border-color: rgba(0, 0, 0, 0.16);
+        }
+        @media (prefers-color-scheme: dark) {
+          .maiv-card:hover {
+            border-color: rgba(255, 255, 255, 0.22);
+          }
         }
         .maiv-card-title {
           flex-shrink: 0;
           margin: 0;
-          padding: 0 0 4px 0;
+          padding: 0 0 5px 0;
           font-family: var(--maiv-font-display);
           font-size: var(--maiv-fs-fine);
           font-weight: 600;
@@ -2416,13 +2415,20 @@
         }
         .maiv-card-title.maiv-collapsible:hover { color: var(--maiv-primary); }
         .maiv-card-title.maiv-collapsible::before {
-          content: "▶";
-          font-size: 10px;
-          transition: transform 0.2s;
+          content: "";
+          width: 5px;
+          height: 5px;
+          border-right: 1.5px solid currentColor;
+          border-bottom: 1.5px solid currentColor;
+          transform: rotate(-45deg);
           display: inline-block;
           flex-shrink: 0;
+          margin-right: 3px;
+          transition: transform 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
         }
-        .maiv-card-title.maiv-collapsible.maiv-expanded::before { transform: rotate(90deg); }
+        .maiv-card-title.maiv-collapsible.maiv-expanded::before {
+          transform: rotate(45deg);
+        }
         .maiv-collapsible-body {
           max-height: 0;
           overflow: hidden;
@@ -2810,11 +2816,11 @@
         .maiv-confirm-box {
           background: var(--maiv-card-bg);
           border: 1px solid var(--maiv-card-border);
-          border-radius: var(--maiv-radius);
+          border-radius: var(--maiv-radius-md);
           padding: 24px;
-          max-width: 360px;
+          max-width: 380px;
           width: 90%;
-          box-shadow: none;
+          box-shadow: 0 12px 36px rgba(0, 0, 0, 0.22);
         }
         .maiv-confirm-text {
           font-size: var(--maiv-fs-caption);
@@ -3770,44 +3776,28 @@
       host = document.createElement("div");
       host.id = hostId;
 
-      // ■ ホスト要素のレイアウト固定
-      // Shadow DOM が隔離するのは内部のスタイルだけで、ホスト要素自身の箱は
-      // 親要素やメール側 CSS のレイアウト指定を受ける。例えば崩れた HTML メールで
-      // 文書途中に現れた <body style="max-width:480px"> の属性は、HTML の構文解析
-      // ルールにより本来の body 要素に合流するため、body 内に置いたダッシュボードが
-      // その幅に閉じ込められて右側が切れてしまう。
-      // そこでホストは body の中ではなく <html> 直下（<body> の直前）に置き、
-      // メールが body に与えた幅・余白・配置の影響を受けないようにする。
-      // さらに `div { max-width: ... !important }` のようにメール側 CSS がホストを
-      // 直接対象にした場合にも負けないよう、レイアウトに関わる指定をインラインの
-      // !important で固定する（インラインの !important はページ側のどの指定にも優先する）。
-      // バー周囲の余白はなくし、全幅（margin: 0）で表示する。
-      const hostLayout = {
-        "display": "block",
-        "position": "static",
-        "float": "none",
-        "box-sizing": "border-box",
-        "width": "100%",
-        "min-width": "0",
-        "max-width": "none",
-        "height": "auto",
-        "max-height": "none",
-        "margin": "0",
-        "padding": "0",
-        "border": "0",
-        "transform": "none",
-        "visibility": "visible",
-        "opacity": "1"
-      };
-      for (const [prop, value] of Object.entries(hostLayout)) {
-        host.style.setProperty(prop, value, "important");
-      }
-      if (document.body && document.body.parentNode === document.documentElement) {
-        document.documentElement.insertBefore(host, document.body);
-      } else {
-        // body が存在しない・html 直下にない特殊な文書では従来どおり先頭へ挿入する
-        (document.body || document.documentElement).insertAdjacentElement("afterbegin", host);
-      }
+      // テキストメール等で body に付く margin/padding を相殺し、バー周囲の余白をなくす。
+      // Shadow 内の :host だけでは親の余白は相殺できないため light DOM 側で調整する。
+      const bodyCS = getComputedStyle(document.body);
+      const insetL = (parseFloat(bodyCS.marginLeft) || 0) + (parseFloat(bodyCS.paddingLeft) || 0);
+      const insetR = (parseFloat(bodyCS.marginRight) || 0) + (parseFloat(bodyCS.paddingRight) || 0);
+      const insetT = (parseFloat(bodyCS.marginTop) || 0) + (parseFloat(bodyCS.paddingTop) || 0);
+      host.style.cssText = [
+        "display:block !important",
+        "position:relative !important",
+        "margin:0 !important",
+        "padding:0 !important",
+        "border:0 !important",
+        "box-sizing:border-box !important",
+        `margin-left:-${insetL}px !important`,
+        `margin-right:-${insetR}px !important`,
+        `margin-top:-${insetT}px !important`,
+        `width:calc(100% + ${insetL + insetR}px) !important`,
+        "max-width:none !important",
+        "min-width:0 !important"
+      ].join(";");
+
+      document.body.insertAdjacentElement("afterbegin", host);
 
       const shadow = host.attachShadow({ mode: "closed" });
       shadow.appendChild(style);
