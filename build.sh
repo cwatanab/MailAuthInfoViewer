@@ -50,7 +50,7 @@ with zipfile.ZipFile(out_path, 'w', zipfile.ZIP_DEFLATED) as z:
         dirs.sort()
         for file in sorted(files):
             full = os.path.join(root, file)
-            rel = os.path.relpath(full, stage_dir)
+            rel = os.path.relpath(full, stage_dir).replace('\\', '/')
             z.write(full, rel)
 "
 fi

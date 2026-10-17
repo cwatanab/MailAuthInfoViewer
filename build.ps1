@@ -35,10 +35,23 @@ Copy-Item -Force "images/icon.svg"  (Join-Path $stageDir "images")
 # --- _locales ディレクトリをコピー ---
 Copy-Item -Recurse -Force "_locales" (Join-Path $stageDir "_locales")
 
-# --- 圧縮 ---
+# --- 圧縮 (Zipエントリーは常にスラッシュ区切り) ---
 $absoluteOutFile = [System.IO.Path]::GetFullPath($outFile)
+$stageFull = (Get-Item $stageDir).FullName
+if (-not $stageFull.EndsWith('\')) { $stageFull += '\' }
+
+Add-Type -AssemblyName System.IO.Compression
 Add-Type -AssemblyName System.IO.Compression.FileSystem
-[System.IO.Compression.ZipFile]::CreateFromDirectory($stageDir, $absoluteOutFile)
+
+$zip = [System.IO.Compression.ZipFile]::Open($absoluteOutFile, [System.IO.Compression.ZipArchiveMode]::Create)
+try {
+    Get-ChildItem -Path $stageDir -Recurse | Where-Object { -not $_.PSIsContainer } | ForEach-Object {
+        $relPath = $_.FullName.Substring($stageFull.Length).Replace('\', '/')
+        [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($zip, $_.FullName, $relPath, [System.IO.Compression.CompressionLevel]::Optimal) | Out-Null
+    }
+} finally {
+    $zip.Dispose()
+}
 
 # --- ステージ削除 ---
 Remove-Item -Recurse -Force $stageDir
