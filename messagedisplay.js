@@ -2786,8 +2786,8 @@
         .maiv-kv-key,
         .address-label,
         .maiv-prop-key {
-          flex: 0 0 auto;
-          min-width: 84px;
+          flex: 0 0 116px;
+          width: 116px;
           white-space: nowrap;
           color: var(--maiv-text-muted);
           font-size: var(--maiv-fs-fine);
