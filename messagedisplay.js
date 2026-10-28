@@ -2786,8 +2786,9 @@
         .maiv-kv-key,
         .address-label,
         .maiv-prop-key {
-          flex: 0 0 84px;
-          width: 84px;
+          flex: 0 0 auto;
+          min-width: 84px;
+          white-space: nowrap;
           color: var(--maiv-text-muted);
           font-size: var(--maiv-fs-fine);
           font-weight: 600;
@@ -2815,6 +2816,9 @@
           border: 1px solid var(--maiv-highlight-border);
           direction: ltr;
           unicode-bidi: embed;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
         .maiv-prop-val { color: var(--maiv-text-secondary); }
 
@@ -2949,7 +2953,7 @@
           gap: 6px;
           margin: 0;
           padding: 4px 8px;
-          border-radius: var(--maiv-radius-sm);
+          border-radius: var(--maiv-radius-none);
           font-size: var(--maiv-fs-caption);
           font-weight: 600;
           line-height: 1.35;
@@ -2982,6 +2986,9 @@
           align-items: center;
           flex-wrap: wrap;
           gap: 6px;
+        }
+        .maiv-finding-untrusted .maiv-trust-btn {
+          margin-left: auto;
         }
 
         /* 共通テーブル（route / ARC） */
@@ -3078,12 +3085,15 @@
         .maiv-link-domain-item {
           display: flex;
           align-items: center;
-          flex-wrap: wrap;
           gap: 6px;
           padding: 2px 0;
           font-family: var(--maiv-font-mono);
           font-size: var(--maiv-fs-caption);
           line-height: 1.35;
+          min-height: 22px;
+        }
+        .maiv-link-domain-item .maiv-trust-btn {
+          margin-left: auto;
         }
         .maiv-link-domain-count { color: var(--maiv-text-faint); font-size: var(--maiv-fs-fine); }
         .maiv-link-domain-match,
@@ -3101,16 +3111,24 @@
         .maiv-icon.maiv-link-domain-danger { color: var(--maiv-fail) !important; }
 
         .maiv-trust-btn {
-          font-size: var(--maiv-fs-fine);
-          padding: 6px 12px;
-          margin-left: 6px;
+          font-family: var(--maiv-font-sans);
+          font-size: 11px;
+          line-height: 1;
+          height: 18px;
+          padding: 0 7px;
+          margin: 0 0 0 6px;
           border: 1px solid var(--maiv-primary);
           border-radius: var(--maiv-radius-pill);
           background: transparent;
           color: var(--maiv-primary);
           cursor: pointer;
-          font-weight: 400;
+          font-weight: 500;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
           vertical-align: middle;
+          box-sizing: border-box;
+          flex-shrink: 0;
           transition: transform 0.1s ease, background 0.15s;
         }
         .maiv-trust-btn:hover { background: var(--maiv-mailing-list-bg); }
@@ -3838,7 +3856,7 @@
       }
 
       const addressRow = (label, value) =>
-        `<div class="maiv-kv-row address-row"><span class="maiv-kv-key address-label">${escapeHTML(label)}</span><span class="maiv-kv-val address-highlight">${escapeHTML(value)}</span></div>`;
+        `<div class="maiv-kv-row address-row"><span class="maiv-kv-key address-label">${escapeHTML(label)}</span><span class="maiv-kv-val address-highlight" title="${escapeHTML(value)}">${escapeHTML(value)}</span></div>`;
       const displayNameHTML = envelope.headerFromName
         ? addressRow(msg("labelDisplayName"), envelope.headerFromName)
         : "";
@@ -4015,7 +4033,7 @@
                 !(trustedDomains && trustedDomains.has(untrustedSingleDomain))) {
               inlineTrust = ` <button class="maiv-trust-btn" data-domain="${escapeHTML(untrustedSingleDomain)}">${escapeHTML(msg("trustDomainButton"))} ${escapeHTML(untrustedSingleDomain)}</button>`;
             }
-            findingsHTML += `<div class="${cls}"><span class="maiv-icon">${icon}</span><span>${escapeHTML(f.detail)}${inlineTrust}</span></div>`;
+            findingsHTML += `<div class="${cls}"><span class="maiv-icon">${icon}</span><span style="min-width:0; word-break:break-word;">${escapeHTML(f.detail)}</span>${inlineTrust}</div>`;
           }
         }
 
