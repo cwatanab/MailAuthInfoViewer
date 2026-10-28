@@ -72,50 +72,66 @@
 
   body {
     font-family: var(--font);
-    max-width: 600px;
-    margin: var(--spacing-lg) auto;
+    max-width: 760px;
+    margin: var(--spacing-sm) auto;
     padding: 0 var(--spacing-sm);
     color: var(--ink);
     background: var(--canvas-parchment);
-    /* DESIGN.md: body (17px, 400, 1.47, -0.374px) */
-    font-size: 17px;
+    font-size: 14px;
     font-weight: 400;
-    line-height: 1.47;
-    letter-spacing: -0.374px;
+    line-height: 1.4;
+    letter-spacing: -0.224px;
   }
 
   h1 {
     font-family: var(--font-display);
-    /* DESIGN.md: display-md (34px, 600, 1.47, -0.374px) */
-    font-size: 34px;
+    font-size: 20px;
     font-weight: 600;
-    line-height: 1.47;
-    letter-spacing: -0.374px;
+    line-height: 1.25;
+    letter-spacing: -0.28px;
     border-bottom: 1px solid var(--hairline);
-    padding-bottom: var(--spacing-xs);
-    margin: 0 0 var(--spacing-sm) 0;
+    padding-bottom: 4px;
+    margin: 0 0 var(--spacing-xs) 0;
     color: var(--ink);
   }
 
   h2 {
     font-family: var(--font-display);
-    /* DESIGN.md: tagline (21px, 600, 1.19, 0.231px) */
-    font-size: 21px;
+    font-size: 15px;
     font-weight: 600;
-    line-height: 1.19;
-    letter-spacing: 0.231px;
-    margin: var(--spacing-md) 0 var(--spacing-xxs) 0;
+    line-height: 1.25;
+    letter-spacing: 0.1px;
+    margin: 0 0 4px 0;
     color: var(--ink);
   }
 
   p.desc {
-    /* DESIGN.md: caption (14px, 400, 1.43, -0.224px) */
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 400;
-    line-height: 1.43;
-    letter-spacing: -0.224px;
+    line-height: 1.35;
+    letter-spacing: -0.15px;
     color: var(--ink-muted-48);
-    margin: 0 0 var(--spacing-xs) 0;
+    margin: 0 0 var(--spacing-sm) 0;
+  }
+
+  .settings-grid {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: var(--spacing-sm);
+    align-items: start;
+  }
+
+  .settings-section {
+    min-width: 0;
+    padding: var(--spacing-sm);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-md);
+    background: var(--canvas);
+  }
+
+  @media (max-width: 600px) {
+    .settings-grid { grid-template-columns: minmax(0, 1fr); }
+    .settings-section { padding: var(--spacing-xs); }
   }
 
   .add-row {
@@ -126,18 +142,18 @@
 
   .add-row input {
     flex: 1;
-    /* DESIGN.md: search-input (height 44px, pill, padding 12px 20px) */
-    padding: 12px 20px;
-    font-size: 17px; /* body */
+    min-width: 0;
+    padding: 6px 12px;
+    font-size: 13px;
     font-family: var(--font);
     border: 1px solid var(--hairline);
     border-radius: var(--radius-pill);
     background: var(--canvas);
     color: var(--ink);
     outline: none;
-    height: 44px;
-    line-height: 1.47;
-    letter-spacing: -0.374px;
+    height: 32px;
+    line-height: 1.4;
+    letter-spacing: -0.2px;
   }
 
   .add-row input:focus {
@@ -146,19 +162,17 @@
     outline-offset: 1px;
   }
 
-  /* DESIGN.md: button-pearl-capsule (secondary/utility cards default style) */
   button {
     background: var(--surface-pearl);
     color: var(--ink-muted-80);
     font-family: var(--font);
-    /* DESIGN.md: caption (14px, 400, 1.43, -0.224px) */
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 400;
-    line-height: 1.43;
-    letter-spacing: -0.224px;
-    border: 3px solid var(--divider-soft);
-    border-radius: var(--radius-md); /* 11px */
-    padding: 8px 14px;
+    line-height: 1.3;
+    letter-spacing: -0.15px;
+    border: 2px solid var(--divider-soft);
+    border-radius: var(--radius-sm);
+    padding: 4px 10px;
     cursor: pointer;
     white-space: nowrap;
     transition: transform 0.1s ease;
@@ -171,30 +185,28 @@
     outline-offset: 2px;
   }
 
-  /* DESIGN.md: button-primary (pill, Action Blue, body 17px font) */
   button.primary {
     background: var(--primary);
     color: var(--on-primary);
     border-color: var(--primary);
     border-radius: var(--radius-pill);
-    padding: 11px 22px;
-    height: 44px;
-    font-size: 17px; /* body */
-    font-weight: 400;
-    line-height: 1.47;
-    letter-spacing: -0.374px;
+    padding: 0 14px;
+    height: 32px;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.2px;
   }
 
-  /* DESIGN.md: button-secondary-pill adapted for danger */
   button.danger {
     color: var(--danger);
     border-color: var(--danger);
     border-width: 1px;
     background: transparent;
-    font-size: 14px;
+    font-size: 11px;
     line-height: 1.0;
-    padding: 6px 10px;
-    border-radius: var(--radius-md); /* 11px */
+    padding: 2px 6px;
+    border-radius: var(--radius-xs);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -203,11 +215,10 @@
   button.danger:hover { background: var(--danger-bg); }
 
   .domain-list {
-    /* DESIGN.md: store-utility-card chassis (canvas, hairline, rounded.lg) */
     border: 1px solid var(--hairline);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-md);
     overflow: hidden;
-    min-height: 48px;
+    min-height: 36px;
     background: var(--canvas);
   }
 
@@ -215,21 +226,23 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: var(--spacing-xs) var(--spacing-sm);
+    padding: 4px 8px;
     border-bottom: 1px solid var(--divider-soft);
-    font-size: 14px;
+    font-size: 12px;
     font-family: var(--font-mono);
     color: var(--ink);
+    gap: var(--spacing-xs);
+    overflow-wrap: anywhere;
   }
 
   .domain-item:last-child { border-bottom: none; }
   .domain-item:nth-child(even) { background: var(--surface-pearl); }
 
   .empty {
-    padding: var(--spacing-md);
+    padding: var(--spacing-xs);
     text-align: center;
     color: var(--ink-muted-48);
-    font-size: 14px;
+    font-size: 12px;
     font-style: italic;
   }
 
@@ -240,26 +253,25 @@
   }
 
   .status {
-    /* DESIGN.md: fine-print */
-    font-size: 12px;
+    font-size: 11px;
     line-height: 1.0;
     letter-spacing: -0.12px;
     color: var(--success);
-    margin-top: var(--spacing-xs);
-    min-height: 18px;
+    margin-top: 4px;
+    min-height: 14px;
   }
 
   .checkbox-row {
     display: flex;
     align-items: center;
-    gap: var(--spacing-xs);
+    gap: 6px;
     margin-bottom: var(--spacing-xs);
     cursor: pointer;
   }
 
   .checkbox-row input {
-    width: 18px;
-    height: 18px;
+    width: 15px;
+    height: 15px;
     margin: 0;
     cursor: pointer;
     accent-color: var(--primary);
@@ -267,7 +279,7 @@
   }
 
   .checkbox-row span {
-    font-size: 17px; /* body */
+    font-size: 13px;
     color: var(--ink);
   }
 </style>
@@ -275,15 +287,19 @@
 <body>
   <h1 id="title"></h1>
 
-  <h2 id="displayTitle"></h2>
-  <p class="desc" id="displayDesc"></p>
-  <label class="checkbox-row">
-    <input type="checkbox" id="compactMode">
-    <span id="compactLabel"></span>
-  </label>
+  <main class="settings-grid">
+    <section class="settings-section" aria-labelledby="displayTitle">
+      <h2 id="displayTitle"></h2>
+      <p class="desc" id="displayDesc"></p>
+      <label class="checkbox-row">
+        <input type="checkbox" id="compactMode">
+        <span id="compactLabel"></span>
+      </label>
+    </section>
 
-  <h2 id="whitelistTitle"></h2>
-  <p class="desc" id="whitelistDesc"></p>
+    <section class="settings-section" aria-labelledby="whitelistTitle">
+      <h2 id="whitelistTitle"></h2>
+      <p class="desc" id="whitelistDesc"></p>
 
   <div class="add-row">
     <input type="text" id="domainInput" placeholder="example.com">
@@ -297,7 +313,9 @@
     <button id="importBtn"></button>
     <input type="file" id="importFile" accept=".txt,.text" style="display:none;">
   </div>
-  <div class="status" id="status"></div>
+      <div class="status" id="status"></div>
+    </section>
+  </main>
 
   <script src="options.js"></script>
 </body>

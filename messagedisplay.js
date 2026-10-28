@@ -2019,9 +2019,9 @@
           --maiv-radius-pill: 9999px;
           --maiv-radius: var(--maiv-radius-sm);
 
-          --maiv-bar-pad-y: 6px;
-          --maiv-bar-pad-x: var(--maiv-space-sm);
-          --maiv-gap: var(--maiv-space-xs);
+          --maiv-bar-pad-y: 3px;
+          --maiv-bar-pad-x: var(--maiv-space-xs);
+          --maiv-gap: 6px;
         }
 
         @media (prefers-color-scheme: dark) {
@@ -2121,7 +2121,7 @@
           gap: var(--maiv-gap);
           cursor: pointer;
           user-select: none;
-          min-height: 32px;
+          min-height: 26px;
           padding: 0;
           overflow: hidden;
         }
@@ -2132,10 +2132,10 @@
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          width: 28px;
-          height: 28px;
+          width: 22px;
+          height: 22px;
           padding: 0;
-          border-radius: var(--maiv-radius-sm);
+          border-radius: var(--maiv-radius-xs);
           color: #fff;
           font-family: var(--maiv-font-display);
           line-height: 1;
@@ -2145,8 +2145,8 @@
         .maiv-badge svg {
           display: inline-block;
           vertical-align: middle;
-          width: 16px;
-          height: 16px;
+          width: 13px;
+          height: 13px;
           fill: currentColor;
           flex-shrink: 0;
         }
@@ -2158,14 +2158,14 @@
           color: #fff;
         }
 
-        /* ドメイン名は SF Pro Display で Apple Tight を再現 (15px) */
+        /* ドメイン名は SF Pro Display で Apple Tight を再現 (13.5px) */
         .maiv-header-domain {
-          font-size: 15px;
+          font-size: 13.5px;
           font-weight: 600;
           color: var(--maiv-text-strong);
           font-family: var(--maiv-font-display);
-          letter-spacing: -0.28px;
-          line-height: 1.25;
+          letter-spacing: -0.25px;
+          line-height: 1.2;
           min-width: 0;
           max-width: 38ch;
           overflow: hidden;
@@ -2178,7 +2178,7 @@
         .maiv-auth-minis {
           display: inline-flex;
           align-items: center;
-          gap: 5px;
+          gap: 4px;
           flex-shrink: 0;
         }
         /* ラベル省略なし: SPF / DKIM / DMARC + ステータスアイコン */
@@ -2186,13 +2186,13 @@
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          gap: 4px;
-          height: 24px;
+          gap: 3px;
+          height: 20px;
           min-width: 0;
-          padding: 0 8px;
+          padding: 0 6px;
           border-radius: var(--maiv-radius-pill);
           font-family: var(--maiv-font-sans);
-          font-size: 11px;
+          font-size: 10.5px;
           font-weight: 600;
           letter-spacing: 0.02em;
           line-height: 1;
@@ -2202,19 +2202,19 @@
           transition: background-color 0.15s ease, border-color 0.15s ease;
         }
         .maiv-auth-mini-icon {
-          font-size: 12px;
+          font-size: 11px;
           line-height: 1;
           flex-shrink: 0;
           display: inline-flex;
           align-items: center;
         }
         .maiv-auth-mini-icon svg {
-          width: 12px;
-          height: 12px;
+          width: 11px;
+          height: 11px;
         }
         .maiv-auth-mini-label {
           font-family: var(--maiv-font-mono);
-          font-size: 11px;
+          font-size: 10.5px;
           letter-spacing: 0.02em;
         }
         .maiv-auth-mini.pass {
@@ -2243,13 +2243,13 @@
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          gap: 3px;
-          height: 24px;
-          min-width: 24px;
-          padding: 0 8px;
+          gap: 2px;
+          height: 20px;
+          min-width: 20px;
+          padding: 0 6px;
           border-radius: var(--maiv-radius-pill);
           font-family: var(--maiv-font-sans);
-          font-size: 11px;
+          font-size: 10.5px;
           font-weight: 600;
           line-height: 1;
           letter-spacing: 0.02em;
@@ -2280,22 +2280,22 @@
 
         .maiv-spacer { flex-grow: 1; min-width: 4px; }
 
-        /* utility icon buttons — rounded.sm, hairline, Action Blue focus */
+        /* utility icon buttons — rounded.xs, hairline, Action Blue focus */
         .maiv-copy-btn,
         .maiv-toggle-icon {
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          width: 28px;
-          height: 28px;
-          min-width: 28px;
-          min-height: 28px;
+          width: 22px;
+          height: 22px;
+          min-width: 22px;
+          min-height: 22px;
           margin: 0;
           padding: 0;
-          font-size: 13px;
+          font-size: 11px;
           line-height: 1;
           flex-shrink: 0;
-          border-radius: var(--maiv-radius-sm);
+          border-radius: var(--maiv-radius-xs);
           background: var(--maiv-highlight-bg);
           border: 1px solid var(--maiv-border);
           color: var(--maiv-text);
@@ -2305,8 +2305,8 @@
         }
         .maiv-copy-btn svg,
         .maiv-toggle-icon svg {
-          width: 14px;
-          height: 14px;
+          width: 12px;
+          height: 12px;
         }
         .maiv-copy-btn:hover,
         .maiv-toggle-icon:hover {
@@ -2329,11 +2329,46 @@
 
         /* Compact: 余白のみ圧縮（フォント比率は維持） */
         .maiv-container.maiv-compact {
-          --maiv-bar-pad-y: 2px;
-          --maiv-bar-pad-x: 6px;
+          --maiv-bar-pad-y: 1px;
+          --maiv-bar-pad-x: 5px;
           margin: 0;
         }
-        .maiv-container.maiv-compact .maiv-header { min-height: 28px; gap: 4px; }
+        .maiv-container.maiv-compact .maiv-header { min-height: 22px; gap: 4px; }
+        .maiv-container.maiv-compact .maiv-badge {
+          width: 18px;
+          height: 18px;
+          border-radius: 4px;
+        }
+        .maiv-container.maiv-compact .maiv-badge svg {
+          width: 11px;
+          height: 11px;
+        }
+        .maiv-container.maiv-compact .maiv-header-domain {
+          font-size: 12.5px;
+        }
+        .maiv-container.maiv-compact .maiv-auth-mini,
+        .maiv-container.maiv-compact .maiv-chip {
+          height: 18px;
+          min-width: 18px;
+          padding: 0 5px;
+          font-size: 9.5px;
+        }
+        .maiv-container.maiv-compact .maiv-auth-mini-icon svg {
+          width: 9.5px;
+          height: 9.5px;
+        }
+        .maiv-container.maiv-compact .maiv-copy-btn,
+        .maiv-container.maiv-compact .maiv-toggle-icon {
+          width: 18px;
+          height: 18px;
+          min-width: 18px;
+          min-height: 18px;
+        }
+        .maiv-container.maiv-compact .maiv-copy-btn svg,
+        .maiv-container.maiv-compact .maiv-toggle-icon svg {
+          width: 10px;
+          height: 10px;
+        }
 
         /* === Expanded body === */
         .maiv-body-wrapper {
@@ -2345,14 +2380,14 @@
           max-height: 4000px;
           transition: max-height 0.45s ease-in;
         }
-        .maiv-body-inner { padding-top: var(--maiv-space-xs); }
-        .maiv-body-content { display: flex; flex-direction: column; gap: var(--maiv-space-xs); }
+        .maiv-body-inner { padding-top: 6px; }
+        .maiv-body-content { display: flex; flex-direction: column; gap: 6px; }
 
         /* 詳細パネルは 2 カラムで統一（均等幅ストレッチ） */
         .maiv-grid {
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: var(--maiv-space-xs);
+          gap: 6px;
           align-items: stretch;
         }
         @media (max-width: 560px) {
@@ -2371,11 +2406,11 @@
         .maiv-card {
           display: flex;
           flex-direction: column;
-          gap: 8px;
+          gap: 6px;
           background: var(--maiv-card-bg);
           border: 1px solid var(--maiv-card-border);
           border-radius: var(--maiv-radius-sm);
-          padding: 10px 14px;
+          padding: 8px 10px;
           min-width: 0;
           height: 100%;
           font-size: var(--maiv-fs-caption);
@@ -2396,7 +2431,7 @@
         .maiv-card-title {
           flex-shrink: 0;
           margin: 0;
-          padding: 0 0 5px 0;
+          padding: 0 0 3px 0;
           font-family: var(--maiv-font-display);
           font-size: var(--maiv-fs-fine);
           font-weight: 600;
@@ -2475,15 +2510,15 @@
         .maiv-kv-key,
         .address-label,
         .maiv-prop-key {
-          flex: 0 0 92px;
-          width: 92px;
+          flex: 0 0 84px;
+          width: 84px;
           color: var(--maiv-text-muted);
           font-size: var(--maiv-fs-fine);
           font-weight: 600;
           font-family: var(--maiv-font-sans);
           text-transform: uppercase;
           letter-spacing: var(--maiv-ls-fine);
-          line-height: 1.4;
+          line-height: 1.35;
         }
         .maiv-kv-val,
         .address-highlight,
@@ -2495,11 +2530,11 @@
           font-family: var(--maiv-font-mono);
           color: var(--maiv-text-strong);
           word-break: break-all;
-          line-height: 1.4;
+          line-height: 1.35;
         }
         .address-highlight {
           background: var(--maiv-highlight-bg);
-          padding: 4px var(--maiv-space-xs);
+          padding: 2px 6px;
           border-radius: var(--maiv-radius-sm);
           border: 1px solid var(--maiv-highlight-border);
           direction: ltr;
@@ -2511,7 +2546,7 @@
         .maiv-detail-text {
           display: flex;
           flex-direction: column;
-          gap: 6px;
+          gap: 4px;
           font-size: var(--maiv-fs-caption);
           color: var(--maiv-text-muted);
           font-family: var(--maiv-font-mono);
@@ -2519,7 +2554,7 @@
         .maiv-detail-stack {
           display: flex;
           flex-direction: column;
-          gap: 10px;
+          gap: 6px;
         }
         .maiv-expanded-detail {
           display: flex;
@@ -2556,7 +2591,7 @@
           align-items: center;
           font-size: var(--maiv-fs-fine);
           font-weight: 600;
-          padding: 4px 10px;
+          padding: 2px 8px;
           border-radius: var(--maiv-radius-pill);
           font-family: var(--maiv-font-mono);
           width: fit-content;
@@ -2635,13 +2670,13 @@
         .maiv-finding-privacy {
           display: flex;
           align-items: center;
-          gap: var(--maiv-space-xs);
+          gap: 6px;
           margin: 0;
-          padding: var(--maiv-space-xs) 10px;
+          padding: 4px 8px;
           border-radius: var(--maiv-radius-sm);
           font-size: var(--maiv-fs-caption);
           font-weight: 600;
-          line-height: 1.4;
+          line-height: 1.35;
           border-left: 3px solid currentColor;
         }
         .align-ok {
@@ -2683,10 +2718,10 @@
         }
         .maiv-route-table td,
         .maiv-arc-table td {
-          padding: 4px var(--maiv-space-xxs);
+          padding: 2px var(--maiv-space-xxs);
           border-bottom: 1px solid var(--maiv-route-border);
           vertical-align: middle;
-          line-height: 1.4;
+          line-height: 1.35;
         }
         .maiv-route-table tr:last-child td,
         .maiv-arc-table tr:last-child td { border-bottom: none; }
@@ -2749,7 +2784,7 @@
         .maiv-link-domain-list {
           display: flex;
           flex-direction: column;
-          gap: 6px;
+          gap: 4px;
           margin: 0;
         }
         .maiv-link-domain-list { font-size: var(--maiv-fs-caption); }
@@ -2767,10 +2802,10 @@
           align-items: center;
           flex-wrap: wrap;
           gap: 6px;
-          padding: 4px 0;
+          padding: 2px 0;
           font-family: var(--maiv-font-mono);
           font-size: var(--maiv-fs-caption);
-          line-height: 1.4;
+          line-height: 1.35;
         }
         .maiv-link-domain-count { color: var(--maiv-text-faint); font-size: var(--maiv-fs-fine); }
         .maiv-link-domain-match,
