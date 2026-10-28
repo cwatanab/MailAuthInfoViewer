@@ -47,6 +47,18 @@
   "dkimLimitedScope": {
     "message": "La firma copre solo una parte del corpo del messaggio"
   },
+  "dkimUnsignedHeaders": {
+    "message": "La firma non copre le intestazioni consigliate"
+  },
+  "dkimSignedUnverified": {
+    "message": "FIRMATO (NON VERIFICATO)"
+  },
+  "dkimSignedUnverifiedDomain": {
+    "message": "dominio di firma (non verificato):"
+  },
+  "dkimSignedUnverifiedNote": {
+    "message": "Questo messaggio contiene una firma DKIM, ma il server di ricezione non ha registrato alcun risultato di verifica, quindi non è noto se la firma sia valida"
+  },
   "dmarcWeakSubpolicy": {
     "message": "La policy dei sottodomini è none (sottodomini non protetti)"
   },
@@ -229,6 +241,9 @@
   },
   "verdictReasonRelayOriginal": {
     "message": "Mittente originale non verificato (servizio di inoltro)"
+  },
+  "verdictReasonDkimReplayRisk": {
+    "message": "Oggetto non firmato (rischio di replay DKIM)"
   },
   "verdictReasonSuspicious": {
     "message": "Link sospetto"

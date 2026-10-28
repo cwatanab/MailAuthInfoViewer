@@ -47,6 +47,18 @@
   "dkimLimitedScope": {
     "message": "簽章僅涵蓋部分郵件內文"
   },
+  "dkimUnsignedHeaders": {
+    "message": "簽章未涵蓋建議的標頭"
+  },
+  "dkimSignedUnverified": {
+    "message": "已簽章（未驗證）"
+  },
+  "dkimSignedUnverifiedDomain": {
+    "message": "簽章網域（未驗證）："
+  },
+  "dkimSignedUnverifiedNote": {
+    "message": "此郵件帶有 DKIM 簽章，但接收伺服器未記錄驗證結果，因此無法確認簽章是否有效"
+  },
   "dmarcWeakSubpolicy": {
     "message": "子網域政策為 none（子網域未受保護）"
   },
@@ -229,6 +241,9 @@
   },
   "verdictReasonRelayOriginal": {
     "message": "原始寄件者未驗證（轉寄服務）"
+  },
+  "verdictReasonDkimReplayRisk": {
+    "message": "主旨未簽章（DKIM 重送風險）"
   },
   "verdictReasonSuspicious": {
     "message": "可疑連結"

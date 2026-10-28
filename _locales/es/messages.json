@@ -47,6 +47,18 @@
   "dkimLimitedScope": {
     "message": "La firma cubre solo una parte del cuerpo del mensaje"
   },
+  "dkimUnsignedHeaders": {
+    "message": "La firma no cubre los encabezados recomendados"
+  },
+  "dkimSignedUnverified": {
+    "message": "FIRMADO (SIN VERIFICAR)"
+  },
+  "dkimSignedUnverifiedDomain": {
+    "message": "dominio de firma (sin verificar):"
+  },
+  "dkimSignedUnverifiedNote": {
+    "message": "Este mensaje lleva una firma DKIM, pero el servidor receptor no registró ningún resultado de verificación, por lo que se desconoce si la firma es válida"
+  },
   "dmarcWeakSubpolicy": {
     "message": "La política de subdominios es none (subdominios sin protección)"
   },
@@ -229,6 +241,9 @@
   },
   "verdictReasonRelayOriginal": {
     "message": "Remitente original no verificado (servicio de reenvío)"
+  },
+  "verdictReasonDkimReplayRisk": {
+    "message": "Asunto sin firmar (riesgo de repetición DKIM)"
   },
   "verdictReasonSuspicious": {
     "message": "Enlace sospechoso"

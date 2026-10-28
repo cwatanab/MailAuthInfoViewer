@@ -52,6 +52,18 @@
   "dkimLimitedScope": {
     "message": "署名が本文の一部のみを保護しています"
   },
+  "dkimUnsignedHeaders": {
+    "message": "推奨ヘッダが署名対象外です"
+  },
+  "dkimSignedUnverified": {
+    "message": "署名あり（未検証）"
+  },
+  "dkimSignedUnverifiedDomain": {
+    "message": "署名ドメイン（未検証）:"
+  },
+  "dkimSignedUnverifiedNote": {
+    "message": "このメールには DKIM 署名が付いていますが、受信サーバが検証結果を記録していないため、署名が有効かどうかは確認できません"
+  },
   "dmarcWeakSubpolicy": {
     "message": "サブドメインポリシーがnoneです（サブドメインが無防備）"
   },
@@ -231,6 +243,9 @@
   },
   "verdictReasonRelayOriginal": {
     "message": "元送信者未検証（転送サービス）"
+  },
+  "verdictReasonDkimReplayRisk": {
+    "message": "件名が署名対象外（DKIM リプレイの恐れ）"
   },
   "verdictReasonSuspicious": {
     "message": "不審なリンク"

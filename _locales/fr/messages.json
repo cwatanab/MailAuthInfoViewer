@@ -47,6 +47,18 @@
   "dkimLimitedScope": {
     "message": "La signature ne couvre qu'une partie du corps du message"
   },
+  "dkimUnsignedHeaders": {
+    "message": "La signature ne couvre pas les en-têtes recommandés"
+  },
+  "dkimSignedUnverified": {
+    "message": "SIGNÉ (NON VÉRIFIÉ)"
+  },
+  "dkimSignedUnverifiedDomain": {
+    "message": "domaine de signature (non vérifié) :"
+  },
+  "dkimSignedUnverifiedNote": {
+    "message": "Ce message porte une signature DKIM, mais le serveur de réception n'a enregistré aucun résultat de vérification ; la validité de la signature est donc inconnue"
+  },
   "dmarcWeakSubpolicy": {
     "message": "La politique de sous-domaine est none (sous-domaines non protégés)"
   },
@@ -229,6 +241,9 @@
   },
   "verdictReasonRelayOriginal": {
     "message": "Expéditeur d'origine non vérifié (service de transfert)"
+  },
+  "verdictReasonDkimReplayRisk": {
+    "message": "Objet non signé (risque de rejeu DKIM)"
   },
   "verdictReasonSuspicious": {
     "message": "Lien suspect"

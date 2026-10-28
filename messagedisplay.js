@@ -46,9 +46,14 @@
       }
       const parts = ip.split('.').map(Number);
       if (parts.length !== 4) return false;
+      // 100.64.0.0/10 は RFC 6598 の共有アドレス空間（キャリアグレード NAT 等の内部用）で、
+      // インターネットからは到達できない（例: xspmail の内部 LMTP ホップ "(100.120.25.83)"）。
+      // 169.254.0.0/16 はリンクローカル
       return (parts[0] === 10) ||
              (parts[0] === 172 && parts[1] >= 16 && parts[1] <= 31) ||
              (parts[0] === 192 && parts[1] === 168) ||
+             (parts[0] === 100 && parts[1] >= 64 && parts[1] <= 127) ||
+             (parts[0] === 169 && parts[1] === 254) ||
              (parts[0] === 127);
     };
 
@@ -322,6 +327,11 @@
     //   - mailbox.org:
     //       受信境界は mx*.mailbox.org。内部ホップは *.heinlein-hosting.de。
     //       authserv-id はホスト名ではない固定値 "incoming_mbo"。
+    //   - Hostpoint:
+    //       受信境界は mxin<番号>.mail.hostpoint.ch（Exim）。受信後は SpamAssassin による
+    //       スキャンのため同一ホストへ自身で再投入し（from mailnull ... with local_*）、
+    //       *.adm.hostpoint.ch / *.mail.hostpoint.internal の内部ホップへ LMTP で渡す。
+    //       authserv-id は受信ホスト名ではないクラスタ名 "mxin-hosts.mail.hostpoint.ch"。
     // これらは parseAuthResults の detectProviderRoute で境界を特定し、生ヘッダ順序で
     // A-R の付与位置を検証したうえで採用する。各定義:
     //   orgDomains:         プロバイダ自身のホストの組織ドメイン
@@ -335,6 +345,9 @@
     //                       受信時にプロバイダが付与するキュー ID ヘッダの値が受信境界の
     //                       Received の "id" と一致することを要求する（受信時に初めて決まる値で
     //                       送信者は予測できないため、プロバイダが実際に処理したことの証跡になる）
+    //   localReinjection:   MTA が受信済みメールを同一ホストへ自身で再投入するホップ
+    //                       （from <ローカルユーザー名> by <ホスト> with local*、IP なし）を、
+    //                       同一サーバ内の処理として通過させるか
     //   detectInternal:     組織内で完結した配送を判定・注記する対象か
     const PROVIDER_INGRESS_RULES = [
       {
@@ -344,6 +357,7 @@
         providerAuthServId: null,
         arPlacement: "above",
         queueIdHeader: null,
+        localReinjection: false,
         detectInternal: true
       },
       {
@@ -353,6 +367,18 @@
         providerAuthServId: "incoming_mbo",
         arPlacement: "below",
         queueIdHeader: "x-rspamd-queue-id",
+        localReinjection: false,
+        detectInternal: false
+      },
+      {
+        name: "Hostpoint",
+        orgDomains: ["hostpoint.ch", "hostpoint.internal"],
+        ingress: /^mxin\d+\.mail\.hostpoint\.ch$/,
+        providerAuthServId: "mxin-hosts.mail.hostpoint.ch",
+        // A-R はスパムスキャン後の再投入ホップと受信境界の Received の間に積まれる
+        arPlacement: "above",
+        queueIdHeader: null,
+        localReinjection: true,
         detectInternal: false
       }
     ];
@@ -546,6 +572,8 @@
       // 最新の Received ヘッダの by ホスト名と Authentication-Results の authserv-id を比較し、
       // 信頼できるヘッダのみを採用する。攻撃者が注入した偽の認証結果を排除するため。
       // ARC-Authentication-Results は独自のチェイン検証機構を持つため、フィルタリング対象外。
+      // 名前の照合だけでは偽物を排除できないため、受信境界（detectBoundary）と生ヘッダ上の
+      // 位置（selectGenericAR）を併せて確かめ、受信サーバが付けたと言える A-R だけを採用する。
 
       // ■ コメント括弧を考慮したセミコロン分割ヘルパー
       // RFC 8601 では Authentication-Results 中の "(...)" はコメントであり、
@@ -582,79 +610,126 @@
         return result;
       };
 
-      const getLastReceivedBy = () => {
+      // ■ 受信境界（境界 MTA）の特定
+      // authserv-id 照合と A-R の位置検証に使う「信頼する受信ホスト」を求める。
+      // 単純に received[0] の by を採るだけでは、受信プロバイダの構成によって
+      // 「最終配送ホップ ≠ 認証（Authentication-Results 付与）ホスト」となり、
+      // 正規の A-R が authserv-id 不一致で破棄されてしまう。代表的な2パターン:
+      //   - Gmail / Google Workspace: 最上段に内部ハンドオフ
+      //       Received: by 2002:<IPv6> with SMTP id ...
+      //     を積む（by が IP リテラルで authserv-id になり得ない）。
+      //   - Fastmail (messagingengine.com): Cyrus LMTP の内部ホスト
+      //       Received: ... by slotpiXXmYY (Cyrus ...) with LMTPA
+      //     が最終配送だが、認証は phl-mx-NN.messagingengine.com が実施し
+      //     A-R を付与する。間に *.internal / localhost の内部ホップが挟まる。
+      // 最上段から下へ、受信側の内部処理と言い切れるホップだけを読み飛ばし、
+      // それ以外の最初のホップを境界とする。読み飛ばすのは次のものに限る:
+      //   - from 句の無いホップ（Gmail の "Received: by 2002:..." 等の内部ハンドオフ）
+      //   - プライベート IP・ループバックからの受信（*.internal / localhost の内部ホップ）
+      //   - IP の記録が無いローカルの受け渡し（"from exim by ... with sa-scanned" のように、
+      //     from がドットも角括弧も含まない単語だけのもの）
+      // 境界の Received は受信側が書いたものであり、それより下は送信者が自由に書ける。
+      // IP の読み取れない外部受信の行を読み飛ばすと、送信者が書いた偽の Received を
+      // 境界と取り違え、送信者が自作した「境界」と A-R の組を信頼してしまう。
+      // そのため境界の候補は「最初の読み飛ばせないホップ」1つに限り、それより下は見ない。
+      // 括弧内 IPv6 も IP として扱う: Exchange 系の内部ホップは "(2001:db8::1)" の形で
+      // 公開 IPv6 を記録するため、そこが境界になって A-R が照合されなくなるが、
+      // 下へ潜って送信者の行を拾うよりは安全側である
+      // （Microsoft 365 等は detectProviderRoute で別途ホスト名ベースに境界を特定する）。
+      // 戻り値:
+      //   host:  境界ホップの by（IP リテラル等で使えない場合は ""）
+      //   index: 境界ホップの received 配列上の位置（全ホップが内部処理なら -1）
+      const detectBoundary = () => {
         const received = headers["received"] || [];
-        if (received.length === 0) return "";
 
-        // authserv-id 照合に使う「信頼する受信ホスト」を求める。
-        // 単純に received[0] の by を採るだけでは、受信プロバイダの構成によって
-        // 「最終配送ホップ ≠ 認証（Authentication-Results 付与）ホスト」となり、
-        // 正規の A-R が authserv-id 不一致で破棄されてしまう。代表的な2パターン:
-        //   - Gmail / Google Workspace: 最上段に内部ハンドオフ
-        //       Received: by 2002:<IPv6> with SMTP id ...
-        //     を積む（by が IP リテラルで authserv-id になり得ない）。
-        //   - Fastmail (messagingengine.com): Cyrus LMTP の内部ホスト
-        //       Received: ... by slotpiXXmYY (Cyrus ...) with LMTPA
-        //     が最終配送だが、認証は phl-mx-NN.messagingengine.com が実施し
-        //     A-R を付与する。間に *.internal / localhost の内部ホップが挟まる。
-        // そこで以下の優先順で境界 MTA（=authserv 発行ホスト）を特定する。
-
+        // by 句のホスト名は空白・セミコロンに加え "(" の手前で区切る。
+        // RFC 5321 の Received 構文ではホスト名の直後に空白なしでコメントを続けられ、
+        // 例: "by mfsmax.docomo.ne.jp(DOCOMO Mail Server Ver2.0)"
+        // ここを区切らないとホスト名にコメントが混入し、authserv-id 照合に失敗して
+        // 受信サーバー自身の正規の Authentication-Results まで信頼対象から外れてしまう。
         const extractBy = (line) => {
-          const m = line.match(/\bby\s+([^\s;]+)/i);
-          return m ? m[1].toLowerCase().replace(/^\[|\]$/g, "") : "";
+          const m = line.match(/\bby\s+([^\s;()]+)/i);
+          return m ? m[1].toLowerCase().replace(/^\[|\]$/g, "").replace(/\.$/, "") : "";
         };
         const isIpLiteral = (h) => isIPv4Like(h) || isIPv6Like(h);
-        // 公開到達可能な実 FQDN か（ドットを含み、IP リテラルでも内部/予約
-        // ホスト名でもない）。.internal/.local 等や単一ラベル名・localhost を除外する。
-        const isPublicFqdn = (h) =>
-          !!h && h.includes(".") && !isIpLiteral(h) && h !== "localhost" &&
-          !/\.(internal|local|lan|intranet|localdomain|home\.arpa)$/.test(h);
 
-        // 優先1: 外部（公開 IP）から受信した最初のホップ＝境界 MTA。その by を採用。
-        // 内部配送ホップ（private IP / localhost / from 無し）はこの段で自然に飛ぶ。
-        // 単一ラベル名の受信ホストでも、公開 IP から受信していれば正しく採用される。
-        // 括弧内 IPv6 は抽出しない: Exchange 系の内部ホップは "(2001:db8::1)" の形で
-        // 公開 IPv6 を記録するため、これを外部受信とみなすと内部ホップを境界と誤認する。
-        // （Microsoft 365 等は detectProviderRoute で別途ホスト名ベースに境界を特定する）
-        for (const line of received) {
+        for (let i = 0; i < received.length; i++) {
+          const line = received[i];
           const fromMatch = line.match(/\bfrom\s+(.+?)(?=\s+by\s+|;|$)/i);
-          const fromIP = extractIPFromReceived(fromMatch ? fromMatch[1] : "", false);
-          if (fromIP && !isPrivateIP(fromIP)) {
-            const by = extractBy(line);
-            if (by && !isIpLiteral(by)) return by;
-            break; // 境界は見つかったが by が使えない → 後段へ
-          }
-        }
-
-        // 優先2: 公開 IP からの受信ホップが無い場合（自己送信や全内部経路）。
-        // 先頭から最初の実 FQDN の by を採用する。Fastmail の自己送信のように
-        // slotpiXX（単一ラベル）・*.internal・localhost ばかりの経路でも、
-        // 認証ホスト phl-mx-NN.messagingengine.com に正しく当てられる。
-        for (const line of received) {
+          if (!fromMatch) continue;
+          const fromPart = fromMatch[1].trim();
+          const fromIP = extractIPFromReceived(fromPart, true);
+          if (fromIP && isPrivateIP(fromIP)) continue;
+          const fromHost = fromPart.split(/[\s(]+/)[0];
+          // IP の記録が無く、from がドットも角括弧も含まない単語だけのもの（"from exim" /
+          // "from mailnull" 等）は、MTA が自身へ渡し直したローカルの受け渡し。
+          // 外部からの SMTP 受信では MTA が接続元 IP を必ず記録するため、この形は境界になり得ない。
+          // ホスト名だけで IP の無い行（"from mail.example.com by ..."）は、送信者が HELO で
+          // 受信側と同じドメインを名乗れるため内部とはみなさず、境界として扱う
+          if (!fromIP && !fromPart.includes("[") && /^[A-Za-z][A-Za-z0-9_-]*$/.test(fromHost)) continue;
           const by = extractBy(line);
-          if (isPublicFqdn(by)) return by;
+          return { host: by && !isIpLiteral(by) ? by : "", index: i };
         }
-
-        // 優先3: いずれも該当しなければ従来どおり received[0] の by を返す。
-        return extractBy(received[0]);
+        return { host: "", index: -1 };
       };
 
-      const filterByAuthServId = (authResultHeaders, trustedHost) => {
-        if (!trustedHost || authResultHeaders.length === 0) return authResultHeaders;
+      // ■ 汎用経路での A-R の採用（受信プロバイダ固有ルールに該当しない場合）
+      // A-R は誰でもメールに書けるため、authserv-id の名前だけでは受信サーバが付けたものと
+      // 区別できない。受信サーバが除去するのは自身の authserv-id を名乗る A-R だけで、
+      // A-R を付けないサーバや、別の名前を名乗る偽物はそのまま届く。そこで生のヘッダ順序
+      // （rawHeaderOrder）で位置を確かめ、受信サーバが付けたと言える A-R だけを信頼する。
+      //   名前: authserv-id は境界ホスト名との完全一致のみ（大文字小文字・末尾のドットは無視）。
+      //         親ドメインやサブドメインを許すと "com" や "ne.jp" を名乗るだけの偽物が通る。
+      //   位置: 境界の Received より上にある、名前の一致する A-R はすべて候補にする。
+      //         受信サーバが 1 回の検証結果を複数の A-R に分けて書くことがあるため
+      //         （Fastmail は x-ptr / bimi / arc / dkim・dmarc・spf 等を別々の A-R にする）、
+      //         1 本に絞ると DKIM や DMARC の結果を取りこぼす。
+      //         境界より上に無い場合は、境界の直下（次の Received の手前）で名前の一致する
+      //         最初の 1 本だけを候補にする。元メールに埋もれた A-R は使わない。
+      //   証拠: 境界より上の A-R は受信後に付与されたもので、送信者は書き込めないため信頼する。
+      //         境界の直下は元メール先頭に置かれた偽物とも重なる位置（Gmail 等はここに付与する）
+      //         のため、境界より上に同じ authserv-id の ARC-Authentication-Results がある場合
+      //         （受信サーバが実際に処理した証跡）に限って信頼する。直下で 2 本目以降を採らないのは、
+      //         受信サーバの A-R のすぐ後ろに送信者の偽物が続いていても区別できないため。
+      //   内部経路のみ（境界が無い。自己送信等）: 最上段の Received より上にある最初の A-R だけを
+      //         信頼する。最上段より上は最終配送側が書いた位置で、送信者は書き込めない。
+      // 生ヘッダが取得できない、または getFull と Received の本数が一致しない場合は信頼しない。
+      // 戻り値は getFull 側の該当ヘッダ値の配列（境界より上の場合は複数本になりうる）。
+      const selectGenericAR = (boundary, regularAuth) => {
+        if (!Array.isArray(rawHeaderOrder) || regularAuth.length === 0) return [];
+        const squash = (s) => (s || "").replace(/\s+/g, " ").trim();
+        const normalizeId = (s) => (s || "").toLowerCase().replace(/\.$/, "");
+        const idOf = (v) => normalizeId(splitOnTopLevelSemicolons(v)[0].trim());
+        const receivedRaw = [];
+        rawHeaderOrder.forEach((h, i) => { if (h.name === "received") receivedRaw.push(i); });
+        if (receivedRaw.length === 0 || receivedRaw.length !== (headers["received"] || []).length) return [];
+        const toFullValue = (rawValue) => regularAuth.find(h => squash(h) === squash(rawValue));
+        const isAR = (h) => h.name === "authentication-results";
 
-        const trusted = authResultHeaders.filter(h => {
-          // authserv-id はヘッダの先頭（最初のセミコロンの前）に記載される
-          // コメント括弧内のセミコロンを誤って境界と認識しないようヘルパーを利用する
-          const authServId = splitOnTopLevelSemicolons(h)[0].trim().toLowerCase();
-          // 完全一致、またはサブドメイン関係を許容
-          return authServId === trustedHost ||
-                 authServId.endsWith("." + trustedHost) ||
-                 trustedHost.endsWith("." + authServId);
-        });
+        if (boundary.index < 0) {
+          const k = rawHeaderOrder.findIndex((h, i) => i < receivedRaw[0] && isAR(h));
+          const full = k >= 0 ? toFullValue(rawHeaderOrder[k].value) : undefined;
+          return full ? [full] : [];
+        }
+        if (!boundary.host) return [];
+        const boundaryRaw = receivedRaw[boundary.index];
+        const isBoundaryAR = (h) => isAR(h) && idOf(h.value) === boundary.host;
 
-        // マッチするものがなければ空配列を返す（判定に使わない）
-        // 不一致時にすべてのA-Rを信頼するのはセキュリティ上の危険
-        return trusted;
+        // 境界より上: 名前の一致するものをすべて採用する。
+        // getFull 側に対応するヘッダが見つからないものが 1 本でもあれば、生ヘッダとの対応が
+        // 取れていないため全体を信頼しない（安全側）
+        const above = rawHeaderOrder.filter((h, i) => i < boundaryRaw && isBoundaryAR(h)).map(h => toFullValue(h.value));
+        if (above.length > 0) return above.every(Boolean) ? above : [];
+
+        // 境界の直下: 最初の 1 本だけを、境界より上に同名の ARC-AR がある場合に限って採用する
+        const zoneEnd = boundary.index + 1 < receivedRaw.length ? receivedRaw[boundary.index + 1] : rawHeaderOrder.length;
+        const k = rawHeaderOrder.findIndex((h, i) => i > boundaryRaw && i < zoneEnd && isBoundaryAR(h));
+        if (k < 0) return [];
+        const arcAbove = rawHeaderOrder.some((h, i) => i < boundaryRaw && h.name === "arc-authentication-results" &&
+          idOf(h.value.replace(/^\s*i\s*=\s*\d+\s*;\s*/i, "")) === boundary.host);
+        if (!arcAbove) return [];
+        const full = toFullValue(rawHeaderOrder[k].value);
+        return full ? [full] : [];
       };
 
       // authserv-id を持たない A-R か（先頭セグメントが "method=result" の形をしている）
@@ -687,12 +762,18 @@
         const firstLabel = (h) => (h || "").split(".")[0];
         const normalize = (h) => h.toLowerCase().replace(/^\[|\]$/g, "").replace(/\.$/, "");
         const hops = received.map(line => {
-          const byMatch = line.match(/\bby\s+([^\s;]+)/i);
+          // ホスト名の直後に空白なしで続くコメント "host(...)" を含めないよう "(" でも区切る
+          const byMatch = line.match(/\bby\s+([^\s;()]+)/i);
           const fromMatch = line.match(/\bfrom\s+(.+?)(?=\s+by\s+|;|$)/i);
-          const fromHost = fromMatch ? fromMatch[1].trim().split(/\s+/)[0] : "";
+          const fromHost = fromMatch ? fromMatch[1].trim().split(/[\s(]+/)[0] : "";
           return {
             by: byMatch ? normalize(byMatch[1]) : "",
-            fromHost: normalize(fromHost)
+            fromHost: normalize(fromHost),
+            // 同一ホストへの自己再投入（Exim がスパムスキャン後に記録する
+            //   "from mailnull by mxin016.mail.hostpoint.ch with local_accounts_spamscanned"）。
+            // from がドットを含まないローカルユーザー名で、IP の記録が無く、プロトコルが local* のもの
+            localHandoff: !!fromHost && !fromHost.includes(".") &&
+                          !extractIPFromReceived(line) && /\bwith\s+local\w*/i.test(line)
           };
         });
 
@@ -708,6 +789,13 @@
           if (!isProviderHost(hop.by)) return result;
           // 前段の送信元と、このホップの受信ホストが同一サーバでなければ連続性が途切れている
           if (i > 0 && firstLabel(hops[i - 1].fromHost) !== firstLabel(hop.by)) return result;
+          // 自己再投入ホップは、同じサーバが受信済みのメールを自身へ渡し直したもの。
+          // 送信元を自分自身とみなして走査を続け、次段にも同じサーバの Received を求める。
+          // 最上段から連続した走査でしか到達しないため、送信者が下段に積んだヘッダは対象にならない
+          if (rule.localReinjection && hop.localHandoff) {
+            hop.fromHost = hop.by;
+            continue;
+          }
           // 同一サーバが自身から受け取ったホップ（from X by X）は組織内での送信受付の起点。
           // これより下段はクライアントが送信時に含めた任意のヘッダであり信頼できないため、
           // ここで走査を打ち切り、組織内で発生した配送として扱う。
@@ -782,13 +870,21 @@
       };
 
       const providerRoute = detectProviderRoute();
-      const lastReceivedBy = providerRoute.ingressHost || getLastReceivedBy();
+      const boundary = providerRoute.ingressHost ? null : detectBoundary();
+      const lastReceivedBy = providerRoute.ingressHost || boundary.host;
       const regularAuth = headers["authentication-results"] || [];
 
       // 通常の Authentication-Results のみ authserv-id でフィルタリング
       // ARC-Authentication-Results は暗号学的検証なしでは偽造可能なため、
       // 本判定からは除外し、ARC カード表示（parseArcChain）のみで利用する
-      let trustedRegular = filterByAuthServId(regularAuth, lastReceivedBy);
+      // （汎用経路で境界より上にある ARC-AR を「受信サーバが処理した証跡」として参照するのみ）。
+      // プロバイダの受信経路が特定できた場合は、authserv-id による照合を行わない。
+      // これらのプロバイダの authserv-id は受信境界のホスト名と異なるため、境界のホスト名を
+      // authserv-id に名乗る A-R はプロバイダが付与したものではなく、送信者が元メールに
+      // 仕込んだ偽物でしかありえない（プロバイダは自身の authserv-id を名乗る A-R しか
+      // 除去しないため、偽物はそのまま届く）。下の位置検証を経た A-R だけを信頼する。
+      // それ以外は selectGenericAR で、名前の完全一致と生ヘッダ上の位置を確かめた 1 本だけを信頼する。
+      let trustedRegular = providerRoute.ingressHost ? [] : selectGenericAR(boundary, regularAuth);
       let authHeaders = trustedRegular;
 
       // ■ プロバイダが付与した A-R の採用
@@ -798,7 +894,7 @@
       // 下段にある A-R（元メールに含まれていたもの）は対象にしない。
       // authserv-id を持たない形式（Microsoft 365）は、既存パーサが先頭セグメントを
       // authserv-id として読み飛ばすため、境界ホスト名を authserv-id として補って渡す。
-      if (trustedRegular.length === 0 && providerRoute.ingressHost && regularAuth.length > 0 &&
+      if (providerRoute.ingressHost && regularAuth.length > 0 &&
           isProviderAR(providerRoute.rule, regularAuth[0]) &&
           isProviderARPlaced(providerRoute.rule, regularAuth[0], providerRoute.ingressIndex)) {
         trustedRegular = [regularAuth[0]];
@@ -831,6 +927,9 @@
         const results = [];
         // 重複排除用: "status|domain" の組み合わせを記録
         const seen = new Set();
+        // pass した署名の (domain, selector) を重複排除前の状態で保持する。
+        // 同一ドメインでセレクタ違いの署名を区別する必要がある署名範囲（h=）の評価に用いる
+        const passed = [];
 
         for (const h of authHeaders) {
           // コメント括弧 "(2048-bit key; unprotected)" 等に含まれるセミコロンを
@@ -855,10 +954,13 @@
               const sMatch = m.match(/header\.s=([^;\s()]+)/i);
               const selector = sMatch ? sMatch[1].replace(/["']/g, '') : "";
               const status = statusMatch[1].toLowerCase();
+              if (status === "pass" && domain) passed.push({ domain, selector });
 
               // Authentication-Results と ARC-Authentication-Results に
               // 同じ署名結果が記録されることがあるため、status+domain で重複排除
-              const key = `${status}|${domain.toLowerCase()}`;
+              // セレクタも鍵に含め、同一ドメインでセレクタの異なる署名は別々に表示する
+              // （1 つにまとめると、署名ごとの警告がどの署名のものか分からなくなるため）
+              const key = `${status}|${domain.toLowerCase()}|${selector.toLowerCase()}`;
               if (seen.has(key)) continue;
               seen.add(key);
 
@@ -880,7 +982,7 @@
           else aggregated = results[0].status;
         }
 
-        return { aggregated, results };
+        return { aggregated, results, passed };
       };
 
       // 認証タイプに関連する詳細情報(ドメイン, IP等)を構造化データとして抽出する
@@ -1016,10 +1118,21 @@
       // ■ Received-SPF フォールバック
       // Authentication-Results に SPF 結果がない場合（古いMTAなど）、
       // Received-SPF ヘッダから SPF ステータスとドメイン・IPを取得する
+      // Received-SPF も送信者が自由に書けるため、受信側が書いたと言える位置のものだけを使う。
+      // 受信境界の Received より上（内部経路のみの場合は最上段の Received より上）にある
+      // 最初の Received-SPF に限る。生ヘッダが取得できない場合は補完しない（安全側）。
+      const pickReceivedSpf = () => {
+        if (!Array.isArray(rawHeaderOrder)) return "";
+        const receivedRaw = [];
+        rawHeaderOrder.forEach((h, i) => { if (h.name === "received") receivedRaw.push(i); });
+        if (receivedRaw.length === 0 || receivedRaw.length !== (headers["received"] || []).length) return "";
+        const recvIndex = providerRoute.ingressHost ? providerRoute.ingressIndex : Math.max(boundary.index, 0);
+        const k = rawHeaderOrder.findIndex((h, i) => i < receivedRaw[recvIndex] && h.name === "received-spf");
+        return k >= 0 ? rawHeaderOrder[k].value : "";
+      };
       if (spfStatus === "none") {
-        const receivedSpf = headers["received-spf"] || [];
-        if (receivedSpf.length > 0) {
-          const spfLine = receivedSpf[0];
+        const spfLine = pickReceivedSpf();
+        if (spfLine) {
           // ステータス: ヘッダの先頭単語 (例: "pass identity=mailfrom;")
           const statusMatch = spfLine.match(/^\s*(pass|fail|softfail|neutral|temperror|permerror|none)/i);
           if (statusMatch) {
@@ -1041,6 +1154,116 @@
 
       // SPF/DKIM アライメントの個別評価結果（pass した署名のドメインのみで判定）
       const alignment = evaluateAlignment(spfDetail, dkimResult.results, envelope.headerOrgDomain, spfStatus, dkimResult.aggregated);
+
+      // ■ DKIM 署名範囲（h= タグ）の評価
+      // DKIM 署名が保証するのは本文と h= に列挙されたヘッダだけで、署名対象外のヘッダは
+      // 署名を壊さずに誰でも差し替え・追加できる。正規の署名付きメールを入手した第三者が
+      // 件名や Content-Type（本文の MIME 構造をどう解釈するか）だけを書き換えて別の宛先へ
+      // 再送する「DKIM リプレイ」では、From と署名ドメインが一致したまま DMARC も pass するため、
+      // 認証結果だけでは正規メールと区別できない。
+      // RFC 6376 が署名を必須とするのは From のみだが、5.4.1 は Subject・Reply-To 等の
+      // 署名を推奨し、MIME ヘッダの署名も強く勧めている。
+      // From とアラインして pass した署名を対象に、改ざんされると受信者に実害が出るヘッダを調べる。
+      //   blocking:     Subject。署名付きメールを 1 通入手するだけで、前提条件なしに件名を
+      //                 差し替えて再送できる。判定（グリーン阻害）に用いる。
+      //   always:       Subject / Content-Type。受信者が目にする件名と本文の解釈を決めるヘッダ。
+      //                 メールに存在しない場合でも署名対象（オーバーサイン）に含まれていなければ
+      //                 第三者が後から追加できるため、存在の有無に関わらず署名を求める。
+      //                 Content-Type の差し替えで本文を別の内容として表示させるには、本文中に
+      //                 攻撃者が入力した文字列（フォーム入力の転記等）が含まれている必要があり、
+      //                 その前提はヘッダから判断できない。また Gmail 等の大手サービスも署名しない
+      //                 ことが多く、判定に用いると正規メールの大半がグリーンを失うため、
+      //                 DKIM カード内の管理者向け警告に留める。
+      //   when present: Reply-To。返信先を攻撃者へ誘導できるヘッダで、メールに存在するのに
+      //                 署名対象外の場合のみ報告する（存在しない Reply-To のオーバーサインまでは
+      //                 正規の送信基盤でもほとんど行われていないため問わない）。
+      // Date・To・Cc・MIME-Version 等の未署名は、差し替えても受信者の判断を直接誤らせないため報告しない。
+      const SIGNED_HEADER_LABELS = {
+        "subject": "Subject",
+        "content-type": "Content-Type",
+        "reply-to": "Reply-To"
+      };
+      const BLOCKING_SIGNED_HEADERS = ["subject"];
+      const ALWAYS_SIGNED_HEADERS = ["subject", "content-type"];
+      const SIGNED_WHEN_PRESENT_HEADERS = ["reply-to"];
+
+      const evaluateSignedHeaderCoverage = () => {
+        const getOrgDomain = window.getOrganizationalDomain || ((d) => d);
+        const normalizeDomain = (d) => domainToAscii((d || "").replace(/\.$/, "")).toLowerCase();
+
+        // DKIM-Signature をタグ単位に分解する。h= の値は折り返し（FWS）を含みうるため、
+        // 空白をすべて除去してからコロンで分割する。
+        // b= の値（Base64）はセミコロンを含まないため、単純な ';' 分割で問題ない
+        const parseSigTags = (sigHeader) => {
+          const tags = {};
+          for (const part of sigHeader.split(";")) {
+            const eq = part.indexOf("=");
+            if (eq < 0) continue;
+            const name = part.slice(0, eq).trim().toLowerCase();
+            if (name && !(name in tags)) tags[name] = part.slice(eq + 1).replace(/\s+/g, "");
+          }
+          return tags;
+        };
+        const signatures = (headers["dkim-signature"] || []).map(h => {
+          const t = parseSigTags(h);
+          return {
+            domain: normalizeDomain(t.d),
+            selector: (t.s || "").toLowerCase(),
+            signed: new Set((t.h || "").toLowerCase().split(":").filter(Boolean))
+          };
+        });
+
+        const warnings = [];
+        let alignedPassCount = 0;
+        let coveredPassCount = 0;
+        const seenSig = new Set();
+
+        for (const p of dkimResult.passed) {
+          const passDomain = normalizeDomain(p.domain);
+          if (getOrgDomain(passDomain) !== envelope.headerOrgDomain) continue;
+          const passSelector = (p.selector || "").toLowerCase();
+
+          // A-R の header.s があればセレクタまで一致する署名に絞る。
+          // 記録が無い場合は同一ドメインの全署名が候補となり、どれが pass したか
+          // 特定できないため、全候補が blocking ヘッダを覆っている場合のみ「覆われている」とみなす
+          const matches = signatures.filter(sig =>
+            sig.domain === passDomain && (!passSelector || sig.selector === passSelector));
+          // DKIM-Signature ヘッダが見当たらない（経路上で除去された等）場合は判断材料が無いため評価しない
+          if (matches.length === 0) continue;
+          alignedPassCount++;
+
+          let allCovered = true;
+          for (const sig of matches) {
+            const blocking = BLOCKING_SIGNED_HEADERS.some(name => !sig.signed.has(name));
+            if (blocking) allCovered = false;
+
+            const sigKey = `${sig.domain}|${sig.selector}`;
+            if (seenSig.has(sigKey)) continue;
+            seenSig.add(sigKey);
+            const missing = ALWAYS_SIGNED_HEADERS.filter(name => !sig.signed.has(name))
+              .concat(SIGNED_WHEN_PRESENT_HEADERS.filter(name =>
+                !sig.signed.has(name) && (headers[name] || []).length > 0));
+            if (missing.length > 0) {
+              warnings.push({
+                type: "unsigned_headers",
+                domain: sig.domain,
+                // 同一ドメインに複数の署名がある場合に、どの署名についての警告か示すため保持する
+                selector: sig.selector,
+                value: missing.map(name => SIGNED_HEADER_LABELS[name]).join(", ")
+              });
+            }
+          }
+          if (allCovered) coveredPassCount++;
+        }
+
+        // アラインした pass 署名が評価でき、そのいずれも Subject を覆っていない場合に
+        // 「受信者が目にする件名をドメイン所有者が保証していない」とみなす
+        return {
+          warnings,
+          subjectUncovered: alignedPassCount > 0 && coveredPassCount === 0
+        };
+      };
+      const dkimCoverage = evaluateSignedHeaderCoverage();
 
       // ■ 認証強度の弱さ検出
       // 認証が pass していても、送信側の努力で解決できる設定上の弱さがあれば
@@ -1074,6 +1297,10 @@
             dkimWarnings.push({ type: "limited_scope", domain: sigDomain, value: `l=${lMatch[1]}` });
           }
         }
+
+        // --- 署名対象ヘッダの不足（h= タグ） ---
+        // 評価は evaluateSignedHeaderCoverage() で済ませてあり、ここでは警告一覧に合流させる
+        for (const w of dkimCoverage.warnings) dkimWarnings.push(w);
 
         // --- DKIM 鍵長検査 ---
         // 鍵長は DKIM-Signature には現れないが、受信側 MTA が
@@ -1167,16 +1394,46 @@
       };
       const relayOriginal = parseRelayOriginalAuth();
 
+      // ■ 受信サーバが検証結果を記録していない DKIM 署名
+      // 信頼済み A-R に DKIM の結果が無いのに DKIM-Signature ヘッダがある場合、
+      // 「署名なし」ではなく「署名はあるが受信サーバが検証していない」状態として区別して示す。
+      // 検証結果を Authentication-Results に書かず、SpamAssassin の X-Spam-Status 等にだけ
+      // 記録する受信サーバで生じる。X-Spam-* は送信者が自由に付与でき、付与した MTA も
+      // 特定できないため、認証結果の代わりには用いない。
+      // DKIM-Signature ヘッダ自体も送信者が偽造できるため、署名の存在は安全の根拠にならない。
+      // 判定（DKIM: none）は変えず、DKIM カードの表示を補う情報としてのみ使う。
+      const collectUnverifiedSignatures = () => {
+        if (dkimResult.aggregated !== "none") return [];
+        const list = [];
+        const seen = new Set();
+        for (const sigHeader of (headers["dkim-signature"] || [])) {
+          const dMatch = sigHeader.match(/(?:^|[;\s])d=([^;\s]+)/i);
+          const sMatch = sigHeader.match(/(?:^|[;\s])s=([^;\s]+)/i);
+          const domain = dMatch ? dMatch[1].trim() : "";
+          const selector = sMatch ? sMatch[1].trim() : "";
+          const key = `${domain.toLowerCase()}|${selector.toLowerCase()}`;
+          if (seen.has(key)) continue;
+          seen.add(key);
+          list.push({ domain, selector });
+        }
+        return list;
+      };
+      const unverifiedSignatures = collectUnverifiedSignatures();
+
       return {
         // 信頼した A-R の authserv-id（Microsoft 365 の場合は補った EOP ホスト名）
         authServId: authHeaders.length > 0
           ? splitOnTopLevelSemicolons(authHeaders[0])[0].trim()
           : lastReceivedBy,
         spf: { status: spfStatus, detail: spfDetail },
-        dkim: { status: dkimResult.aggregated, detail: dkimDetail, signatures: dkimResult.results },
+        // unverifiedSignatures: 受信サーバが検証結果を記録していない署名の {domain, selector}（表示専用）
+        dkim: { status: dkimResult.aggregated, detail: dkimDetail, signatures: dkimResult.results, unverifiedSignatures },
         dmarc: { status: dmarcStatus, detail: dmarcDetail },
         alignment,
         strength,
+        // アラインした pass 署名が Subject を署名対象に含んでいないか
+        // （DKIM リプレイで件名を差し替えうる状態か）
+        dkimSubjectUnsigned: dkimCoverage.subjectUncovered,
         reportedUnverified,
         // Microsoft 365 組織内で完結した配送か（注記表示用。判定には影響させない）
         // 外部から EOP を経由したメールには必ず A-R が付与されるため、A-R が1本でも
@@ -1237,7 +1494,8 @@
 
       return rawReceived.slice().reverse().map(line => {
         const fromMatch = line.match(/\bfrom\s+(.+?)(?=\s+by\s+|;|$)/i);
-        const byMatch = line.match(/\bby\s+([^\s;]+)/i);
+        // 受信ホスト名の直後に空白なしで続くコメント "host(...)" は表示に含めない
+        const byMatch = line.match(/\bby\s+([^\s;()]+)/i);
         const date = parseReceivedDate(line);
 
         // from 句からIPアドレスを抽出し、内部/外部ネットワークを判定
@@ -1779,11 +2037,25 @@
       // 受信者が注意すべき事柄が残る以上グリーンにはしない（警告付きの判定に留める）。
       const isReplyToHomograph = !!replyToHomograph;
 
+      // ■ DKIM リプレイの余地（件名が署名で守られていない）
+      // DMARC が DKIM アライメントだけで pass している（SPF はアラインしていない）場合、
+      // 「正規の送信基盤から直接届いた」保証は無く、ドメイン所有者が保証するのは署名範囲だけになる。
+      // その署名が Subject を含まなければ、正規の署名付きメールを入手した第三者が
+      // 件名を差し替えて再送しても DMARC pass のまま届く。
+      // （Content-Type の未署名は悪用に本文側の前提条件が要り、大手サービスでも一般的なため
+      //   判定には用いず、DKIM カード内の警告に留める。evaluateSignedHeaderCoverage 参照）
+      // 署名範囲は送信側（署名を行う送信基盤）が広げれば解消できる不備のためグリーンにはしないが、
+      // 認証自体は成功しており偽装と断定はできないため、警告付きの判定に留める。
+      // SPF もアラインしている場合は第三者による再送が成立しないため、DKIM カード内の警告のみとする。
+      const isDkimReplayRisk = isDmarcOk && !!al.dkimAligned && !al.spfAligned &&
+                               !!authResults.dkimSubjectUnsigned;
+
       const isSecure = isSpfOk && isDkimOk && isDmarcOk &&
                        domainCheckOk && isDmarcAligned &&
                        !isDisplayNameSpoofed && !hasCriticalPhishing &&
                        !hasSuspiciousLink && !hasUntrustedLink &&
-                       !isRelayOriginalUnverified && !isSenderHomograph && !isReplyToHomograph;
+                       !isRelayOriginalUnverified && !isSenderHomograph && !isReplyToHomograph &&
+                       !isDkimReplayRisk;
 
       // 認証系: pass 以外なら実際のステータスを記録 (例: "SPF: softfail")
       if (!isSpfOk) verdictReasons.push(`SPF: ${authResults.spf.status}`);
@@ -1799,6 +2071,7 @@
       if (!domainCheckOk) verdictReasons.push("domain_not_aligned");
       if (isDisplayNameSpoofed) verdictReasons.push("display_name_spoofed");
       if (isRelayOriginalUnverified) verdictReasons.push("relay_original_unverified");
+      if (isDkimReplayRisk) verdictReasons.push("dkim_replay_risk");
       // 送信者ドメインの偽装は、リンク起因のフィッシングと区別できるよう判定理由として明示する
       if (isSenderHomograph) verdictReasons.push("sender_homograph");
       if (isReplyToHomograph) verdictReasons.push("reply_to_homograph");
@@ -1825,8 +2098,11 @@
       } else if (authResults.spf.status === "fail" || authResults.dkim.status === "fail" || authResults.dmarc.status === "fail") {
         badgeClass = "danger";
         badgeText = msg("badgeAuthFailed");
-      } else if ((isSpfOk || isDkimOk) && isDmarcOk && envelopeFrom !== "Unknown") {
+      } else if ((isSpfOk || isDkimOk) && isDmarcOk) {
         // SPF/DKIM・DMARC全て通っているが他の条件（アライメント・なりすまし等）で不合格
+        // DMARC が検証するのはヘッダ From であり、エンベロープ送信者が空（Return-Path: <>）や
+        // 取得できない場合でも DMARC pass の事実は変わらないため、ここでは envelopeFrom を問わない。
+        // （空の送信者は配送エラー通知・自動応答のほか、SPF を HELO で評価させる手口にも使われる）
         badgeClass = "warning";
         badgeText = msg("badgeAuthPassWarning");
       } else if ((isSpfOk || isDkimOk) && envelopeFrom !== "Unknown") {
@@ -2774,6 +3050,8 @@
           font-size: var(--maiv-fs-caption);
         }
         .maiv-ip-tag { font-size: var(--maiv-fs-fine); margin-left: 4px; }
+        /* 受信サーバが検証していない DKIM 署名の注記（警告ではなく補足説明） */
+        .maiv-dkim-unverified-note { color: var(--maiv-text-faint); font-size: var(--maiv-fs-fine); margin-top: 4px; }
         .maiv-tls-secure { color: var(--maiv-pass); }
         .maiv-tls-warn { color: var(--maiv-delay-warning); font-weight: 600; }
         .maiv-tls-danger { color: var(--maiv-fail); font-weight: 600; }
@@ -2917,6 +3195,12 @@
           ? sigs.map(sig => `${sig.domain || "?"}=${sig.status}${sig.selector ? ` (s=${sig.selector})` : ""}`).join(", ")
           : "-";
         lines.push(`DKIM:  ${authResults.dkim.status.toUpperCase()} (${dkimSummary})`);
+        // 受信サーバが検証結果を記録していない署名（判定には算入しない）
+        const unverifiedSigs = authResults.dkim.unverifiedSignatures || [];
+        if (authResults.dkim.status === "none" && unverifiedSigs.length > 0) {
+          const list = unverifiedSigs.map(sig => `${sig.domain || "?"}${sig.selector ? ` (s=${sig.selector})` : ""}`).join(", ");
+          lines.push(`DKIM signature present, not verified by receiving server: ${list}`);
+        }
 
         const dmarcPolicy = authResults.dmarc.detail.policy || "-";
         lines.push(`DMARC: ${authResults.dmarc.status.toUpperCase()} (policy: ${dmarcPolicy})`);
@@ -2958,7 +3242,7 @@
           lines.push("STRENGTH WARNINGS");
           lines.push("-----------------");
           for (const w of strength.dkim) {
-            lines.push(`[!] DKIM ${w.type}: ${w.value}${w.domain ? ` (${w.domain})` : ""}`);
+            lines.push(`[!] DKIM ${w.type}: ${w.value}${w.domain ? ` (${w.domain}${w.selector ? `, s=${w.selector}` : ""})` : ""}`);
           }
           for (const w of strength.dmarc) {
             lines.push(`[!] DMARC ${w.type}: ${w.value}`);
@@ -3159,6 +3443,7 @@
           "sender_homograph": msg("verdictReasonSenderHomograph"),
           "reply_to_homograph": msg("verdictReasonReplyToHomograph"),
           "relay_original_unverified": msg("verdictReasonRelayOriginal"),
+          "dkim_replay_risk": msg("verdictReasonDkimReplayRisk"),
           "phishing_suspicious": msg("verdictReasonSuspicious"),
           "link_untrusted": msg("verdictReasonUntrusted")
         };
@@ -3279,17 +3564,45 @@
         const strengthTypeMsg = {
           "weak_key": msg("dkimWeakKeyLength"),
           "weak_algorithm": msg("dkimWeakAlgorithm"),
-          "limited_scope": msg("dkimLimitedScope")
+          "limited_scope": msg("dkimLimitedScope"),
+          "unsigned_headers": msg("dkimUnsignedHeaders")
         };
         let strengthHTML = "";
         for (const w of (authResults.strength ? authResults.strength.dkim : [])) {
           const label = strengthTypeMsg[w.type] || w.type;
-          const domainInfo = w.domain ? ` — ${w.domain}` : "";
+          // 署名単位の警告（署名対象ヘッダの不足）はセレクタも添え、どの署名についてか明示する
+          const selectorInfo = w.selector ? `, s=${w.selector}` : "";
+          const domainInfo = w.domain ? ` — ${w.domain}${selectorInfo}` : "";
           strengthHTML += `<div class="maiv-strength-warn"><span class="maiv-icon">${BI.exclamationTriangleFill}</span><span>${escapeHTML(label)} (${escapeHTML(w.value)}${escapeHTML(domainInfo)})</span></div>`;
         }
 
         if (sigs.length === 0 || !sigs.some(s => s.domain)) {
           const st = authResults.dkim.status;
+
+          // DKIM-Signature はあるが受信サーバの検証結果が無い場合は、「署名なし」と区別して
+          // 「署名あり（未検証）」と表示する。色は none と同じ中立表示に留め、判定は変えない。
+          // 署名ドメインは送信者が偽造できる値のため、未検証であることを必ず併記する
+          const unverified = authResults.dkim.unverifiedSignatures || [];
+          if (st === "none" && unverified.length > 0) {
+            const sigLines = unverified.map(sig => {
+              const parts = [`${escapeHTML(msg("dkimSignedUnverifiedDomain"))} ${escapeHTML(sig.domain || "?")}`];
+              if (sig.selector) parts.push(`${escapeHTML(msg("labelSelector"))} ${escapeHTML(sig.selector)}`);
+              return parts.join("<br>");
+            });
+            // ラベルが pass/none より長く、狭いカードでは authserv-id と並べると
+            // ラベル自体が細切れに折り返すため、ラベルは改行させず authserv-id 側を次行へ回す
+            return `
+              <div class="maiv-status-row" style="flex-wrap:wrap;">
+                <span class="maiv-status-icon status-none"><span class="maiv-icon">${BI.exclamationTriangleFill}</span></span>
+                <span class="status-none" style="white-space:nowrap;">${escapeHTML(msg("dkimSignedUnverified"))}</span>
+                ${authServLabel}
+              </div>
+              <div class="maiv-detail-text">${sigLines.join('<div style="border-top:1px dashed var(--maiv-card-title-border); margin:6px 0;"></div>')}</div>
+              <div class="maiv-dkim-unverified-note">${escapeHTML(msg("dkimSignedUnverifiedNote"))}</div>
+              ${strengthHTML}
+            `;
+          }
+
           const emptyIcon = (st === "fail" || st === "permerror" || st === "temperror") ? BI.xCircleFill : BI.exclamationTriangleFill;
           const emptyCls = (st === "fail" || st === "permerror" || st === "temperror") ? "status-fail" : "status-none";
           return `
@@ -4001,14 +4314,18 @@
       compactMode = stored.compactMode === true;
     } catch { /* storage未対応環境では通常表示 */ }
 
-    // ■ 生ヘッダ順序の取得（受信プロバイダ固有ルールが該当する場合のみ）
-    //    最上段 Received の受信ホストが PROVIDER_INGRESS_RULES のプロバイダである場合に限り、
-    //    A-R の付与位置を検証するための生ヘッダを background 経由で取得する。
-    //    メッセージ全体の読み込みを伴うため、該当しないメールでは取得しない。
-    //    取得に失敗した場合は null のまま進め、プロバイダ固有の A-R 採用を行わない（安全側）。
+    // ■ 生ヘッダ順序の取得（Authentication-Results / Received-SPF がある場合、または受信プロバイダ固有ルールが該当する場合）
+    //    最上段 Received の受信ホストが PROVIDER_INGRESS_RULES のプロバイダである場合に加え、
+    //    汎用経路でも A-R・Received-SPF の位置を検証するため（selectGenericAR / pickReceivedSpf）、それらを含むメールでは
+    //    生ヘッダを background 経由で取得する。
+    //    メッセージ全体の読み込みを伴うため、どちらも無く固有ルールにも該当しないメールでは取得しない。
+    //    取得に失敗した場合は null のまま進め、A-R を信頼しない（安全側）。
     let rawHeaderOrder = null;
-    const topReceivedBy = ((headers["received"] || [])[0] || "").match(/\bby\s+([^\s;]+)/i);
-    if (topReceivedBy && findProviderRule(topReceivedBy[1])) {
+    //    受信ホスト名の切り出しは detectProviderRoute と同じく "(" でも区切り、判定を一致させる。
+    const topReceivedBy = ((headers["received"] || [])[0] || "").match(/\bby\s+([^\s;()]+)/i);
+    // Received-SPF だけのメールも、補完に使う Received-SPF の位置検証（pickReceivedSpf）に生ヘッダが要る
+    if ((headers["authentication-results"] || []).length > 0 || (headers["received-spf"] || []).length > 0 ||
+        (topReceivedBy && findProviderRule(topReceivedBy[1]))) {
       try {
         const rawResp = await browser.runtime.sendMessage({ command: "getRawHeaders" });
         if (rawResp && typeof rawResp.rawHeaders === "string") {
