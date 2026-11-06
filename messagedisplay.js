@@ -2197,198 +2197,209 @@
         }
         *, *::before, *::after { box-sizing: border-box; }
 
-        /* === Design tokens (DESIGN.md Apple system + security semantics) === */
+        /* === Design tokens (DESIGN.md デジタル庁デザインシステム / DADS 準拠) === */
         .maiv-container {
           /* surfaces */
-          --maiv-bg: #f5f5f7;                 /* canvas-parchment */
-          --maiv-bg-elevated: #ffffff;        /* canvas */
-          --maiv-border: #e0e0e0;             /* hairline */
-          --maiv-border-subtle: #f0f0f0;      /* divider-soft */
+          --maiv-bg: #f5f7fa;                 /* DADS canvas-subtle / neutral surface */
+          --maiv-bg-elevated: #ffffff;        /* DADS canvas */
+          --maiv-border: #b3b3b3;             /* DADS neutral border (>= 3:1 contrast) */
+          --maiv-border-subtle: #e0e0e0;      /* DADS divider-soft */
           /* text */
-          --maiv-text: #1d1d1f;               /* ink / body */
-          --maiv-text-secondary: #333333;     /* ink-muted-80 */
-          --maiv-text-muted: #7a7a7a;         /* ink-muted-48 */
-          --maiv-text-faint: #7a7a7a;
-          --maiv-text-strong: #1d1d1f;
-          --maiv-text-strongest: #1d1d1f;
-          /* interactive: single Action Blue */
-          --maiv-primary: #0066cc;
-          --maiv-primary-focus: #0071e3;
-          --maiv-primary-on-dark: #2997ff;
+          --maiv-text: #1a1a1a;               /* DADS text-primary (>= 16:1 contrast) */
+          --maiv-text-secondary: #4d4d4d;     /* DADS text-secondary (>= 7.5:1 contrast) */
+          --maiv-text-muted: #666666;         /* DADS text-muted (>= 4.6:1 contrast) */
+          --maiv-text-faint: #666666;
+          --maiv-text-strong: #1a1a1a;
+          --maiv-text-strongest: #1a1a1a;
+          /* interactive: DADS Key Blue */
+          --maiv-primary: #0050a4;            /* DADS Key Blue (>= 7.5:1 contrast) */
+          --maiv-primary-focus: #0050a4;
+          --maiv-primary-hover: #003a7a;
+          --maiv-primary-tint: #e6f0fa;
+          --maiv-primary-on-dark: #66b0ff;
           --maiv-on-primary: #ffffff;
           /* cards */
           --maiv-card-bg: #ffffff;
-          --maiv-card-border: #e0e0e0;
-          --maiv-card-title-color: #7a7a7a;
-          --maiv-card-title-border: #f0f0f0;
-          --maiv-highlight-bg: #fafafc;       /* surface-pearl */
-          --maiv-highlight-border: #e0e0e0;
-          --maiv-route-border: #f0f0f0;
-          --maiv-route-origin-bg: #f5f5f7;
-          --maiv-shadow: transparent;         /* chrome に影なし */
-          /* security semantics (domain-specific; not brand accents) */
-          --maiv-pass: #248a3d;
-          --maiv-fail: #d70015;
-          --maiv-none: #7a7a7a;
-          --maiv-delay-normal: #7a7a7a;
-          --maiv-delay-warning: #b25000;
-          --maiv-delay-danger: #d70015;
-          --maiv-align-ok-text: #248a3d;
-          --maiv-align-warn-bg: #fff8ef;
-          --maiv-align-warn-text: #b25000;
-          --maiv-align-ng-bg: #fff2f2;
-          --maiv-align-ng-text: #d70015;
-          --maiv-policy-reject-bg: #eef5ff;
-          --maiv-policy-reject-text: #0066cc;
-          --maiv-policy-quarantine-bg: #fff8ef;
-          --maiv-policy-quarantine-text: #b25000;
-          --maiv-policy-none-bg: #fff2f2;
-          --maiv-policy-none-text: #d70015;
-          --maiv-mismatch-color: #b25000;
-          --maiv-mailing-list-bg: #eef5ff;
-          --maiv-mailing-list-text: #0066cc;
-          --maiv-untrusted-bg: #fff8ef;
-          --maiv-untrusted-text: #b25000;
-          --maiv-privacy-bg: #f5f5f7;
-          --maiv-privacy-text: #333333;
-          --maiv-accent-secure: #248a3d;
-          --maiv-accent-warning: #c93400;
-          --maiv-accent-danger: #d70015;
-          --maiv-accent-phishing: #d70015;
+          --maiv-card-border: #b3b3b3;        /* DADS card border (>= 3:1 contrast) */
+          --maiv-card-title-color: #4d4d4d;
+          --maiv-card-title-border: #e0e0e0;
+          --maiv-highlight-bg: #f5f7fa;
+          --maiv-highlight-border: #b3b3b3;
+          --maiv-route-border: #e0e0e0;
+          --maiv-route-origin-bg: #e6f0fa;
+          --maiv-shadow: none;                /* DADS: borders provide clear separation */
+
+          /* security semantics (DADS semantic colors) */
+          --maiv-pass: #007b43;               /* DADS Success (>= 4.8:1 contrast) */
+          --maiv-fail: #c51b24;               /* DADS Error (>= 5.5:1 contrast) */
+          --maiv-none: #666666;               /* DADS Neutral muted */
+          --maiv-delay-normal: #666666;
+          --maiv-delay-warning: #994200;       /* DADS Warning (>= 5.8:1 contrast) */
+          --maiv-delay-danger: #c51b24;
+          --maiv-align-ok-text: #007b43;
+          --maiv-align-warn-bg: #fff8eb;
+          --maiv-align-warn-text: #994200;
+          --maiv-align-ng-bg: #fdefef;
+          --maiv-align-ng-text: #c51b24;
+          --maiv-policy-reject-bg: #fdefef;
+          --maiv-policy-reject-text: #c51b24;
+          --maiv-policy-quarantine-bg: #fff8eb;
+          --maiv-policy-quarantine-text: #994200;
+          --maiv-policy-none-bg: #f0f2f5;
+          --maiv-policy-none-text: #4d4d4d;
+          --maiv-mismatch-color: #994200;
+          --maiv-mailing-list-bg: #e6f0fa;
+          --maiv-mailing-list-text: #0050a4;
+          --maiv-untrusted-bg: #fff8eb;
+          --maiv-untrusted-text: #994200;
+          --maiv-privacy-bg: #f0f2f5;
+          --maiv-privacy-text: #4d4d4d;
+          --maiv-accent-secure: #007b43;
+          --maiv-accent-warning: #994200;
+          --maiv-accent-danger: #c51b24;
+          --maiv-accent-phishing: #c51b24;
           --maiv-accent: var(--maiv-accent-warning);
           --maiv-mini-pass-bg: #eaf6ed;
-          --maiv-mini-pass-border: #a8d5b5;
-          --maiv-mini-fail-bg: #fff2f2;
-          --maiv-mini-fail-border: #f5b5b8;
-          --maiv-mini-soft-bg: #fff8ef;
-          --maiv-mini-soft-border: #f0c9a0;
+          --maiv-mini-pass-border: #00885a;
+          --maiv-mini-fail-bg: #fdefef;
+          --maiv-mini-fail-border: #c51b24;
+          --maiv-mini-soft-bg: #fff8eb;
+          --maiv-mini-soft-border: #b45309;
 
-          /* typography: SF Pro Display & Text stacks (DESIGN.md) */
-          --maiv-font-sans: "SF Pro Text", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-          --maiv-font-display: "SF Pro Display", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-          --maiv-font-mono: ui-monospace, "SF Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+          /* typography: DADS Noto Sans JP & Noto Sans Mono */
+          --maiv-font-sans: "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+          --maiv-font-display: "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+          --maiv-font-mono: "Noto Sans Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
-          /* Typography Profiles from DESIGN.md */
-          --maiv-fs-domain: 14px;
-          --maiv-lh-domain: 1.29;
-          --maiv-ls-domain: -0.224px;
+          /* Typography Profiles from DADS (Dense & Oneline scale) */
+          --maiv-fs-domain: 13.5px;
+          --maiv-lh-domain: 1.25;
+          --maiv-ls-domain: 0;
 
-          --maiv-fs-body: 17px;
-          --maiv-lh-body: 1.47;
-          --maiv-ls-body: -0.374px;
+          --maiv-fs-body: 13px;
+          --maiv-lh-body: 1.35;
+          --maiv-ls-body: 0;
 
-          --maiv-fs-body-strong: 17px;
-          --maiv-lh-body-strong: 1.24;
-          --maiv-ls-body-strong: -0.374px;
+          --maiv-fs-body-strong: 13px;
+          --maiv-lh-body-strong: 1.35;
+          --maiv-ls-body-strong: 0;
 
-          --maiv-fs-tagline: 21px;
-          --maiv-lh-tagline: 1.19;
-          --maiv-ls-tagline: 0.231px;
+          --maiv-fs-tagline: 16px;
+          --maiv-lh-tagline: 1.3;
+          --maiv-ls-tagline: 0;
 
-          --maiv-fs-caption: 14px;
-          --maiv-lh-caption: 1.43;
-          --maiv-ls-caption: -0.224px;
+          --maiv-fs-caption: 13px;
+          --maiv-lh-caption: 1.35;
+          --maiv-ls-caption: 0;
 
-          --maiv-fs-caption-strong: 14px;
-          --maiv-lh-caption-strong: 1.29;
-          --maiv-ls-caption-strong: -0.224px;
+          --maiv-fs-caption-strong: 13px;
+          --maiv-lh-caption-strong: 1.35;
+          --maiv-ls-caption-strong: 0;
 
-          --maiv-fs-btn-ut: 14px;
-          --maiv-lh-btn-ut: 1.29;
-          --maiv-ls-btn-ut: -0.224px;
+          --maiv-fs-btn-ut: 13px;
+          --maiv-lh-btn-ut: 1.2;
+          --maiv-ls-btn-ut: 0;
 
-          --maiv-fs-fine: 12px;
-          --maiv-lh-fine: 1.0;
-          --maiv-ls-fine: -0.12px;
+          --maiv-fs-fine: 11px;
+          --maiv-lh-fine: 1.2;
+          --maiv-ls-fine: 0.02em;
 
-          /* Spacing Scale (DESIGN.md) */
+          /* Spacing Scale (DADS 8px modular scale) */
           --maiv-space-xxs: 4px;
           --maiv-space-xs: 8px;
           --maiv-space-sm: 12px;
-          --maiv-space-md: 17px;
+          --maiv-space-md: 16px;
           --maiv-space-lg: 24px;
           --maiv-space-xl: 32px;
           --maiv-space-xxl: 48px;
 
-          /* Border Radius Scale (DESIGN.md) */
+          /* Border Radius Scale (DADS 5-step corner shapes) */
           --maiv-radius-none: 0px;
-          --maiv-radius-xs: 5px;
-          --maiv-radius-sm: 8px;
-          --maiv-radius-md: 11px;
-          --maiv-radius-lg: 18px;
+          --maiv-radius-xs: 4px;
+          --maiv-radius-sm: 4px;
+          --maiv-radius-md: 6px;
+          --maiv-radius-lg: 12px;
           --maiv-radius-pill: 9999px;
           --maiv-radius: var(--maiv-radius-sm);
 
           --maiv-bar-pad-y: 3px;
           --maiv-bar-pad-x: var(--maiv-space-xs);
           --maiv-gap: 6px;
+
+          /* DADS 規定 2重フォーカスインジケーター */
+          --maiv-focus-ring: 2px solid #ffd43b;
+          --maiv-focus-shadow: 0 0 0 2px #000000;
         }
 
         @media (prefers-color-scheme: dark) {
           .maiv-container {
-            --maiv-bg: #272729;              /* surface-tile-1 */
-            --maiv-bg-elevated: #2a2a2c;     /* surface-tile-2 */
-            --maiv-border: #3a3a3c;
-            --maiv-border-subtle: #333335;
+            --maiv-bg: #18191c;
+            --maiv-bg-elevated: #222429;
+            --maiv-border: #4d515a;
+            --maiv-border-subtle: #333740;
             --maiv-text: #ffffff;
-            --maiv-text-secondary: #cccccc;  /* body-muted */
-            --maiv-text-muted: #a1a1a6;
-            --maiv-text-faint: #86868b;
+            --maiv-text-secondary: #d1d5db;
+            --maiv-text-muted: #9ca3af;
+            --maiv-text-faint: #9ca3af;
             --maiv-text-strong: #ffffff;
             --maiv-text-strongest: #ffffff;
-            --maiv-primary: #2997ff;         /* primary-on-dark */
-            --maiv-primary-focus: #2997ff;
-            --maiv-card-bg: #2a2a2c;
-            --maiv-card-border: #3a3a3c;
-            --maiv-card-title-color: #a1a1a6;
-            --maiv-card-title-border: #333335;
-            --maiv-highlight-bg: #252527;
-            --maiv-highlight-border: #3a3a3c;
-            --maiv-route-border: #333335;
-            --maiv-route-origin-bg: #252527;
-            --maiv-pass: #30d158;
-            --maiv-fail: #ff453a;
-            --maiv-none: #a1a1a6;
-            --maiv-delay-normal: #a1a1a6;
-            --maiv-delay-warning: #ff9f0a;
-            --maiv-delay-danger: #ff453a;
-            --maiv-align-ok-text: #30d158;
-            --maiv-align-warn-bg: #3a2a12;
-            --maiv-align-warn-text: #ffd60a;
-            --maiv-align-ng-bg: #3a1515;
-            --maiv-align-ng-text: #ff6961;
-            --maiv-policy-reject-bg: #0a2540;
-            --maiv-policy-reject-text: #2997ff;
-            --maiv-policy-quarantine-bg: #3a2a12;
-            --maiv-policy-quarantine-text: #ffd60a;
-            --maiv-policy-none-bg: #3a1515;
-            --maiv-policy-none-text: #ff6961;
-            --maiv-mismatch-color: #ff9f0a;
-            --maiv-mailing-list-bg: #0a2540;
-            --maiv-mailing-list-text: #2997ff;
-            --maiv-untrusted-bg: #3a2a12;
-            --maiv-untrusted-text: #ffd60a;
-            --maiv-privacy-bg: #252527;
-            --maiv-privacy-text: #cccccc;
-            --maiv-accent-secure: #30d158;
-            --maiv-accent-warning: #ff9f0a;
-            --maiv-accent-danger: #ff453a;
-            --maiv-accent-phishing: #ff453a;
-            --maiv-mini-pass-bg: #0f2a18;
-            --maiv-mini-pass-border: #1f6b3a;
-            --maiv-mini-fail-bg: #3a1515;
-            --maiv-mini-fail-border: #7a2a28;
-            --maiv-mini-soft-bg: #3a2a12;
-            --maiv-mini-soft-border: #7a5a1e;
+            --maiv-primary: #66b0ff;
+            --maiv-primary-focus: #66b0ff;
+            --maiv-primary-tint: #162a45;
+            --maiv-card-bg: #222429;
+            --maiv-card-border: #4d515a;
+            --maiv-card-title-color: #d1d5db;
+            --maiv-card-title-border: #333740;
+            --maiv-highlight-bg: #2c2e35;
+            --maiv-highlight-border: #4d515a;
+            --maiv-route-border: #333740;
+            --maiv-route-origin-bg: #162a45;
+            --maiv-pass: #4ade80;
+            --maiv-fail: #f87171;
+            --maiv-none: #9ca3af;
+            --maiv-delay-normal: #9ca3af;
+            --maiv-delay-warning: #fbbf24;
+            --maiv-delay-danger: #f87171;
+            --maiv-align-ok-text: #4ade80;
+            --maiv-align-warn-bg: #2b200b;
+            --maiv-align-warn-text: #fbbf24;
+            --maiv-align-ng-bg: #2b1414;
+            --maiv-align-ng-text: #f87171;
+            --maiv-policy-reject-bg: #2b1414;
+            --maiv-policy-reject-text: #f87171;
+            --maiv-policy-quarantine-bg: #2b200b;
+            --maiv-policy-quarantine-text: #fbbf24;
+            --maiv-policy-none-bg: #2c2e35;
+            --maiv-policy-none-text: #d1d5db;
+            --maiv-mismatch-color: #fbbf24;
+            --maiv-mailing-list-bg: #162a45;
+            --maiv-mailing-list-text: #66b0ff;
+            --maiv-untrusted-bg: #2b200b;
+            --maiv-untrusted-text: #fbbf24;
+            --maiv-privacy-bg: #2c2e35;
+            --maiv-privacy-text: #d1d5db;
+            --maiv-accent-secure: #4ade80;
+            --maiv-accent-warning: #fbbf24;
+            --maiv-accent-danger: #f87171;
+            --maiv-accent-phishing: #f87171;
+            --maiv-mini-pass-bg: #0d2818;
+            --maiv-mini-pass-border: #1b5e20;
+            --maiv-mini-fail-bg: #2b1414;
+            --maiv-mini-fail-border: #7f1d1d;
+            --maiv-mini-soft-bg: #2b200b;
+            --maiv-mini-soft-border: #78350f;
+
+            --maiv-focus-ring: 2px solid #ffd43b;
+            --maiv-focus-shadow: 0 0 0 2px #ffffff;
           }
           .maiv-badge.phishing {
-            background-color: #1a0000;
-            color: #ff453a;
-            border-color: #ff453a;
+            background-color: #2b1414;
+            color: #f87171;
+            border: 1px solid #f87171;
           }
           @keyframes maiv-phishing-pulse {
-            0%, 100% { background-color: #1a0000; color: #ff453a; }
-            50% { background-color: #ff453a; color: #1a0000; }
+            0%, 100% { background-color: #2b1414; color: #f87171; }
+            50% { background-color: #f87171; color: #2b1414; }
           }
         }
 
@@ -2397,7 +2408,7 @@
         .maiv-container.maiv-sev-danger { --maiv-accent: var(--maiv-accent-danger); }
         .maiv-container.maiv-sev-phishing { --maiv-accent: var(--maiv-accent-phishing); }
 
-        /* === Shell (floating-sticky-bar / parchment bar feel) === */
+        /* === Shell (bar container) === */
         .maiv-container {
           font-family: var(--maiv-font-sans);
           background: var(--maiv-bg);
@@ -2410,7 +2421,7 @@
           border-left: 3px solid var(--maiv-accent);
           padding: var(--maiv-bar-pad-y) var(--maiv-bar-pad-x);
           margin: 0;
-          box-shadow: none;                  /* chrome に影なし */
+          box-shadow: none;
         }
 
         /* === Header bar (always visible) === */
@@ -2425,9 +2436,9 @@
           padding: 0;
           overflow: hidden;
         }
-        .maiv-header:hover { opacity: 0.92; }
+        .maiv-header:hover { opacity: 0.95; }
 
-        /* 判定バッジ: アイコンのみ（全文は title） */
+        /* 判定バッジ: DADS 角丸スモール(4px)、高コントラスト無地背景 */
         .maiv-badge {
           display: inline-flex;
           align-items: center;
@@ -2445,8 +2456,8 @@
         .maiv-badge svg {
           display: inline-block;
           vertical-align: middle;
-          width: 13px;
-          height: 13px;
+          width: 14px;
+          height: 14px;
           fill: currentColor;
           flex-shrink: 0;
         }
@@ -2458,14 +2469,14 @@
           color: #fff;
         }
 
-        /* ドメイン名は SF Pro Display で Apple Tight を再現 (13.5px) */
+        /* ドメイン名は Noto Sans JP Bold (13.5px) */
         .maiv-header-domain {
-          font-size: 13.5px;
-          font-weight: 600;
+          font-size: var(--maiv-fs-domain);
+          font-weight: 700;
           color: var(--maiv-text-strong);
           font-family: var(--maiv-font-display);
-          letter-spacing: -0.25px;
-          line-height: 1.2;
+          letter-spacing: 0;
+          line-height: var(--maiv-lh-domain);
           min-width: 0;
           max-width: 38ch;
           overflow: hidden;
@@ -2481,7 +2492,7 @@
           gap: 4px;
           flex-shrink: 0;
         }
-        /* ラベル省略なし: SPF / DKIM / DMARC + ステータスアイコン */
+        /* DADS チップラベル準拠: カプセル型、アイコン + ラベル */
         .maiv-auth-mini {
           display: inline-flex;
           align-items: center;
@@ -2492,8 +2503,8 @@
           padding: 0 6px;
           border-radius: var(--maiv-radius-pill);
           font-family: var(--maiv-font-sans);
-          font-size: 10.5px;
-          font-weight: 600;
+          font-size: 11px;
+          font-weight: 700;
           letter-spacing: 0.02em;
           line-height: 1;
           border: 1px solid transparent;
@@ -2514,7 +2525,8 @@
         }
         .maiv-auth-mini-label {
           font-family: var(--maiv-font-mono);
-          font-size: 10.5px;
+          font-size: 11px;
+          font-weight: 700;
           letter-spacing: 0.02em;
         }
         .maiv-auth-mini.pass {
@@ -2549,8 +2561,8 @@
           padding: 0 6px;
           border-radius: var(--maiv-radius-pill);
           font-family: var(--maiv-font-sans);
-          font-size: 10.5px;
-          font-weight: 600;
+          font-size: 11px;
+          font-weight: 700;
           line-height: 1;
           letter-spacing: 0.02em;
           flex-shrink: 0;
@@ -2560,84 +2572,90 @@
         .maiv-chip-ml {
           background: var(--maiv-mailing-list-bg);
           color: var(--maiv-mailing-list-text);
+          border: 1px solid var(--maiv-primary);
         }
         .maiv-chip-issue {
           background: var(--maiv-align-warn-bg);
           color: var(--maiv-align-warn-text);
+          border: 1px solid var(--maiv-delay-warning);
         }
         .maiv-chip-issue.danger {
           background: var(--maiv-align-ng-bg);
           color: var(--maiv-align-ng-text);
+          border: 1px solid var(--maiv-fail);
         }
         .maiv-chip-issue .maiv-chip-count {
           font-family: var(--maiv-font-mono);
           font-size: inherit;
+          font-weight: 700;
         }
         .maiv-chip-info {
           background: var(--maiv-privacy-bg);
           color: var(--maiv-privacy-text);
+          border: 1px solid var(--maiv-border);
         }
 
         .maiv-spacer { flex-grow: 1; min-width: 4px; }
 
-        /* utility icon buttons — rounded.xs, hairline, Action Blue focus */
+        /* DADS ユーティリティアイコンボタン (4px 角丸、明確な枠線、DADS 2重フォーカス枠) */
         .maiv-copy-btn,
         .maiv-toggle-icon {
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          width: 22px;
-          height: 22px;
-          min-width: 22px;
-          min-height: 22px;
+          width: 24px;
+          height: 24px;
+          min-width: 24px;
+          min-height: 24px;
           margin: 0;
           padding: 0;
-          font-size: 11px;
+          font-size: 12px;
           line-height: 1;
           flex-shrink: 0;
           border-radius: var(--maiv-radius-xs);
-          background: var(--maiv-highlight-bg);
+          background: var(--maiv-bg-elevated);
           border: 1px solid var(--maiv-border);
-          color: var(--maiv-text);
+          color: var(--maiv-text-secondary);
           cursor: pointer;
           box-sizing: border-box;
-          transition: transform 0.1s ease, background 0.15s, border-color 0.15s, color 0.15s;
+          transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
         }
         .maiv-copy-btn svg,
         .maiv-toggle-icon svg {
-          width: 12px;
-          height: 12px;
+          width: 13px;
+          height: 13px;
         }
         .maiv-copy-btn:hover,
         .maiv-toggle-icon:hover {
-          background: var(--maiv-bg-elevated);
+          background: var(--maiv-primary-tint);
           color: var(--maiv-primary);
           border-color: var(--maiv-primary);
         }
         .maiv-copy-btn:active,
-        .maiv-toggle-icon:active { transform: scale(0.92); }
+        .maiv-toggle-icon:active { transform: scale(0.95); }
         .maiv-copy-btn:focus-visible,
         .maiv-toggle-icon:focus-visible {
-          outline: 2px solid var(--maiv-primary-focus);
-          outline-offset: 1px;
+          outline: var(--maiv-focus-ring) !important;
+          outline-offset: 1px !important;
+          box-shadow: var(--maiv-focus-shadow) !important;
         }
         .maiv-toggle-icon {
-          transition: transform 0.25s ease, background 0.15s, border-color 0.15s, color 0.15s;
+          transition: transform 0.2s ease, background 0.15s, border-color 0.15s, color 0.15s;
         }
         .maiv-toggle-icon.expanded { transform: rotate(180deg); }
-        .maiv-toggle-icon.expanded:active { transform: rotate(180deg) scale(0.92); }
+        .maiv-toggle-icon.expanded:active { transform: rotate(180deg) scale(0.95); }
 
-        /* Compact: 余白のみ圧縮（フォント比率は維持） */
+        /* Compact: 余白のみ圧縮（フォント・視認性は維持） */
         .maiv-container.maiv-compact {
           --maiv-bar-pad-y: 1px;
-          --maiv-bar-pad-x: 5px;
+          --maiv-bar-pad-x: 6px;
           margin: 0;
         }
         .maiv-container.maiv-compact .maiv-header { min-height: 22px; gap: 4px; }
         .maiv-container.maiv-compact .maiv-badge {
           width: 18px;
           height: 18px;
-          border-radius: 4px;
+          border-radius: var(--maiv-radius-xs);
         }
         .maiv-container.maiv-compact .maiv-badge svg {
           width: 11px;
@@ -2651,23 +2669,23 @@
           height: 18px;
           min-width: 18px;
           padding: 0 5px;
-          font-size: 9.5px;
+          font-size: 10px;
         }
         .maiv-container.maiv-compact .maiv-auth-mini-icon svg {
-          width: 9.5px;
-          height: 9.5px;
+          width: 10px;
+          height: 10px;
         }
         .maiv-container.maiv-compact .maiv-copy-btn,
         .maiv-container.maiv-compact .maiv-toggle-icon {
-          width: 18px;
-          height: 18px;
-          min-width: 18px;
-          min-height: 18px;
+          width: 20px;
+          height: 20px;
+          min-width: 20px;
+          min-height: 20px;
         }
         .maiv-container.maiv-compact .maiv-copy-btn svg,
         .maiv-container.maiv-compact .maiv-toggle-icon svg {
-          width: 10px;
-          height: 10px;
+          width: 11px;
+          height: 11px;
         }
 
         /* === Expanded body === */
@@ -2678,12 +2696,12 @@
         }
         .maiv-body-wrapper.expanded {
           max-height: 4000px;
-          transition: max-height 0.45s ease-in;
+          transition: max-height 0.35s ease-in;
         }
         .maiv-body-inner { padding-top: 6px; }
         .maiv-body-content { display: flex; flex-direction: column; gap: 6px; }
 
-        /* 詳細パネルは 2 カラムで統一（均等幅ストレッチ） */
+        /* 詳細パネルは 2 カラム（均等幅ストレッチ） */
         .maiv-grid {
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2702,14 +2720,14 @@
           margin: 0;
         }
 
-        /* ========== 全パネル共通シェル ========== */
+        /* ========== DADS カード準拠シェル (外周枠線 >= 3:1 コントラスト比) ========== */
         .maiv-card {
           display: flex;
           flex-direction: column;
           gap: 6px;
           background: var(--maiv-card-bg);
           border: 1px solid var(--maiv-card-border);
-          border-radius: var(--maiv-radius-sm);
+          border-radius: var(--maiv-radius-md);
           padding: 8px 10px;
           min-width: 0;
           height: 100%;
@@ -2721,20 +2739,15 @@
           transition: border-color 0.15s ease;
         }
         .maiv-card:hover {
-          border-color: rgba(0, 0, 0, 0.16);
-        }
-        @media (prefers-color-scheme: dark) {
-          .maiv-card:hover {
-            border-color: rgba(255, 255, 255, 0.22);
-          }
+          border-color: var(--maiv-primary);
         }
         .maiv-card-title {
           flex-shrink: 0;
           margin: 0;
-          padding: 0 0 3px 0;
-          font-family: var(--maiv-font-display);
+          padding: 0 0 4px 0;
+          font-family: var(--maiv-font-sans);
           font-size: var(--maiv-fs-fine);
-          font-weight: 600;
+          font-weight: 700;
           color: var(--maiv-card-title-color);
           text-transform: uppercase;
           letter-spacing: var(--maiv-ls-fine);
@@ -2751,14 +2764,14 @@
         .maiv-card-title.maiv-collapsible:hover { color: var(--maiv-primary); }
         .maiv-card-title.maiv-collapsible::before {
           content: "";
-          width: 5px;
-          height: 5px;
-          border-right: 1.5px solid currentColor;
-          border-bottom: 1.5px solid currentColor;
+          width: 6px;
+          height: 6px;
+          border-right: 2px solid currentColor;
+          border-bottom: 2px solid currentColor;
           transform: rotate(-45deg);
           display: inline-block;
           flex-shrink: 0;
-          margin-right: 3px;
+          margin-right: 2px;
           transition: transform 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
         }
         .maiv-card-title.maiv-collapsible.maiv-expanded::before {
@@ -2771,7 +2784,7 @@
         }
         .maiv-collapsible-body.maiv-expanded { max-height: 2400px; }
 
-        /* カード本文の縦リズム: 直下要素の独自マージンを無効化 */
+        /* カード本文の縦リズム */
         .maiv-card > * { margin-top: 0; margin-bottom: 0; }
         .maiv-auth-card { min-height: 0; }
 
@@ -2782,7 +2795,7 @@
           flex-wrap: wrap;
           gap: 4px var(--maiv-space-xxs);
           font-size: var(--maiv-fs-caption);
-          font-weight: 600;
+          font-weight: 700;
         }
         .maiv-status-icon { font-size: var(--maiv-fs-caption); line-height: 1; }
         .maiv-authserv {
@@ -2793,7 +2806,7 @@
           letter-spacing: var(--maiv-ls-fine);
           line-height: var(--maiv-lh-fine);
         }
-        .status-pass, .status-fail, .status-none { font-weight: 600; color: var(--maiv-text); }
+        .status-pass, .status-fail, .status-none { font-weight: 700; color: var(--maiv-text); }
         .maiv-status-icon.status-pass, .maiv-icon.status-pass { color: var(--maiv-pass) !important; }
         .maiv-status-icon.status-fail, .maiv-icon.status-fail { color: var(--maiv-fail) !important; }
         .maiv-status-icon.status-none, .maiv-icon.status-none { color: var(--maiv-none) !important; }
@@ -2810,12 +2823,12 @@
         .maiv-kv-key,
         .address-label,
         .maiv-prop-key {
-          flex: 0 0 116px;
-          width: 116px;
+          flex: 0 0 110px;
+          width: 110px;
           white-space: nowrap;
-          color: var(--maiv-text-muted);
+          color: var(--maiv-text-secondary);
           font-size: var(--maiv-fs-fine);
-          font-weight: 600;
+          font-weight: 700;
           font-family: var(--maiv-font-sans);
           text-transform: uppercase;
           letter-spacing: var(--maiv-ls-fine);
@@ -2836,7 +2849,7 @@
         .address-highlight {
           background: var(--maiv-highlight-bg);
           padding: 2px 6px;
-          border-radius: var(--maiv-radius-sm);
+          border-radius: var(--maiv-radius-xs);
           border: 1px solid var(--maiv-highlight-border);
           direction: ltr;
           unicode-bidi: embed;
@@ -2852,7 +2865,7 @@
           flex-direction: column;
           gap: 4px;
           font-size: var(--maiv-fs-caption);
-          color: var(--maiv-text-muted);
+          color: var(--maiv-text-secondary);
           font-family: var(--maiv-font-mono);
         }
         .maiv-detail-stack {
@@ -2865,7 +2878,7 @@
           flex-direction: column;
           gap: var(--maiv-space-xxs);
           font-size: var(--maiv-fs-fine);
-          color: var(--maiv-text-muted);
+          color: var(--maiv-text-secondary);
           padding-top: var(--maiv-space-xxs);
           border-top: 1px solid var(--maiv-card-title-border);
         }
@@ -2876,11 +2889,11 @@
           font-size: var(--maiv-fs-fine);
           font-family: var(--maiv-font-sans);
         }
-        .maiv-align-pass, .maiv-align-fail { font-weight: 600; color: var(--maiv-text); }
+        .maiv-align-pass, .maiv-align-fail { font-weight: 700; color: var(--maiv-text); }
         .maiv-icon.maiv-align-pass { color: var(--maiv-pass) !important; }
         .maiv-icon.maiv-align-fail { color: var(--maiv-fail) !important; }
         .maiv-sig-heading {
-          font-weight: 600;
+          font-weight: 700;
           font-size: var(--maiv-fs-fine);
           font-family: var(--maiv-font-mono);
           color: var(--maiv-text-strong);
@@ -2894,15 +2907,28 @@
           display: inline-flex;
           align-items: center;
           font-size: var(--maiv-fs-fine);
-          font-weight: 600;
+          font-weight: 700;
           padding: 2px 8px;
           border-radius: var(--maiv-radius-pill);
           font-family: var(--maiv-font-mono);
           width: fit-content;
+          border: 1px solid transparent;
         }
-        .maiv-policy-reject { background: var(--maiv-policy-reject-bg); color: var(--maiv-policy-reject-text); }
-        .maiv-policy-quarantine { background: var(--maiv-policy-quarantine-bg); color: var(--maiv-policy-quarantine-text); }
-        .maiv-policy-none { background: var(--maiv-policy-none-bg); color: var(--maiv-policy-none-text); }
+        .maiv-policy-reject {
+          background: var(--maiv-policy-reject-bg);
+          color: var(--maiv-policy-reject-text);
+          border-color: var(--maiv-fail);
+        }
+        .maiv-policy-quarantine {
+          background: var(--maiv-policy-quarantine-bg);
+          color: var(--maiv-policy-quarantine-text);
+          border-color: var(--maiv-delay-warning);
+        }
+        .maiv-policy-none {
+          background: var(--maiv-policy-none-bg);
+          color: var(--maiv-policy-none-text);
+          border-color: var(--maiv-border);
+        }
         .maiv-icon {
           display: inline-flex;
           align-items: center;
@@ -2910,15 +2936,6 @@
           line-height: 1;
           flex-shrink: 0;
           vertical-align: middle;
-        }
-        /* アイコン類に明示的な color を強制し、外部からの白/黒等の予期しない color 継承を防ぐ */
-        .maiv-copy-btn,
-        .maiv-toggle-icon {
-          color: var(--maiv-text-secondary) !important;
-        }
-        .maiv-copy-btn:hover,
-        .maiv-toggle-icon:hover {
-          color: var(--maiv-primary) !important;
         }
         .maiv-tls-secure {
           color: var(--maiv-pass) !important;
@@ -2960,10 +2977,11 @@
           color: var(--maiv-delay-warning);
           font-size: var(--maiv-fs-fine);
           font-family: var(--maiv-font-sans);
+          font-weight: 500;
           margin: 0;
         }
 
-        /* 共通コールアウト（align / findings） */
+        /* DADS 注釈ブロック準拠コールアウト（align / findings） */
         .align-ok,
         .align-ng,
         .align-warn,
@@ -2976,7 +2994,7 @@
           align-items: center;
           gap: 6px;
           margin: 0;
-          padding: 4px 8px;
+          padding: 6px 10px;
           border-radius: var(--maiv-radius-none);
           font-size: var(--maiv-fs-caption);
           font-weight: 600;
@@ -3015,7 +3033,7 @@
           margin-left: auto;
         }
 
-        /* 共通テーブル（route / ARC） */
+        /* DADS テーブル（Dense）準拠 (route / ARC) */
         .maiv-route-table,
         .maiv-arc-table {
           width: 100%;
@@ -3025,7 +3043,7 @@
         }
         .maiv-route-table td,
         .maiv-arc-table td {
-          padding: 2px var(--maiv-space-xxs);
+          padding: 3px var(--maiv-space-xxs);
           border-bottom: 1px solid var(--maiv-route-border);
           vertical-align: middle;
           line-height: 1.35;
@@ -3034,7 +3052,7 @@
         .maiv-arc-table tr:last-child td { border-bottom: none; }
         .maiv-route-origin {
           background: var(--maiv-route-origin-bg);
-          font-weight: 600;
+          font-weight: 700;
           color: var(--maiv-text-strongest);
           border-left: 3px solid var(--maiv-primary);
         }
@@ -3058,7 +3076,7 @@
         .maiv-route-delay {
           width: 48px;
           text-align: right;
-          font-weight: 600;
+          font-weight: 700;
           color: inherit;
         }
         .maiv-route-tls { text-align: right; padding-left: 6px; }
@@ -3068,7 +3086,7 @@
         .maiv-delay-warning { color: var(--maiv-delay-warning); }
         .maiv-delay-danger { color: var(--maiv-delay-danger); }
         .maiv-arc-chain-num {
-          font-weight: 600;
+          font-weight: 700;
           color: var(--maiv-text-strong);
           width: 36px;
           text-align: center;
@@ -3081,14 +3099,13 @@
           font-size: var(--maiv-fs-caption);
         }
         .maiv-ip-tag { font-size: var(--maiv-fs-fine); margin-left: 4px; }
-        /* 受信サーバが検証していない DKIM 署名の注記（警告ではなく補足説明） */
         .maiv-dkim-unverified-note { color: var(--maiv-text-faint); font-size: var(--maiv-fs-fine); margin-top: 4px; }
         .maiv-tls-secure { color: var(--maiv-pass); }
-        .maiv-tls-warn { color: var(--maiv-delay-warning); font-weight: 600; }
-        .maiv-tls-danger { color: var(--maiv-fail); font-weight: 600; }
+        .maiv-tls-warn { color: var(--maiv-delay-warning); font-weight: 700; }
+        .maiv-tls-danger { color: var(--maiv-fail); font-weight: 700; }
         .maiv-tls-unknown { color: var(--maiv-text-faint); }
 
-        /* リンク安全性: リストも同一リズム */
+        /* リンク安全性リスト */
         .maiv-findings-stack,
         .maiv-link-domain-list {
           display: flex;
@@ -3098,7 +3115,7 @@
         }
         .maiv-link-domain-list { font-size: var(--maiv-fs-caption); }
         .maiv-link-domain-list-title {
-          font-weight: 600;
+          font-weight: 700;
           margin: 0;
           color: var(--maiv-card-title-color);
           font-size: var(--maiv-fs-fine);
@@ -3110,7 +3127,7 @@
           display: flex;
           align-items: center;
           gap: 6px;
-          padding: 2px 0;
+          padding: 3px 0;
           font-family: var(--maiv-font-mono);
           font-size: var(--maiv-fs-caption);
           line-height: 1.35;
@@ -3127,42 +3144,49 @@
         }
         .maiv-link-domain-danger {
           color: var(--maiv-text);
-          font-weight: 600;
+          font-weight: 700;
         }
         .maiv-icon.maiv-link-domain-match { color: var(--maiv-pass) !important; }
         .maiv-icon.maiv-link-domain-mismatch { color: var(--maiv-align-warn-text) !important; }
         .maiv-icon.maiv-link-domain-trusted { color: var(--maiv-primary) !important; }
         .maiv-icon.maiv-link-domain-danger { color: var(--maiv-fail) !important; }
 
+        /* DADS 信頼ボタン（Secondary button 小型スタイル） */
         .maiv-trust-btn {
           font-family: var(--maiv-font-sans);
           font-size: 11px;
+          font-weight: 700;
           line-height: 1;
-          height: 18px;
-          padding: 0 7px;
+          height: 20px;
+          padding: 0 8px;
           margin: 0 0 0 6px;
           border: 1px solid var(--maiv-primary);
-          border-radius: var(--maiv-radius-pill);
-          background: transparent;
+          border-radius: var(--maiv-radius-xs);
+          background: var(--maiv-bg-elevated);
           color: var(--maiv-primary);
           cursor: pointer;
-          font-weight: 500;
           display: inline-flex;
           align-items: center;
           justify-content: center;
           vertical-align: middle;
           box-sizing: border-box;
           flex-shrink: 0;
-          transition: transform 0.1s ease, background 0.15s;
+          transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
         }
-        .maiv-trust-btn:hover { background: var(--maiv-mailing-list-bg); }
-        .maiv-trust-btn:active { transform: scale(0.95); }
+        .maiv-trust-btn:hover { background: var(--maiv-primary-tint); }
+        .maiv-trust-btn:active { transform: scale(0.96); }
+        .maiv-trust-btn:focus-visible {
+          outline: var(--maiv-focus-ring) !important;
+          outline-offset: 1px !important;
+          box-shadow: var(--maiv-focus-shadow) !important;
+        }
         .maiv-trust-btn:disabled { opacity: 0.5; cursor: default; }
 
+        /* DADS モーダルダイアログ準拠 (エレベーション L3 + 半透明シェード) */
         .maiv-confirm-overlay {
           position: fixed;
           inset: 0;
-          background: rgba(0,0,0,0.5);
+          background: rgba(0, 0, 0, 0.5);
           z-index: 99999;
           display: flex;
           align-items: center;
@@ -3172,38 +3196,46 @@
           background: var(--maiv-card-bg);
           border: 1px solid var(--maiv-card-border);
           border-radius: var(--maiv-radius-md);
-          padding: 24px;
+          padding: 20px;
           max-width: 380px;
           width: 90%;
-          box-shadow: 0 12px 36px rgba(0, 0, 0, 0.22);
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
         }
         .maiv-confirm-text {
           font-size: var(--maiv-fs-caption);
           color: var(--maiv-text-strongest);
           margin-bottom: 16px;
-          line-height: 1.47;
+          line-height: 1.45;
         }
-        .maiv-confirm-domain { font-weight: 600; color: var(--maiv-primary); }
+        .maiv-confirm-domain { font-weight: 700; color: var(--maiv-primary); }
         .maiv-confirm-buttons { display: flex; gap: 8px; justify-content: flex-end; }
         .maiv-confirm-buttons button {
-          padding: 8px 16px;
-          border-radius: var(--maiv-radius-pill);
+          height: 32px;
+          padding: 0 14px;
+          border-radius: var(--maiv-radius-sm);
           font-size: var(--maiv-fs-caption);
+          font-weight: 700;
           cursor: pointer;
-          border: 1px solid var(--maiv-card-border);
-          transition: transform 0.1s ease;
+          transition: background 0.15s ease, transform 0.1s ease;
         }
-        .maiv-confirm-buttons button:active { transform: scale(0.95); }
+        .maiv-confirm-buttons button:active { transform: scale(0.96); }
+        .maiv-confirm-buttons button:focus-visible {
+          outline: var(--maiv-focus-ring) !important;
+          outline-offset: 1px !important;
+          box-shadow: var(--maiv-focus-shadow) !important;
+        }
         .maiv-confirm-cancel {
-          background: transparent;
+          background: var(--maiv-card-bg);
           color: var(--maiv-primary);
-          border-color: var(--maiv-primary);
+          border: 1px solid var(--maiv-primary);
         }
+        .maiv-confirm-cancel:hover { background: var(--maiv-primary-tint); }
         .maiv-confirm-ok {
           background: var(--maiv-primary);
           color: var(--maiv-on-primary);
-          border-color: var(--maiv-primary);
+          border: 1px solid var(--maiv-primary);
         }
+        .maiv-confirm-ok:hover { background: var(--maiv-primary-hover); }
 
       `;
 
