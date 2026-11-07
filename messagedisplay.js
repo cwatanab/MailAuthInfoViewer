@@ -3138,6 +3138,107 @@
           padding-top: var(--maiv-space-xxs);
           border-top: 1px solid var(--maiv-card-title-border);
         }
+        /* 差出人メインブロック（レイアウトで直感的に伝える） */
+        .maiv-sender-block {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+          padding: 2px 0;
+        }
+        .maiv-sender-name {
+          font-size: 13.5px;
+          font-weight: 700;
+          color: var(--maiv-text-strong);
+          line-height: 1.25;
+          word-break: break-all;
+        }
+        .maiv-sender-addr {
+          font-family: var(--maiv-font-mono);
+          font-size: 12px;
+          color: var(--maiv-text-secondary);
+          word-break: break-all;
+          line-height: 1.35;
+        }
+        .maiv-sub-addr-stack {
+          display: flex;
+          flex-direction: column;
+          gap: 3px;
+          padding-top: 4px;
+          border-top: 1px dashed var(--maiv-card-title-border);
+        }
+        .maiv-sub-addr-row {
+          display: flex;
+          align-items: baseline;
+          gap: 6px;
+          font-size: 11px;
+          line-height: 1.3;
+        }
+        .maiv-sub-addr-key {
+          font-size: 11px;
+          font-weight: 600;
+          color: var(--maiv-text-muted);
+          white-space: nowrap;
+          flex-shrink: 0;
+        }
+        .maiv-sub-addr-val {
+          font-family: var(--maiv-font-mono);
+          color: var(--maiv-text-secondary);
+          word-break: break-all;
+        }
+
+        /* 認証カードのドメイン・主要情報行（セカンダリラベルを排しレイアウトで説明） */
+        .maiv-auth-primary-row {
+          display: flex;
+          align-items: baseline;
+          flex-wrap: wrap;
+          gap: 6px;
+          padding: 1px 0;
+        }
+        .maiv-auth-domain {
+          font-family: var(--maiv-font-mono);
+          font-size: 12.5px;
+          font-weight: 700;
+          color: var(--maiv-text-strong);
+          word-break: break-all;
+        }
+        .maiv-auth-meta {
+          font-family: var(--maiv-font-mono);
+          font-size: 11px;
+          color: var(--maiv-text-muted);
+          white-space: nowrap;
+        }
+        .maiv-align-chip {
+          display: inline-flex;
+          align-items: center;
+          gap: 4px;
+          font-size: 11px;
+          font-weight: 600;
+          padding: 1px 7px;
+          border-radius: var(--maiv-radius-pill);
+          line-height: 1.25;
+          width: fit-content;
+          border: 1px solid transparent;
+        }
+        .maiv-align-chip.pass {
+          color: var(--maiv-pass);
+          background: var(--maiv-mini-pass-bg);
+          border-color: var(--maiv-mini-pass-border);
+        }
+        .maiv-align-chip.fail {
+          color: var(--maiv-fail);
+          background: var(--maiv-mini-fail-bg);
+          border-color: var(--maiv-mini-fail-border);
+        }
+        .maiv-origin-badge {
+          display: inline-block;
+          font-weight: 700;
+          font-size: 11px;
+          color: var(--maiv-primary);
+        }
+        .maiv-route-to-addr {
+          font-family: var(--maiv-font-mono);
+          color: var(--maiv-text-strong);
+        }
         .maiv-align-item {
           display: flex;
           align-items: center;
@@ -3881,19 +3982,24 @@
         return `<div class="maiv-kv-row"><span class="maiv-kv-key">${escapeHTML(key)}</span><span class="maiv-kv-val">${escapeHTML(String(val))}</span></div>`;
       };
 
-      // SPF カード詳細: ドメイン・IP・アライメント結果を表示
+      // SPF カード詳細: ドメイン・IP・アライメント結果をレイアウト主導で表示（セカンダリラベルを排す）
+      const alignLabelName = (msg("labelSpfAlign") || "Alignment").replace(/SPF[- ]?/i, "").replace(/[:：]$/, "").trim();
       const spfDetailHTML = (() => {
         const d = authResults.spf.detail;
         const al = authResults.alignment;
         const parts = [];
-        if (d.domain) parts.push(kvRow(msg("labelDomain"), d.domain));
-        if (d.ip) parts.push(kvRow(msg("labelIpAddress"), d.ip));
-        // SPF アライメント: SPF が pass の場合のみ表示
+        if (d.domain) {
+          const ipMeta = d.ip ? ` <span class="maiv-auth-meta">(${escapeHTML(d.ip)})</span>` : "";
+          parts.push(`<div class="maiv-auth-primary-row"><span class="maiv-auth-domain">${escapeHTML(d.domain)}</span>${ipMeta}</div>`);
+        } else if (d.ip) {
+          parts.push(`<div class="maiv-auth-primary-row"><span class="maiv-auth-domain">${escapeHTML(d.ip)}</span></div>`);
+        }
+        // SPF アライメント: SPF が pass の場合のみ表示（カード名が SPF のため冗長な "SPFアライメント" ラベルを避ける）
         if (al && authResults.spf.status === "pass") {
           const icon = al.spfAligned ? BI.checkCircleFill : BI.xCircleFill;
-          const cls = al.spfAligned ? "maiv-align-pass" : "maiv-align-fail";
+          const cls = al.spfAligned ? "pass" : "fail";
           const label = al.spfAligned ? msg("alignedLabel") : msg("notAlignedLabel");
-          parts.push(`<div class="maiv-align-item"><span class="maiv-icon ${cls}">${icon}</span><span class="${cls}">${escapeHTML(msg("labelSpfAlign"))} ${escapeHTML(label)}</span></div>`);
+          parts.push(`<div class="maiv-align-chip ${cls}"><span class="maiv-icon">${icon}</span><span>${escapeHTML(alignLabelName)}: ${escapeHTML(label)}</span></div>`);
         }
         return parts.join("");
       })();
@@ -3973,18 +4079,19 @@
           const icon = sig.status === "pass" ? BI.checkCircleFill : (sig.status === "fail" ? BI.xCircleFill : BI.exclamationTriangleFill);
           const sClass = sig.status === "pass" ? "status-pass" : (sig.status === "fail" ? "status-fail" : "status-none");
 
-          // ステータス行（SPFと同じ maiv-status-row）
+          // ステータス行
           html += `<div class="maiv-status-row"><span class="maiv-status-icon ${sClass}">${icon}</span><span class="${sClass}">${escapeHTML(sig.status.toUpperCase())}</span>${authServLabel}</div>`;
           const parts = [];
-          parts.push(kvRow(msg("labelDomain"), sig.domain));
-          if (sig.selector) parts.push(kvRow(msg("labelSelector"), sig.selector));
+          const selectorMeta = sig.selector ? ` <span class="maiv-auth-meta">(s=${escapeHTML(sig.selector)})</span>` : "";
+          parts.push(`<div class="maiv-auth-primary-row"><span class="maiv-auth-domain">${escapeHTML(sig.domain)}</span>${selectorMeta}</div>`);
+
           if (sig.status === "pass") {
             const sigOrgDomain = getOrgDomain(domainToAscii(sig.domain));
             const aligned = (sigOrgDomain === headerOrgDomain);
             const alIcon = aligned ? BI.checkCircleFill : BI.xCircleFill;
-            const alCls = aligned ? "maiv-align-pass" : "maiv-align-fail";
+            const alCls = aligned ? "pass" : "fail";
             const alLabel = aligned ? msg("alignedLabel") : msg("notAlignedLabel");
-            parts.push(`<div class="maiv-align-item"><span class="maiv-icon ${alCls}">${alIcon}</span><span class="${alCls}">${escapeHTML(msg("labelDkimAlign"))} ${escapeHTML(alLabel)}</span></div>`);
+            parts.push(`<div class="maiv-align-chip ${alCls}"><span class="maiv-icon">${alIcon}</span><span>${escapeHTML(alignLabelName)}: ${escapeHTML(alLabel)}</span></div>`);
           }
           html += `<div class="maiv-detail-text">${parts.join("")}</div>`;
         }
@@ -3994,12 +4101,15 @@
       const dmarcDetailHTML = (() => {
         const d = authResults.dmarc.detail;
         const parts = [];
-        if (d.domain) parts.push(kvRow(msg("labelDomain"), d.domain));
-        if (d.policy) {
-          let policyClass = "maiv-policy-none";
-          if (d.policy === "reject") policyClass = "maiv-policy-reject";
-          else if (d.policy === "quarantine") policyClass = "maiv-policy-quarantine";
-          parts.push(`<div class="maiv-kv-row"><span class="maiv-kv-key">${escapeHTML(msg("labelPolicy"))}</span><span class="maiv-policy-tag ${policyClass}">${escapeHTML(d.policy)}</span></div>`);
+        if (d.domain || d.policy) {
+          let policyTag = "";
+          if (d.policy) {
+            let policyClass = "maiv-policy-none";
+            if (d.policy === "reject") policyClass = "maiv-policy-reject";
+            else if (d.policy === "quarantine") policyClass = "maiv-policy-quarantine";
+            policyTag = ` <span class="maiv-policy-tag ${policyClass}" title="${escapeHTML(msg("labelPolicy"))}: ${escapeHTML(d.policy)}">p=${escapeHTML(d.policy)}</span>`;
+          }
+          parts.push(`<div class="maiv-auth-primary-row"><span class="maiv-auth-domain">${escapeHTML(d.domain || "")}</span>${policyTag}</div>`);
         }
         const dmarcStrengthMsg = {
           "weak_sp": msg("dmarcWeakSubpolicy"),
@@ -4115,6 +4225,7 @@
 
       // --- アドレス＆アライメント表示 ---
       let alignmentWarningHTML = "";
+      const cleanNoticeMsg = (text) => (typeof text === "string" ? text.replace(/^[🚨⚠️💀ℹ️]\s*/u, "") : "");
 
       // ホモグラフ検査結果を「Unicode (ASCII) — 根拠 / 紛らわしい文字」の形で説明する
       const describeHomograph = (info) => {
@@ -4132,40 +4243,40 @@
       // 送信者情報カードの先頭で最も強い表示にする。紛らわしい兆候の無い国際化ドメインは
       // 表記の併記だけを情報として示す。
       if (senderInfo && senderInfo.isHomograph) {
-        alignmentWarningHTML += `<div class="align-ng"><span class="maiv-icon">${BI.xCircleFill}</span><span>${escapeHTML(msg("senderHomographWarning"))}<br>${escapeHTML(describeHomograph(senderInfo))}</span></div>`;
+        alignmentWarningHTML += `<div class="align-ng"><span class="maiv-icon">${BI.xCircleFill}</span><span>${escapeHTML(cleanNoticeMsg(msg("senderHomographWarning")))}<br>${escapeHTML(describeHomograph(senderInfo))}</span></div>`;
       } else if (senderInfo && senderInfo.isIdn) {
-        alignmentWarningHTML += `<div class="align-info"><span class="maiv-icon">${BI.infoCircleFill}</span><span>${escapeHTML(msg("idnDomainInfo"))}: ${escapeHTML(`${senderInfo.unicode} (${senderInfo.ascii})`)}</span></div>`;
+        alignmentWarningHTML += `<div class="align-info"><span class="maiv-icon">${BI.infoCircleFill}</span><span>${escapeHTML(cleanNoticeMsg(msg("idnDomainInfo")))}: ${escapeHTML(`${senderInfo.unicode} (${senderInfo.ascii})`)}</span></div>`;
       }
 
       // 表示名なりすまし警告: 表示名に別ドメインのアドレスが埋め込まれている場合
       if (envelope.isDisplayNameSpoofed) {
-        alignmentWarningHTML += `<div class="align-ng"><span class="maiv-icon">${BI.xCircleFill}</span><span>${escapeHTML(msg("displayNameSpoofWarning"))}</span></div>`;
+        alignmentWarningHTML += `<div class="align-ng"><span class="maiv-icon">${BI.xCircleFill}</span><span>${escapeHTML(cleanNoticeMsg(msg("displayNameSpoofWarning")))}</span></div>`;
       }
 
       if (!envelope.isDomainAligned && envelope.envelopeFrom !== "Unknown") {
         if (envelope.isMailingList) {
           // メーリングリスト経由: 不一致の原因が転送である可能性を明示
-          alignmentWarningHTML += `<div class="align-warn"><span class="maiv-icon">${BI.envelopeFill}</span><span>${escapeHTML(msg("mailingListNote"))}</span></div>`;
+          alignmentWarningHTML += `<div class="align-warn"><span class="maiv-icon">${BI.envelopeFill}</span><span>${escapeHTML(cleanNoticeMsg(msg("mailingListNote")))}</span></div>`;
         } else if (security.isSpfOk || security.isDkimOk) {
           // 認証は通っている: DMARCアライメント成立時は情報提供レベル、非成立時は警告
-          alignmentWarningHTML += `<div class="align-warn"><span class="maiv-icon">${BI.exclamationTriangleFill}</span><span>${escapeHTML(msg("alignMismatch"))}</span></div>`;
+          alignmentWarningHTML += `<div class="align-warn"><span class="maiv-icon">${BI.exclamationTriangleFill}</span><span>${escapeHTML(cleanNoticeMsg(msg("alignMismatch")))}</span></div>`;
         } else {
-          alignmentWarningHTML += `<div class="align-ng"><span class="maiv-icon">${BI.xCircleFill}</span><span>${escapeHTML(msg("alignMismatch"))}</span></div>`;
+          alignmentWarningHTML += `<div class="align-ng"><span class="maiv-icon">${BI.xCircleFill}</span><span>${escapeHTML(cleanNoticeMsg(msg("alignMismatch")))}</span></div>`;
         }
       } else if (envelope.isDomainAligned && (security.isSpfOk || security.isDkimOk)) {
         // ドメイン一致かつ認証も通っている場合はグリーン表示
         // （p=none等で総合判定がグリーンでなくても、認証自体は成功している）
-        alignmentWarningHTML += `<div class="align-ok"><span class="maiv-icon">${BI.checkCircleFill}</span><span>${escapeHTML(msg("alignOk"))}</span></div>`;
+        alignmentWarningHTML += `<div class="align-ok"><span class="maiv-icon">${BI.checkCircleFill}</span><span>${escapeHTML(cleanNoticeMsg(msg("alignOk")))}</span></div>`;
       } else if (envelope.isDomainAligned && !authResults.m365Internal) {
         // ドメインは一致しているが認証が通っていない
-        alignmentWarningHTML += `<div class="align-warn"><span class="maiv-icon">${BI.exclamationTriangleFill}</span><span>${escapeHTML(msg("alignNotAuth"))}</span></div>`;
+        alignmentWarningHTML += `<div class="align-warn"><span class="maiv-icon">${BI.exclamationTriangleFill}</span><span>${escapeHTML(cleanNoticeMsg(msg("alignNotAuth")))}</span></div>`;
       }
 
       // Microsoft 365 組織内配送の注記: 組織外へ出ない配送には SPF/DKIM/DMARC が
       // そもそも適用されないため、「外部送信者を検証できなかった」とは区別して伝える。
       // バッジ・判定理由は変えない情報提供（組織内配送の信頼性を保証するものではない）。
       if (authResults.m365Internal) {
-        alignmentWarningHTML += `<div class="align-info"><span class="maiv-icon">${BI.infoCircleFill}</span><span>${escapeHTML(msg("m365InternalNote"))}</span></div>`;
+        alignmentWarningHTML += `<div class="align-info"><span class="maiv-icon">${BI.infoCircleFill}</span><span>${escapeHTML(cleanNoticeMsg(msg("m365InternalNote")))}</span></div>`;
       }
 
       // 転送サービスが記録した元送信者の認証結果（未検証の報告値）
@@ -4181,11 +4292,11 @@
 
       // Reply-To 不一致警告: フィッシングで返信先を攻撃者に誘導する手口の可能性
       if (envelope.isReplyToMismatch) {
-        alignmentWarningHTML += `<div class="align-warn"><span class="maiv-icon">${BI.exclamationTriangleFill}</span><span>${escapeHTML(msg("replyToMismatch"))} (${escapeHTML(envelope.replyToAddress)})</span></div>`;
+        alignmentWarningHTML += `<div class="align-warn"><span class="maiv-icon">${BI.exclamationTriangleFill}</span><span>${escapeHTML(cleanNoticeMsg(msg("replyToMismatch")))} (${escapeHTML(envelope.replyToAddress)})</span></div>`;
       }
       // Reply-To ドメインのホモグラフ警告: 返信先を偽装ドメインへ誘導する手口
       if (envelope.replyToHomograph) {
-        alignmentWarningHTML += `<div class="align-ng"><span class="maiv-icon">${BI.xCircleFill}</span><span>${escapeHTML(msg("replyToHomographWarning"))} (${escapeHTML(envelope.replyToHomograph.address)})<br>${escapeHTML(describeHomograph(envelope.replyToHomograph))}</span></div>`;
+        alignmentWarningHTML += `<div class="align-ng"><span class="maiv-icon">${BI.xCircleFill}</span><span>${escapeHTML(cleanNoticeMsg(msg("replyToHomographWarning")))} (${escapeHTML(envelope.replyToHomograph.address)})<br>${escapeHTML(describeHomograph(envelope.replyToHomograph))}</span></div>`;
       }
 
       // 並びを変える上書き（RLO/LRO）による文字列偽装の警告。検出箇所を列挙する
@@ -4198,7 +4309,7 @@
       const bidiLocations = security.bidiSpoofLocations || [];
       if (bidiLocations.length > 0) {
         const where = bidiLocations.map(loc => bidiLocationLabels[loc] || loc).join(", ");
-        alignmentWarningHTML += `<div class="align-ng"><span class="maiv-icon">${BI.xCircleFill}</span><span>${escapeHTML(msg("bidiOverrideWarning"))} (${escapeHTML(where)})</span></div>`;
+        alignmentWarningHTML += `<div class="align-ng"><span class="maiv-icon">${BI.xCircleFill}</span><span>${escapeHTML(cleanNoticeMsg(msg("bidiOverrideWarning")))} (${escapeHTML(where)})</span></div>`;
       }
 
       // 表示名に偽装の上書きがある場合は、制御文字を ⟨RLO⟩ のような記号で見せ、
@@ -4208,23 +4319,55 @@
         ? revealBidiControls(security.bidiDisplayName)
         : envelope.headerFromName;
 
-      const addressRow = (label, value) =>
-        `<div class="maiv-kv-row address-row"><span class="maiv-kv-key address-label">${escapeHTML(label)}</span><span class="maiv-kv-val address-highlight" title="${escapeHTML(value)}">${escapeHTML(value)}</span></div>`;
-      const displayNameHTML = envelope.headerFromName
-        ? addressRow(msg("labelDisplayName"), displayNameText)
+      // 差出人（From）のレイアウト:
+      // 表示名がある場合は、上段に太字の表示名、下段にモノスペースのアドレスを配置。
+      // 「表示名」「From (ヘッダ)」という不要なセカンダリラベルを排除し、レイアウトで説明する。
+      const hasDisplayName = !!envelope.headerFromName;
+      const senderHTML = hasDisplayName
+        ? `
+          <div class="maiv-sender-block">
+            <div class="maiv-sender-name" title="${escapeHTML(displayNameText)}">${escapeHTML(displayNameText)}</div>
+            <div class="maiv-sender-addr" title="${escapeHTML(envelope.headerFromAddress)}">&lt;${escapeHTML(envelope.headerFromAddress)}&gt;</div>
+          </div>
+        `
+        : `
+          <div class="maiv-sender-block">
+            <div class="maiv-sender-name" style="font-family:var(--maiv-font-mono);" title="${escapeHTML(envelope.headerFromAddress)}">${escapeHTML(envelope.headerFromAddress)}</div>
+          </div>
+        `;
+
+      // エンベロープFrom / エンベロープTo:
+      // ヘッダFromとエンベロープFromが異なる場合、またはエンベロープToが存在する場合にサブ情報として配置
+      const subAddresses = [];
+      const isEnvelopeFromDiff = envelope.envelopeFrom && envelope.envelopeFrom !== "Unknown" &&
+        envelope.envelopeFrom.toLowerCase() !== envelope.headerFromAddress.toLowerCase();
+
+      if (isEnvelopeFromDiff) {
+        subAddresses.push(`
+          <div class="maiv-sub-addr-row">
+            <span class="maiv-sub-addr-key">${escapeHTML(msg("labelEnvelopeFrom"))}:</span>
+            <span class="maiv-sub-addr-val" title="${escapeHTML(envelope.envelopeFrom)}">${escapeHTML(envelope.envelopeFrom)}</span>
+          </div>
+        `);
+      }
+      if (envelope.envelopeTo && envelope.envelopeTo !== "Unknown") {
+        subAddresses.push(`
+          <div class="maiv-sub-addr-row">
+            <span class="maiv-sub-addr-key">${escapeHTML(msg("labelEnvelopeTo"))}:</span>
+            <span class="maiv-sub-addr-val" title="${escapeHTML(envelope.envelopeTo)}">${escapeHTML(envelope.envelopeTo)}</span>
+          </div>
+        `);
+      }
+      const subAddressHTML = subAddresses.length > 0
+        ? `<div class="maiv-sub-addr-stack">${subAddresses.join("")}</div>`
         : "";
-      // エンベロープTo: 取得できない場合 (Unknown) は非表示
-      const envelopeToHTML = envelope.envelopeTo && envelope.envelopeTo !== "Unknown"
-        ? addressRow(msg("labelEnvelopeTo"), envelope.envelopeTo)
-        : "";
+
       const addressHTML = `
         <div class="maiv-card">
           <div class="maiv-card-title" title="${escapeHTML(msg("tooltipAddress"))}">${escapeHTML(msg("cardTitleAddress"))}</div>
           <div class="maiv-detail-stack">
-            ${displayNameHTML}
-            ${addressRow(msg("labelHeaderFrom"), envelope.headerFromAddress)}
-            ${addressRow(msg("labelEnvelopeFrom"), envelope.envelopeFrom)}
-            ${envelopeToHTML}
+            ${senderHTML}
+            ${subAddressHTML}
             ${alignmentWarningHTML}
           </div>
         </div>
@@ -4265,10 +4408,6 @@
           }
 
           // TLS / 暗号化状態セル（このホップの Received ヘッダ記載に基づく）
-          // ・バージョン記載あり → 🔒 + バージョン番号（TLS 1.0/1.1 は ⚠️ で旧版警告）
-          // ・ESMTPS 等のプロトコル名のみ → 🔒（バージョン不明）
-          // ・SMTP/ESMTP 等の平文プロトコル表記 → 🔓（暗号化の記録なし）
-          // ・with 句なし（ローカル配送等） → 無印（判定材料がないだけで警告ではない）
           let tlsCell = "";
           const tls = hop.tls;
           if (tls && tls.version) {
@@ -4289,7 +4428,9 @@
 
           const rowClass = isFirst ? "maiv-route-origin" : "maiv-route-hop";
           const timeDisplay = hop.date ? hop.date.toLocaleTimeString() : "";
-          const escapedLabel = isFirst ? `${escapeHTML(msg("labelOrigin"))} <span class="maiv-icon" title="${escapeHTML(msg("tooltipRouteOrigin"))}">${BI.arrowUpRightCircleFill}</span>` : escapeHTML(`#${i + 1}`);
+          const escapedLabel = isFirst
+            ? `<span class="maiv-origin-badge" title="${escapeHTML(msg("tooltipRouteOrigin"))}">${escapeHTML(msg("labelOrigin"))}</span>`
+            : escapeHTML(`#${i + 1}`);
 
           routeRows += `
             <tr class="${rowClass}">
@@ -4301,13 +4442,12 @@
           `;
         }
 
-        // Envelope-To を末尾行に追加（取得できない場合は省略）
+        // Envelope-To を末尾行に追加（取得できない場合は省略。ラベルを排しレイアウトで宛先を示す）
         if (envelope.envelopeTo && envelope.envelopeTo !== "Unknown") {
-          const envelopeToLabel = `${escapeHTML(msg("labelEnvelopeTo"))}: ${escapeHTML(envelope.envelopeTo)}`;
           routeRows += `
             <tr class="maiv-route-hop">
               <td class="maiv-route-delay"><span class="maiv-delay-none"><span class="maiv-icon" title="${escapeHTML(msg("tooltipEnvelopeTo"))}">${BI.arrowDownLeftCircleFill}</span></span></td>
-              <td>${envelopeToLabel}</td>
+              <td><span class="maiv-route-to-addr" title="${escapeHTML(msg("labelEnvelopeTo"))}">${escapeHTML(envelope.envelopeTo)}</span></td>
               <td class="maiv-route-tls"></td>
               <td class="maiv-route-time"></td>
             </tr>
@@ -4440,7 +4580,7 @@
         // QR コードの一覧。信頼リストでは QR の警告が解消しないため、ここには「信頼」ボタンを出さない。
         // URL 以外の内容は判定に影響しないため、件数のみを添える。
         const qrNonUrlHTML = (linkSafety.qrNonUrlCount > 0)
-          ? `<div class="maiv-link-domain-item"><span class="maiv-icon">${BI.infoCircleFill}</span><span>${escapeHTML(msg("qrCodeNonUrl"))}</span> <span class="maiv-link-domain-count">(×${linkSafety.qrNonUrlCount})</span></div>`
+          ? `<div class="maiv-link-domain-item"><span class="maiv-icon">${BI.infoCircleFill}</span><span title="${escapeHTML(msg("qrCodeNonUrl"))}">${escapeHTML(cleanNoticeMsg(msg("qrCodeNonUrl")))}</span> <span class="maiv-link-domain-count">(×${linkSafety.qrNonUrlCount})</span></div>`
           : "";
         const qrListHTML = hasQrCodes
           ? renderDomainList(msg("qrCodeListTitle"), linkSafety.qrDomains, deceptive, null, false, qrNonUrlHTML)
