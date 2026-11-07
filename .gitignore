@@ -20,3 +20,8 @@ repomix-output.xml
 
 CLAUDE.md
 design_system/
+
+# third-party libraries (obtained via npm; see VENDOR.md and lib/README.md)
+node_modules/
+lib/jsQR.js
+lib/jsQR-LICENSE.txt
